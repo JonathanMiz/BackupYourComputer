@@ -26,7 +26,7 @@ namespace BackupSoftware
 			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents\\BackupTest");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Downloads");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
-			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
+			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
 
 			   // Set default hard drive for backup
 			   this.BackupDrive.Text = "H:\\JonathanCompterBackup";
@@ -129,27 +129,34 @@ namespace BackupSoftware
 
 					string folderInBackupDrive = BackupDrive.Text + "\\" + folderName;
 
-					Debug.WriteLine("Backup...");
-					CopyAll(folderFullPathToBackup, folderInBackupDrive);
-					Debug.WriteLine("End backup...");
+					//Debug.WriteLine("Backup...");
+					//Backup(folderFullPathToBackup, folderInBackupDrive);
+					//Debug.WriteLine("End backup...");
 
+
+					Debug.WriteLine("DeleteFiles...");
+					DeleteFilesFromDst(folderFullPathToBackup, folderInBackupDrive);
+					Debug.WriteLine("End deletefiles...");
+					
 			   }
-
-			   //Directory.GetDirectories();
 		  }
 
 		  #region Helper Functions
-
-		  private void CopyAll(string source, string dst)
+		  /// <summary>
+		  /// Backups all the files and folders that in source to dest
+		  /// </summary>
+		  /// <param name="source"></param>
+		  /// <param name="dest"></param>
+		  private void Backup(string source, string dest)
 		  {
-			   if (!Directory.Exists(dst))
+			   if (!Directory.Exists(dest))
 			   {
-					Directory.CreateDirectory(dst);
+					Directory.CreateDirectory(dest);
 			   }
 
 			   foreach (var file in Directory.GetFiles(source))
 			   {
-					string fullFilePathInDst = System.IO.Path.Combine(dst, ExtractFileFolderNameFromFullPath(file));
+					string fullFilePathInDst = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(file));
 
 					Debug.WriteLine(fullFilePathInDst);
 					if (File.Exists(fullFilePathInDst))
@@ -173,11 +180,49 @@ namespace BackupSoftware
 
 			   foreach (var dir in Directory.GetDirectories(source))
 			   {
-					string fullDirPathInDst = System.IO.Path.Combine(dst, ExtractFileFolderNameFromFullPath(dir));
-					CopyAll(dir, fullDirPathInDst);
+					string fullDirPathInDst = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(dir));
+					Backup(dir, fullDirPathInDst);
 			   }
 
 			   if (Directory.GetDirectories(source).Length == 0)
+					return;
+		  }
+
+		  /// <summary>
+		  /// Deletes the files that doesn't exist in 
+		  /// </summary>
+		  /// <param name="source"></param>
+		  /// <param name="dest"></param>
+		  /// TODO: Change the dest to be source in the parameters
+		  private void DeleteFilesFromDst(string source, string dest)
+		  {
+
+			   foreach (var file in Directory.GetFiles(dest))
+			   {
+					string fullFilePathInSrc = System.IO.Path.Combine(source, ExtractFileFolderNameFromFullPath(file));
+
+
+					if (!File.Exists(fullFilePathInSrc))
+					{
+						 Debug.WriteLine("Deleted " + file + "....");
+						 // Delete the file
+						 File.Delete(file);
+
+					}
+			   }
+
+			   foreach (var dir in Directory.GetDirectories(dest))
+			   {
+					string fullDirPathInSrc = System.IO.Path.Combine(source, ExtractFileFolderNameFromFullPath(dir));
+					Debug.WriteLine("Folder " + fullDirPathInSrc);
+					DeleteFilesFromDst(dir, fullDirPathInSrc);
+					//if (Directory.GetFiles(fullDirPathInSrc).Length == 0)
+					//{
+
+					//}
+			   }
+
+			   if (Directory.GetDirectories(dest).Length == 0)
 					return;
 		  }
 
