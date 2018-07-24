@@ -18,16 +18,18 @@ namespace BackupSoftware
 		  {
 			   InitializeComponent();
 
+			   //this.DataContext = ;
+
 			   // Setting some default folders to save me some time
 			   // TODO: save all the added folders in database or something similar
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents");
-			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents\\Test");
-			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Downloads");
-			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
+			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents\\BackupTest");
+			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Downloads");
+			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
 			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
 
 			   // Set default hard drive for backup
-			   this.BackupDrive.Text = "H:\\";
+			   this.BackupDrive.Text = "H:\\JonathanCompterBackup";
 		  }
 
 		  public object DataTime { get; private set; }
@@ -60,10 +62,10 @@ namespace BackupSoftware
 					// Iterate through all of the folders
 					foreach (var folderName in folders)
 					{
-						 foreach(var folder in this.FolderList.Items)
+						 foreach (var folder in this.FolderList.Items)
 						 {
 							  // Check to see if the new folder is not a sub folder of existing item
-							  if(!IsExistsOrSubFolder(folder.ToString(), folderName))
+							  if (!IsExistsOrSubFolder(folder.ToString(), folderName))
 							  {
 								   foldersToAddToListView.Add(folderName);
 							  }
@@ -73,22 +75,22 @@ namespace BackupSoftware
 							  }
 
 						 }
-						 
+
 					}
 
-					foreach(var folder in foldersToAddToListView)
+					foreach (var folder in foldersToAddToListView)
 					{
 						 this.FolderList.Items.Add(folder);
 					}
 			   }
-			   
+
 		  }
 
 		  private void Button_Click_1(object sender, RoutedEventArgs e)
 		  {
 			   var dlg = new CommonOpenFileDialog();
 			   dlg.ResetUserSelections();
-			   dlg.Title = "Choose hard drive";
+			   dlg.Title = "Choose folder to backup in hard drive";
 			   dlg.IsFolderPicker = true;
 			   dlg.InitialDirectory = null;
 
@@ -125,36 +127,14 @@ namespace BackupSoftware
 					// Extract the name of the folder
 					string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
 
-					string folderInBackupDrive = BackupDrive.Text + folderName;
+					string folderInBackupDrive = BackupDrive.Text + "\\" + folderName;
 
-					// Check if the folder already exists in the backup drive
-					if (Directory.Exists(folderInBackupDrive))
-					{
-						 // Check if the folder has been modified
-						 if (DateTime.Compare(Directory.GetLastWriteTime(folderFullPathToBackup), Directory.GetLastWriteTime(folderInBackupDrive)) > 0)
-						 {
-							  Debug.WriteLine("Need to be backed up!");
-						 }
-	
-					}
-					else
-					{
-						 CopyAll(folderFullPathToBackup, folderInBackupDrive);
-						 Debug.WriteLine("end");
-					}
-					
-					// Get all the path of all the files and folders
-					List<string> Paths = GetFileFolderPaths(listBoxItem.ToString());
+					Debug.WriteLine("Backup...");
+					CopyAll(folderFullPathToBackup, folderInBackupDrive);
+					Debug.WriteLine("End backup...");
 
-					foreach (var path in Paths)
-					{
-						
-						 //Debug.WriteLine(path);
-						 //Directory.Exists(path)
-					}
-					
 			   }
-			   
+
 			   //Directory.GetDirectories();
 		  }
 
@@ -170,7 +150,25 @@ namespace BackupSoftware
 			   foreach (var file in Directory.GetFiles(source))
 			   {
 					string fullFilePathInDst = System.IO.Path.Combine(dst, ExtractFileFolderNameFromFullPath(file));
-					File.Copy(file, fullFilePathInDst);
+
+					Debug.WriteLine(fullFilePathInDst);
+					if (File.Exists(fullFilePathInDst))
+					{
+						 FileInfo fileInDestInfo = new FileInfo(fullFilePathInDst);
+						 FileInfo fileInfo = new FileInfo(file);
+
+
+						 if (fileInfo.Length != fileInDestInfo.Length)
+						 {
+							  File.Delete(fullFilePathInDst);
+							  File.Copy(file, fullFilePathInDst);
+							  Debug.WriteLine(file);
+						 }
+					}
+					else
+					{
+						 File.Copy(file, fullFilePathInDst);
+					};
 			   }
 
 			   foreach (var dir in Directory.GetDirectories(source))
@@ -189,6 +187,8 @@ namespace BackupSoftware
 		  /// <param name="folder">The folder </param>
 		  /// <param name="checkFolder">The folder to check if it is subfolder or the same</param>
 		  /// <returns></returns>
+		  /// Note(Jonathan): What if there is a folder names documents and a folder name documents-new
+		  /// Bad implementation
 		  private bool IsExistsOrSubFolder(string folder, string checkFolder)
 		  {
 			   return checkFolder.Contains(folder);
@@ -204,46 +204,8 @@ namespace BackupSoftware
 			   var normalizedPath = fullPath.Replace('\\', '/');
 
 			   int lastSlash = normalizedPath.LastIndexOf('/');
-			   
+
 			   return normalizedPath.Substring(lastSlash + 1);
-		  }
-
-		  /// <summary>
-		  /// Returns only the containg folders and files
-		  /// </summary>
-		  /// <param name="path"></param>
-		  /// <returns></returns>
-		  private List<string> GetFileFolderPaths(string path)
-		  {
-			   List<string> paths = new List<string>();
-
-			   if (Directory.GetDirectories(path).Length == 0)
-					return null;
-
-			   foreach (var dir in Directory.GetDirectories(path))
-			   {
-					string folderPath = dir;
-					// First add the current dir name
-					paths.Add(folderPath);
-					// Then add his sub folders
-					//var list = GetFileFolderPaths(folderPath);
-					//if (list != null)
-					//{
-					//paths.AddRange(list);
-					//Debug.WriteLine(folderPath);
-					//}
-
-					//Debug.WriteLine(folderPath);
-			   }
-
-			   foreach (var file in Directory.GetFiles(path))
-			   {
-					string folderPath = file;
-					// First add the current dir name
-					paths.Add(folderPath);
-			   }
-
-			   return paths;
 		  }
 
 		  #endregion

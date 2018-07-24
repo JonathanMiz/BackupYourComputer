@@ -5,10 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BackupSoftware"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-     <Grid>
-          <StackPanel Orientation="Vertical">
-               <Label Content="Backup Your Computer Software" FontSize="20" Margin="10" Background="{x:Null}">
+        Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        >
+
+     <WindowChrome.WindowChrome>
+          <WindowChrome ResizeBorderThickness="10"
+                        CaptionHeight="50">
+
+          </WindowChrome>
+
+     </WindowChrome.WindowChrome>
+     <Grid >
+          <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <Grid Grid.Row="0" >
+               <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="Auto"/>
+               </Grid.ColumnDefinitions>
+               <!-- Logo -->
+               <Image Grid.Column="0" Width="50"> </Image>
+               <!-- Title -->
+               <Label Grid.Column="1" HorizontalAlignment="Center" Content="Backup Your Computer Software" FontSize="20" Margin="10" Background="{x:Null}">
                     <Label.Foreground>
                          <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                               <GradientStop Color="Black" Offset="0"/>
@@ -16,6 +40,16 @@
                          </LinearGradientBrush>
                     </Label.Foreground>
                </Label>
+               <!-- Window buttons -->
+               <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="_" Padding="5" />
+                    <Button Content="X" Padding="5" />
+               </StackPanel>
+          </Grid>
+
+          <!-- Page content -->
+          <StackPanel Grid.Row="1" Orientation="Vertical">
+             
                <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="List of folders:" />
                     <ListBox Height="20" x:Name="FolderList" Width="350"/>
