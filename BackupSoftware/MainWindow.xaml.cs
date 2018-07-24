@@ -129,13 +129,13 @@ namespace BackupSoftware
 
 					string folderInBackupDrive = BackupDrive.Text + "\\" + folderName;
 
-					//Debug.WriteLine("Backup...");
-					//Backup(folderFullPathToBackup, folderInBackupDrive);
-					//Debug.WriteLine("End backup...");
+		  			Debug.WriteLine("Backup...");
+					Backup(folderFullPathToBackup, folderInBackupDrive);
+					Debug.WriteLine("End backup...");
 
 
 					Debug.WriteLine("DeleteFiles...");
-					DeleteFilesFromDst(folderFullPathToBackup, folderInBackupDrive);
+					DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
 					Debug.WriteLine("End deletefiles...");
 					
 			   }
@@ -158,7 +158,6 @@ namespace BackupSoftware
 			   {
 					string fullFilePathInDst = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(file));
 
-					Debug.WriteLine(fullFilePathInDst);
 					if (File.Exists(fullFilePathInDst))
 					{
 						 FileInfo fileInDestInfo = new FileInfo(fullFilePathInDst);
@@ -167,14 +166,16 @@ namespace BackupSoftware
 
 						 if (fileInfo.Length != fileInDestInfo.Length)
 						 {
+							  // Repalce
 							  File.Delete(fullFilePathInDst);
 							  File.Copy(file, fullFilePathInDst);
-							  Debug.WriteLine(file);
+							  Debug.WriteLine("Replaced " + file + "...");
 						 }
 					}
 					else
 					{
 						 File.Copy(file, fullFilePathInDst);
+						 Debug.WriteLine("Copied " + file + "...");
 					};
 			   }
 
@@ -189,20 +190,20 @@ namespace BackupSoftware
 		  }
 
 		  /// <summary>
-		  /// Deletes the files that doesn't exist in 
+		  /// Deletes the files that doesn't exist in dest
 		  /// </summary>
-		  /// <param name="source"></param>
-		  /// <param name="dest"></param>
+		  /// <param name="source">The backup folder</param>
+		  /// <param name="dest">The folder to backup</param>
 		  /// TODO: Change the dest to be source in the parameters
-		  private void DeleteFilesFromDst(string source, string dest)
+		  private void DeleteFilesFromBackup(string source, string dest)
 		  {
 
-			   foreach (var file in Directory.GetFiles(dest))
+			   foreach (var file in Directory.GetFiles(source))
 			   {
-					string fullFilePathInSrc = System.IO.Path.Combine(source, ExtractFileFolderNameFromFullPath(file));
+					string fullFilePathInDest = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(file));
 
 
-					if (!File.Exists(fullFilePathInSrc))
+					if (!File.Exists(fullFilePathInDest))
 					{
 						 Debug.WriteLine("Deleted " + file + "....");
 						 // Delete the file
@@ -211,18 +212,23 @@ namespace BackupSoftware
 					}
 			   }
 
-			   foreach (var dir in Directory.GetDirectories(dest))
+			   foreach (var dir in Directory.GetDirectories(source))
 			   {
-					string fullDirPathInSrc = System.IO.Path.Combine(source, ExtractFileFolderNameFromFullPath(dir));
-					Debug.WriteLine("Folder " + fullDirPathInSrc);
-					DeleteFilesFromDst(dir, fullDirPathInSrc);
-					//if (Directory.GetFiles(fullDirPathInSrc).Length == 0)
-					//{
+					string fullFilePathInDest = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(dir));
 
-					//}
+					if (!Directory.Exists(fullFilePathInDest))
+					{
+						 Debug.WriteLine("Deleted folder " + fullFilePathInDest + " and all its subfolders and subfiles!");
+						 Directory.Delete(dir, true);
+					}
+					else
+					{
+						 DeleteFilesFromBackup(dir, fullFilePathInDest);
+					}
+
 			   }
 
-			   if (Directory.GetDirectories(dest).Length == 0)
+			   if (Directory.GetDirectories(source).Length == 0)
 					return;
 		  }
 
