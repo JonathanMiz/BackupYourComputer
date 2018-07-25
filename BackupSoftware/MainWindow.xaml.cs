@@ -1,11 +1,12 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
 using System;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace BackupSoftware
 {
@@ -14,25 +15,62 @@ namespace BackupSoftware
 	 /// </summary>
 	 public partial class MainWindow : Window
 	 {
+		  private FormModel formModel;
 		  public MainWindow()
 		  {
 			   InitializeComponent();
 
-			   //this.DataContext = ;
+			   // Create a model form object
+
+			   formModel = new FormModel();
+
+			   // Set values
+			   formModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
+			   formModel.backupFolder = "H:\\JonathanCompterBackup";
+
+			   //this.DataContext = new FormModel();
 
 			   // Setting some default folders to save me some time
 			   // TODO: save all the added folders in database or something similar
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents");
-			   this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents\\BackupTest");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Downloads");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
 
 			   // Set default hard drive for backup
-			   this.BackupDrive.Text = "H:\\JonathanCompterBackup";
+
+			   foreach (var item in formModel.folderPathsToBackup)
+			   {
+					this.FolderList.Items.Add(item);
+			   }
+			   this.BackupFolder.Text = formModel.backupFolder;
+
+			   formModel.PropertyChanged += FormModel_PropertyChanged;
+
+			   // Button events
+			   this.browseFolderToBackupButton.Click += Button_Click;
+			   this.browseBackupFolderButton.Click += Button_Click_1;
+			   this.startBackupButton.Click += Button_Click_2;
+
+
 		  }
 
-		  public object DataTime { get; private set; }
+		  private void FormModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		  {
+			   if (e.PropertyName == formModel.FolderPathsToBackupPropertyName)
+			   {
+					this.FolderList.Items.Clear();
+					foreach (var item in formModel.folderPathsToBackup)
+					{
+						 this.FolderList.Items.Add(item);
+					}
+			   }
+
+			   if (e.PropertyName == formModel.BackupFolderPropertyName)
+			   {
+					this.BackupFolder.Text = formModel.backupFolder;
+			   }
+		  }
 
 		  private void Button_Click(object sender, RoutedEventArgs e)
 		  {
@@ -57,20 +95,31 @@ namespace BackupSoftware
 					// Take all the folders that was chosen
 					var folders = dlg.FileNames;
 
+					// Temp list to add all the folders, because we cannot add to list while iterating on it
 					List<string> foldersToAddToListView = new List<string>();
 
-					// Iterate through all of the folders
+					// Iterate through all of the folders that the user added
 					foreach (var folderName in folders)
 					{
-						 foreach (var folder in this.FolderList.Items)
+						 // // Iterate through all of the folders that are already in our data
+						 foreach (var folder in formModel.folderPathsToBackup)
 						 {
-							  // Check to see if the new folder is not a sub folder of existing item
-							  if (!IsExistsOrSubFolder(folder.ToString(), folderName))
+							  if (formModel.folderPathsToBackup.Contains(folderName))
 							  {
+								   MessageBox.Show("The folder you are trying to add is already exists!");
+								   break;
+							  }
+
+							  // Check to see if the new folder is not a sub folder of existing item
+							  if (!IsSubFolder(folder.ToString(), folderName))
+							  {
+								   // Add to the list
 								   foldersToAddToListView.Add(folderName);
 							  }
 							  else
 							  {
+								   // Break the loop, since if it exists we don't need to keep iterating
+								   MessageBox.Show("The folder you are trying to add is a subfolder of an existing folder!");
 								   break;
 							  }
 
@@ -78,9 +127,10 @@ namespace BackupSoftware
 
 					}
 
+					// TODO: Fix duplications of folders!!!!!
 					foreach (var folder in foldersToAddToListView)
 					{
-						 this.FolderList.Items.Add(folder);
+						 formModel.AddFolderToBackUp(folder);
 					}
 			   }
 
@@ -108,26 +158,27 @@ namespace BackupSoftware
 			   {
 					// Take all the folders that was chosen
 					var folder = dlg.FileName;
-					this.BackupDrive.Text = folder;
+					formModel.backupFolder = folder;
 			   }
 		  }
 
+		  // TODO: Refactor
 		  private void Button_Click_2(object sender, RoutedEventArgs e)
 		  {
-			   if (string.IsNullOrEmpty(this.BackupDrive.Text) || FolderList.Items.Count == 0)
+			   if (string.IsNullOrEmpty(this.formModel.backupFolder) || this.formModel.folderPathsToBackup.Count == 0)
 			   {
 					MessageBox.Show("Fill in the list of folder and hard drive!");
 					return;
 			   }
 
-			   foreach (var listBoxItem in FolderList.Items)
+			   foreach (var folderPath in this.formModel.folderPathsToBackup)
 			   {
-					string folderFullPathToBackup = listBoxItem.ToString();
+					string folderFullPathToBackup = folderPath;
 
 					// Extract the name of the folder
 					string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
 
-					string folderInBackupDrive = BackupDrive.Text + "\\" + folderName;
+					string folderInBackupDrive = this.formModel.backupFolder + "\\" + folderName;
 
 		  			Debug.WriteLine("Backup...");
 					Backup(folderFullPathToBackup, folderInBackupDrive);
@@ -233,14 +284,14 @@ namespace BackupSoftware
 		  }
 
 		  /// <summary>
-		  /// If the path of folder is in checkFolder than the folder is subfolder or the same
+		  /// If the path of folder is in checkFolder than the folder is subfolder
 		  /// </summary>
 		  /// <param name="folder">The folder </param>
-		  /// <param name="checkFolder">The folder to check if it is subfolder or the same</param>
+		  /// <param name="checkFolder">The folder to check if it is subfolder</param>
 		  /// <returns></returns>
 		  /// Note(Jonathan): What if there is a folder names documents and a folder name documents-new
 		  /// Bad implementation
-		  private bool IsExistsOrSubFolder(string folder, string checkFolder)
+		  private bool IsSubFolder(string folder, string checkFolder)
 		  {
 			   return checkFolder.Contains(folder);
 		  }

@@ -53,14 +53,14 @@
                <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="List of folders:" />
                     <ListBox Height="20" x:Name="FolderList" Width="350"/>
-                    <Button Content="..." Click="Button_Click" Width="20" Height="20"/>
+                    <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"/>
                </StackPanel>
                <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="Backup Drive:" />
-                    <TextBox Width="300" x:Name="BackupDrive" IsReadOnly="True"/>
-                    <Button Content="..." Width="20" Height="20" Click="Button_Click_1"/>
+                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True"/>
+                    <Button x:Name="browseBackupFolderButton" Content="..." Width="20" Height="20"/>
                </StackPanel>
-               <Button Content="Start Backup" Click="Button_Click_2" x:Name="But"/>
+               <Button x:Name="startBackupButton" Content="Start Backup" />
           </StackPanel>
      </Grid>
 </Window>
