@@ -39,13 +39,25 @@ namespace BackupSoftware
 
 			   // Set default hard drive for backup
 
-			   foreach (var item in formModel.folderPathsToBackup)
-			   {
-					this.FolderList.Items.Add(item);
-			   }
-			   this.BackupFolder.Text = formModel.backupFolder;
+			  // foreach (var item in formModel.folderPathsToBackup)
+			  // {
+					//this.FolderList.Items.Add(item);
+			  // }
+			   //this.BackupFolder.Text = formModel.backupFolder;
 
-			   formModel.PropertyChanged += FormModel_PropertyChanged;
+			   this.FolderList.SetBinding(ListBox.ItemsSourceProperty, new Binding("folderPathsToBackup")
+			   {
+					Source = formModel,
+					Mode = BindingMode.TwoWay
+			   });
+
+			   this.BackupFolder.SetBinding(TextBox.TextProperty, new Binding("backupFolder")
+			   {
+					Source = formModel,
+					Mode = BindingMode.TwoWay
+			   });
+
+			   //formModel.PropertyChanged += FormModel_PropertyChanged;
 
 			   // Button events
 			   this.browseFolderToBackupButton.Click += Button_Click;
@@ -55,22 +67,22 @@ namespace BackupSoftware
 
 		  }
 
-		  private void FormModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		  {
-			   if (e.PropertyName == formModel.FolderPathsToBackupPropertyName)
-			   {
-					this.FolderList.Items.Clear();
-					foreach (var item in formModel.folderPathsToBackup)
-					{
-						 this.FolderList.Items.Add(item);
-					}
-			   }
+		  //private void FormModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		  //{
+			 //  if (e.PropertyName == formModel.FolderPathsToBackupPropertyName)
+			 //  {
+				//	this.FolderList.Items.Clear();
+				//	foreach (var item in formModel.folderPathsToBackup)
+				//	{
+				//		 this.FolderList.Items.Add(item);
+				//	}
+			 //  }
 
-			   if (e.PropertyName == formModel.BackupFolderPropertyName)
-			   {
-					this.BackupFolder.Text = formModel.backupFolder;
-			   }
-		  }
+			 //  if (e.PropertyName == formModel.BackupFolderPropertyName)
+			 //  {
+				//	this.BackupFolder.Text = formModel.backupFolder;
+			 //  }
+		  //}
 
 		  private void Button_Click(object sender, RoutedEventArgs e)
 		  {

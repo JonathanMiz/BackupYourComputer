@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace BackupSoftware
 {
@@ -24,7 +26,20 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The list of the folders the user want to backup
 		  /// </summary>
-		  public List<string> folderPathsToBackup = new List<string>();
+		  private ObservableCollection<string> _folderPathsToBackup = new ObservableCollection<string>();
+		  public ObservableCollection<string> folderPathsToBackup
+		  {
+			   get
+			   {
+					return _folderPathsToBackup;
+			   }
+			   set
+			   {
+					_folderPathsToBackup = value;
+					OnPropertyChanged(FolderPathsToBackupPropertyName);
+			   }
+		  }
+
 
 		  /// <summary>
 		  /// Add new folder to backup to <see cref="folderPathsToBackup"/>
@@ -32,7 +47,7 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void AddFolderToBackUp(string folder)
 		  {
-			   folderPathsToBackup.Add(folder);
+			   _folderPathsToBackup.Add(folder);
 			   OnPropertyChanged(FolderPathsToBackupPropertyName);
 		  }
 
@@ -42,7 +57,7 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void RemoveFolderToBackUp(string folder)
 		  {
-			   folderPathsToBackup.Remove(folder);
+			   _folderPathsToBackup.Remove(folder);
 			   OnPropertyChanged(FolderPathsToBackupPropertyName);
 		  }
 
@@ -63,7 +78,7 @@ namespace BackupSoftware
 						 return;
 
 					m_backupFolder = value;
-					OnPropertyChanged(FolderPathsToBackupPropertyName);
+					OnPropertyChanged(BackupFolderPropertyName);
 			   }
 		  }
 
