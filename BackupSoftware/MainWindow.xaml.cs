@@ -70,12 +70,15 @@ namespace BackupSoftware
 					// Temp list to add all the folders, because we cannot add to list while iterating on it
 					List<string> foldersToAddToListView = new List<string>();
 
+					bool Added = false;
+
 					// Iterate through all of the folders that the user added
 					foreach (var folderName in folders)
 					{
 						 // // Iterate through all of the folders that are already in our data
-						 foreach (var folder in formModel.FolderPathsToBackup)
+						 for(int i = 0; i < formModel.FolderPathsToBackup.Count && !Added; ++i) 
 						 {
+							  var folder = formModel.FolderPathsToBackup[i];
 							  if (formModel.FolderPathsToBackup.Contains(folderName))
 							  {
 								   MessageBox.Show("The folder you are trying to add is already exists!");
@@ -87,6 +90,7 @@ namespace BackupSoftware
 							  {
 								   // Add to the list
 								   foldersToAddToListView.Add(folderName);
+								   Added = true;
 							  }
 							  else
 							  {
