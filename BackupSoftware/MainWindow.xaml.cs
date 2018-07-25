@@ -28,7 +28,7 @@ namespace BackupSoftware
 			   formModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
 			   formModel.backupFolder = "H:\\JonathanCompterBackup";
 
-			   //this.DataContext = new FormModel();
+			   this.DataContext = formModel;
 
 			   // Setting some default folders to save me some time
 			   // TODO: save all the added folders in database or something similar
@@ -38,24 +38,19 @@ namespace BackupSoftware
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
 
 			   // Set default hard drive for backup
-
-			  // foreach (var item in formModel.folderPathsToBackup)
-			  // {
-					//this.FolderList.Items.Add(item);
-			  // }
 			   //this.BackupFolder.Text = formModel.backupFolder;
 
-			   this.FolderList.SetBinding(ListBox.ItemsSourceProperty, new Binding("folderPathsToBackup")
-			   {
-					Source = formModel,
-					Mode = BindingMode.TwoWay
-			   });
+			  // this.FolderList.SetBinding(ListBox.ItemsSourceProperty, new Binding("folderPathsToBackup")
+			  // {
+					//Source = formModel,
+					//Mode = BindingMode.TwoWay
+			  // });
 
-			   this.BackupFolder.SetBinding(TextBox.TextProperty, new Binding("backupFolder")
-			   {
-					Source = formModel,
-					Mode = BindingMode.TwoWay
-			   });
+			  // this.BackupFolder.SetBinding(TextBox.TextProperty, new Binding("backupFolder")
+			  // {
+					//Source = formModel,
+					//Mode = BindingMode.TwoWay
+			  // });
 
 			   //formModel.PropertyChanged += FormModel_PropertyChanged;
 

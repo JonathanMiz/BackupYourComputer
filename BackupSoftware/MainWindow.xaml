@@ -52,12 +52,12 @@
              
                <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="List of folders:" />
-                    <ListBox Height="20" x:Name="FolderList" Width="350"/>
+                    <ListBox Height="20" x:Name="FolderList" ItemsSource="{Binding Path=folderPathsToBackup, Mode=TwoWay}" Width="350"/>
                     <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"/>
                </StackPanel>
                <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="Backup Drive:" />
-                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True"/>
+                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding Path=backupFolder, Mode=TwoWay}"/>
                     <Button x:Name="browseBackupFolderButton" Content="..." Width="20" Height="20"/>
                </StackPanel>
                <Button x:Name="startBackupButton" Content="Start Backup" />
