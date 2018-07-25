@@ -24,9 +24,9 @@ namespace BackupSoftware
 
 			   formModel = new FormModel();
 
-			   // Set values
+			   // Set default values
 			   formModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   formModel.backupFolder = "H:\\JonathanCompterBackup";
+			   formModel.BackupFolder = "H:\\JonathanCompterBackup";
 
 			   this.DataContext = formModel;
 
@@ -37,47 +37,12 @@ namespace BackupSoftware
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
 			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
 
-			   // Set default hard drive for backup
-			   //this.BackupFolder.Text = formModel.backupFolder;
-
-			  // this.FolderList.SetBinding(ListBox.ItemsSourceProperty, new Binding("folderPathsToBackup")
-			  // {
-					//Source = formModel,
-					//Mode = BindingMode.TwoWay
-			  // });
-
-			  // this.BackupFolder.SetBinding(TextBox.TextProperty, new Binding("backupFolder")
-			  // {
-					//Source = formModel,
-					//Mode = BindingMode.TwoWay
-			  // });
-
-			   //formModel.PropertyChanged += FormModel_PropertyChanged;
 
 			   // Button events
 			   this.browseFolderToBackupButton.Click += Button_Click;
 			   this.browseBackupFolderButton.Click += Button_Click_1;
 			   this.startBackupButton.Click += Button_Click_2;
-
-
 		  }
-
-		  //private void FormModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		  //{
-			 //  if (e.PropertyName == formModel.FolderPathsToBackupPropertyName)
-			 //  {
-				//	this.FolderList.Items.Clear();
-				//	foreach (var item in formModel.folderPathsToBackup)
-				//	{
-				//		 this.FolderList.Items.Add(item);
-				//	}
-			 //  }
-
-			 //  if (e.PropertyName == formModel.BackupFolderPropertyName)
-			 //  {
-				//	this.BackupFolder.Text = formModel.backupFolder;
-			 //  }
-		  //}
 
 		  private void Button_Click(object sender, RoutedEventArgs e)
 		  {
@@ -109,9 +74,9 @@ namespace BackupSoftware
 					foreach (var folderName in folders)
 					{
 						 // // Iterate through all of the folders that are already in our data
-						 foreach (var folder in formModel.folderPathsToBackup)
+						 foreach (var folder in formModel.FolderPathsToBackup)
 						 {
-							  if (formModel.folderPathsToBackup.Contains(folderName))
+							  if (formModel.FolderPathsToBackup.Contains(folderName))
 							  {
 								   MessageBox.Show("The folder you are trying to add is already exists!");
 								   break;
@@ -165,27 +130,27 @@ namespace BackupSoftware
 			   {
 					// Take all the folders that was chosen
 					var folder = dlg.FileName;
-					formModel.backupFolder = folder;
+					formModel.BackupFolder = folder;
 			   }
 		  }
 
 		  // TODO: Refactor
 		  private void Button_Click_2(object sender, RoutedEventArgs e)
 		  {
-			   if (string.IsNullOrEmpty(this.formModel.backupFolder) || this.formModel.folderPathsToBackup.Count == 0)
+			   if (string.IsNullOrEmpty(this.formModel.BackupFolder) || this.formModel.FolderPathsToBackup.Count == 0)
 			   {
 					MessageBox.Show("Fill in the list of folder and hard drive!");
 					return;
 			   }
 
-			   foreach (var folderPath in this.formModel.folderPathsToBackup)
+			   foreach (var folderPath in this.formModel.FolderPathsToBackup)
 			   {
 					string folderFullPathToBackup = folderPath;
 
 					// Extract the name of the folder
 					string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
 
-					string folderInBackupDrive = this.formModel.backupFolder + "\\" + folderName;
+					string folderInBackupDrive = this.formModel.BackupFolder + "\\" + folderName;
 
 		  			Debug.WriteLine("Backup...");
 					Backup(folderFullPathToBackup, folderInBackupDrive);
