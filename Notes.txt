@@ -1,0 +1,33 @@
+
+
+	Backup Software Checks:
+	
+	1. If the folder/file is not in the backup drive, copy it to the drive
+	2. If the folder/file is in the backup drive, check:
+		2.1 If the size of the folder/file is not the same do this
+			2.1.1 Iterate over the files and check if the file size and data has changed if they did, replace the files
+	
+	
+	3. Add option for the user to decide if he wants to delete files that exist only in the backup folder
+		3.1 Iterate over all the files in dest
+			3.1.1 If the file in dest does not exist in source delete it
+			3.1.2 If the folder is empty after the 3.1.1 delete it
+	4. When pressing start backup open a window log that will show to file that been replaced ...
+	
+	Todo:
+
+	1. Comment the code
+	2. Refactor the code
+	3. Add log
+	4. Add check if there is a subfolder in the list, and the user is trying to add a parent folder
+	
+	Bugs/Fixes:
+	
+	6. Fix the drag of the window, it is not accurate
+	
+	Aesthetics:
+	
+	1. Custom Window (rounded corners)
+	2. Edit the style of the window buttons and for the regular buttons
+	3. Add some basic icon
+	4. Add global fonts to all of the program
