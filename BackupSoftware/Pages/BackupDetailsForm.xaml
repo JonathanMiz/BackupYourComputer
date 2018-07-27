@@ -1,0 +1,30 @@
+﻿<Page x:Class="BackupSoftware.BackupDetailsForm"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BackupSoftware"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="BackupDetailsForm">
+
+    <Grid>
+          <StackPanel Orientation="Vertical">
+
+               <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="List of folders:" />
+                    <ListBox Height="20" x:Name="FolderList" ItemsSource="{Binding FolderPathsToBackup, Mode=TwoWay}" Width="350"/>
+                    <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
+                            Command="{Binding ChooseFolderCommand}"/>
+               </StackPanel>
+               <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="Backup Drive:" />
+                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}"/>
+                    <Button x:Name="browseBackupFolderButton" Content="..." Width="20" Height="20"
+                            Command="{Binding ChooseBackupFolderCommand}"/>
+               </StackPanel>
+               <Button x:Name="startBackupButton" Content="Start Backup" 
+                       Command="{Binding StartBackupCommand}"/>
+          </StackPanel>
+     </Grid>
+</Page>

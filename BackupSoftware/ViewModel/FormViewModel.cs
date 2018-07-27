@@ -13,7 +13,7 @@ namespace BackupSoftware
 	 /// <summary>
 	 /// The model class that represents the UI form
 	 /// </summary>
-	 public class FormViewModel : INotifyPropertyChanged
+	 public class FormViewModel : ViewModelBase
 	 {
 		  #region Private Members
 		  /// <summary>
@@ -95,19 +95,7 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  public event PropertyChangedEventHandler PropertyChanged;
 
-		  /// <summary>
-		  /// Notify that a property has been changed
-		  /// </summary>
-		  /// <param name="propertyName"></param>
-		  protected void OnPropertyChanged(string propertyName)
-		  {
-			   if(PropertyChanged != null)
-			   {
-					PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			   }
-		  }
 		  #endregion
 
 		  #region Commands
@@ -116,6 +104,7 @@ namespace BackupSoftware
 		  public RelayCommand ChooseBackupFolderCommand { get; set; }
 		  public RelayCommand StartBackupCommand { get; set; }
 
+		   
 		  #endregion
 
 		  public FormViewModel()

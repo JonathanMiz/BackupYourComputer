@@ -7,30 +7,78 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         WindowStyle="None" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen" 
+        Style="{DynamicResource WindowStyle1}"
+        MinHeight="{Binding WindowMinHeight}"
+        MinWidth="{Binding WindowMinWidth}"
         >
+     <Window.Resources>
+          <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type Window}">
+               <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                    <Grid>
+                         <AdornerDecorator>
+                              <ContentPresenter/>
+                         </AdornerDecorator>
+                         <ResizeGrip x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="false" Visibility="Collapsed" VerticalAlignment="Bottom"/>
+                    </Grid>
+               </Border>
+          </ControlTemplate>
+          <Style x:Key="WindowStyle1" TargetType="{x:Type Window}">
+               <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+               <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+               <Setter Property="Template">
+                    <Setter.Value>
+                         <ControlTemplate TargetType="{x:Type Window}">
+                              <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                   <AdornerDecorator>
+                                        <ContentPresenter/>
+                                   </AdornerDecorator>
+                              </Border>
+                         </ControlTemplate>
+                    </Setter.Value>
+               </Setter>
+               <Style.Triggers>
+                    <Trigger Property="ResizeMode" Value="CanResizeWithGrip">
+                         <Setter Property="Template" Value="{StaticResource WindowTemplateKey}"/>
+                    </Trigger>
+               </Style.Triggers>
+          </Style>
+     </Window.Resources>
 
+     <!--<Window.Resources>
+          <Style TargetType="{x:Type local:MainWindow}">
+               <Setter Property="Template">
+                    <Setter.Value>
+                         <ControlTemplate TargetType="{x:Type Window}">
+                              
+                         </ControlTemplate>
+                    </Setter.Value>
+               </Setter>
+          </Style>
+     </Window.Resources>-->
      <WindowChrome.WindowChrome>
-          <WindowChrome ResizeBorderThickness="10"
-                        CaptionHeight="50">
-
+          <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}"
+                        CaptionHeight="{Binding CaptionHeight}"
+                        CornerRadius="0"
+                        GlassFrameThickness="0">
           </WindowChrome>
 
      </WindowChrome.WindowChrome>
-     <Grid >
+     <Grid>
           <Grid.RowDefinitions>
-               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="60"/>
                <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
-
-          <Grid Grid.Row="0" >
+          
+          <!-- Title Bar -->
+          <Grid Grid.Row="0">
                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
                </Grid.ColumnDefinitions>
                <!-- Logo -->
-               <Image Grid.Column="0" Width="50"> </Image>
+               <Image Grid.Column="0" Width="50"></Image>
                <!-- Title -->
                <Label Grid.Column="1" HorizontalAlignment="Center" Content="Backup Your Computer Software" FontSize="20" Margin="10" Background="{x:Null}">
                     <Label.Foreground>
@@ -42,28 +90,16 @@
                </Label>
                <!-- Window buttons -->
                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="_" Padding="5" />
-                    <Button Content="X" Padding="5" />
+                    <Button Content="_" Padding="5" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding MinimizeCommand}"/>
+                    <Button Content="X" Padding="5" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding CloseCommand}"/>
                </StackPanel>
           </Grid>
-
+          
           <!-- Page content -->
-          <StackPanel Grid.Row="1" Orientation="Vertical">
-             
-               <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="List of folders:" />
-                    <ListBox Height="20" x:Name="FolderList" ItemsSource="{Binding FolderPathsToBackup, Mode=TwoWay}" Width="350"/>
-                    <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
-                            Command="{Binding ChooseFolderCommand}"/>
-               </StackPanel>
-               <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="Backup Drive:" />
-                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}"/>
-                    <Button x:Name="browseBackupFolderButton" Content="..." Width="20" Height="20"
-                            Command="{Binding ChooseBackupFolderCommand}"/>
-               </StackPanel>
-               <Button x:Name="startBackupButton" Content="Start Backup" 
-                       Command="{Binding StartBackupCommand}"/>
-          </StackPanel>
+          <Border Grid.Row="1" Background="CornflowerBlue">
+               <Grid>
+                    <Frame x:Name="MainFrame" Source="BackupDetailsForm.xaml"  />
+               </Grid>
+          </Border>
      </Grid>
 </Window>
