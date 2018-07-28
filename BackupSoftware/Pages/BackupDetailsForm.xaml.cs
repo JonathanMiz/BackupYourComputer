@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace BackupSoftware
 
 			   // Set default values
 			   formViewModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   formViewModel.BackupFolder = "H:\\JonathanCompterBackup";
+			   formViewModel.BackupFolder = "H:\\";
 
 			   // Setting some default folders to save me some time
 			   // TODO: save all the added folders in database or something similar

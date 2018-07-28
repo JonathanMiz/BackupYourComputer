@@ -16,7 +16,8 @@
                          <Border x:Name="Chrome"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       Background="{TemplateBinding Background}" 
-                                      SnapsToDevicePixels="true">
+                                      SnapsToDevicePixels="true"
+                                      Padding="10">
                               <ContentPresenter HorizontalAlignment="Center"
                                                      VerticalAlignment="Center"
                                                      Margin="{TemplateBinding Padding}" 

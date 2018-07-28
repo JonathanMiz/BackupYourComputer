@@ -20,6 +20,7 @@
 	2. Refactor the code
 	3. Add log
 	4. Add check if there is a subfolder in the list, and the user is trying to add a parent folder
+	5. Make the backup function work with thread so it won't make the program to stuck
 	
 	Bugs/Fixes:
 	
@@ -28,6 +29,6 @@
 	Aesthetics:
 	
 	1. Custom Window (rounded corners)
-	2. Edit the style of the window buttons and for the regular buttons
-	3. Add some basic icon
+	------2. Edit the style of the window buttons and for the regular buttons
+	------3. Add some basic icon
 	4. Add global fonts to all of the program

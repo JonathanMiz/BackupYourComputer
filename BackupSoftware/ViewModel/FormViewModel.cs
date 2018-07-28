@@ -95,6 +95,22 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  public object SelectedItem { get; set; }
+		  public string LogInfo
+		  {
+			   get
+			   {
+					return LogInfo;
+			   }
+			   set
+			   {
+					if (LogInfo == value)
+						 return;
+
+					LogInfo = value;
+					OnPropertyChanged("LogInfo");
+			   }
+		  }
 
 		  #endregion
 
@@ -103,8 +119,8 @@ namespace BackupSoftware
 		  public RelayCommand ChooseFolderCommand { get; set; }
 		  public RelayCommand ChooseBackupFolderCommand { get; set; }
 		  public RelayCommand StartBackupCommand { get; set; }
+		  public RelayCommand MenuItemClickCommand { get; set; }
 
-		   
 		  #endregion
 
 		  public FormViewModel()
@@ -112,9 +128,14 @@ namespace BackupSoftware
 			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
 			   StartBackupCommand = new RelayCommand(StartBackup);
+			   MenuItemClickCommand = new RelayCommand(MenuItemClick);
 		  }
 
 		  #region Command Functions
+
+		  /// <summary>
+		  ///  The action when the user choose folder add to the <see cref="FolderPathsToBackup"/>
+		  /// </summary>
 		  void ChooseFolder()
 		  {
 			   var dlg = new CommonOpenFileDialog();
@@ -143,35 +164,46 @@ namespace BackupSoftware
 
 					bool Added = false;
 
-					// Iterate through all of the folders that the user added
-					foreach (var folderName in folders)
+					// If the list is not empty
+					if (FolderPathsToBackup.Count > 0)
 					{
-						 // // Iterate through all of the folders that are already in our data
-						 for (int i = 0; i < FolderPathsToBackup.Count && !Added; ++i)
+						 // Iterate through all of the folders that the user added
+						 foreach (var folderName in folders)
 						 {
-							  var folder = FolderPathsToBackup[i];
-							  if (FolderPathsToBackup.Contains(folderName))
+							  // // Iterate through all of the folders that are already in our data
+							  for (int i = 0; i < FolderPathsToBackup.Count && !Added; ++i)
 							  {
-								   MessageBox.Show("The folder you are trying to add is already exists!");
-								   break;
-							  }
+								   var folder = FolderPathsToBackup[i];
+								   if (FolderPathsToBackup.Contains(folderName))
+								   {
+										MessageBox.Show("The folder you are trying to add already exists!");
+										break;
+								   }
 
-							  // Check to see if the new folder is not a sub folder of existing item
-							  if (!IsSubFolder(folder.ToString(), folderName))
-							  {
-								   // Add to the list
-								   foldersToAddToListView.Add(folderName);
-								   Added = true;
-							  }
-							  else
-							  {
-								   // Break the loop, since if it exists we don't need to keep iterating
-								   MessageBox.Show("The folder you are trying to add is a subfolder of an existing folder!");
-								   break;
+								   // Check to see if the new folder is not a sub folder of existing item
+								   if (!IsSubFolder(folder.ToString(), folderName))
+								   {
+										// Add to the list
+										foldersToAddToListView.Add(folderName);
+										Added = true;
+								   }
+								   else
+								   {
+										// Break the loop, since if it exists we don't need to keep iterating
+										MessageBox.Show("The folder you are trying to add is a subfolder of an existing folder!");
+										break;
+								   }
+
 							  }
 
 						 }
-
+					}
+					else
+					{
+						 foreach (var folderName in folders)
+						 {
+							  foldersToAddToListView.Add(folderName);
+						 }
 					}
 
 					foreach (var folder in foldersToAddToListView)
@@ -181,6 +213,9 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  /// <summary>
+		  /// The action when the user choose backup folder
+		  /// </summary>
 		  void ChooseBackupFolder()
 		  {
 			   var dlg = new CommonOpenFileDialog();
@@ -207,13 +242,35 @@ namespace BackupSoftware
 			   }
 		  }
 		  
+		  /// <summary>
+		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
+		  /// </summary>
 		  void StartBackup()
 		  {
+			   // Checks to see if there is content in the fields
 			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderPathsToBackup.Count == 0)
 			   {
 					MessageBox.Show("Fill in the list of folder and hard drive!");
 					return;
 			   }
+
+			   // Check to see if the folders exists
+			   foreach (string path in this.FolderPathsToBackup)
+			   {
+					if (!Directory.Exists(path))
+					{
+						 MessageBox.Show(path + " can not be found!");
+						 return;
+					}
+
+			   }
+
+			   if (!Directory.Exists(this.BackupFolder))
+			   {
+					MessageBox.Show(BackupFolder + " can not be found!");
+					return;
+			   }
+
 
 			   foreach (var folderPath in this.FolderPathsToBackup)
 			   {
@@ -224,18 +281,26 @@ namespace BackupSoftware
 
 					string folderInBackupDrive = this.BackupFolder + "\\" + folderName;
 
-					Debug.WriteLine("Backup...");
+					//Debug.WriteLine("Backup...");
+					LogInfo += "Backup...\n";
+					Debug.WriteLine(LogInfo);
 					Backup(folderFullPathToBackup, folderInBackupDrive);
-					Debug.WriteLine("End backup...");
+					LogInfo += "End Backup...\n";
+					Debug.WriteLine(LogInfo);
+					//Debug.WriteLine("End backup...");
 
 
-					Debug.WriteLine("DeleteFiles...");
-					DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-					Debug.WriteLine("End deletefiles...");
+					//Debug.WriteLine("DeleteFiles...");
+					//DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
+					//Debug.WriteLine("End deletefiles...");
 
 			   }
 		  }
 
+		  void MenuItemClick()
+		  {
+			   FolderPathsToBackup.Remove(SelectedItem.ToString());
+		  }
 		  #endregion
 
 		  #region Helpers
