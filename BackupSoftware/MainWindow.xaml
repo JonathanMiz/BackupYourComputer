@@ -69,9 +69,9 @@
                     <ColumnDefinition Width="Auto"/>
                </Grid.ColumnDefinitions>
                <!-- Logo -->
-               <Image Grid.Column="0" Width="50"/>
+               <Image Grid.Column="0" Width="40" Height="40" Source="Images/backup.png"/>
                <!-- Title -->
-               <Label Grid.Column="1" HorizontalAlignment="Center" Content="Backup Your Computer Software" FontSize="20" Margin="10" Background="{x:Null}">
+               <Label Grid.Column="1" HorizontalAlignment="Center" Content="Backup Your Computer" FontSize="20" Margin="10" Background="{x:Null}">
                     <Label.Foreground>
                          <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                               <GradientStop Color="Black" Offset="0"/>
