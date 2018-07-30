@@ -121,6 +121,7 @@ namespace BackupSoftware
 		  public RelayCommand ChooseBackupFolderCommand { get; set; }
 		  public RelayCommand StartBackupCommand { get; set; }
 		  public RelayCommand MenuItemClickCommand { get; set; }
+		  public RelayParameterizedCommand<string> RemoveItemCommand { get; set; }
 
 		  #endregion
 
@@ -129,7 +130,8 @@ namespace BackupSoftware
 			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
 			   StartBackupCommand = new RelayCommand(StartBackup);
-			   MenuItemClickCommand = new RelayCommand(MenuItemClick);
+			   //MenuItemClickCommand = new RelayCommand(MenuItemClick);
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
 		  }
 
 		  #region Command Functions
@@ -314,6 +316,7 @@ namespace BackupSoftware
 		  {
 			   RemoveFolderToBackUp(SelectedItem.ToString());
 		  }
+
 		  #endregion
 
 		  #region Helpers

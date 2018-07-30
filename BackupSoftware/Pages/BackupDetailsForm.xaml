@@ -28,13 +28,19 @@
                          <ListBox.ItemTemplate>
                               <DataTemplate>
                                    <StackPanel Orientation="Vertical">
-                                        <StackPanel Orientation="Horizontal">
-                                             <TextBlock Text="{Binding}" HorizontalAlignment="Left"/>
-                                             <Button Content="X" HorizontalAlignment="right"/>
+                                        <Grid>
+                                             <Grid.ColumnDefinitions>
+                                                  <ColumnDefinition Width="*"/>
+                                                  <ColumnDefinition Width="Auto"/>
+                                             </Grid.ColumnDefinitions>
+                                             <TextBlock Grid.Column="0" Text="{Binding}" HorizontalAlignment="Left"/>
+                                             <Button Grid.Column="1" Content="X" HorizontalAlignment="right"
+                                                     Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                                     CommandParameter="{Binding}"/>
                                              
-                                        </StackPanel>
+                                        </Grid>
                                         <CheckBox Content="Delete previous files" />
-                                        <Border Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=Width}">
+                                        <Border Width="400">
                                              <Border.Background>
                                                   <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                        <GradientStop Color="White" Offset="0"/>
