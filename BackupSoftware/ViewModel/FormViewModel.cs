@@ -97,21 +97,21 @@ namespace BackupSoftware
 		  }
 
 		  public object SelectedItem { get; set; }
-		  public string LogInfo
-		  {
-			   get
-			   {
-					return LogInfo;
-			   }
-			   set
-			   {
-					if (LogInfo == value)
-						 return;
+		  //public string LogInfo
+		  //{
+			 //  get
+			 //  {
+				//	return LogInfo;
+			 //  }
+			 //  set
+			 //  {
+				//	if (LogInfo == value)
+				//		 return;
 
-					LogInfo = value;
-					OnPropertyChanged("LogInfo");
-			   }
-		  }
+				//	LogInfo = value;
+				//	OnPropertyChanged("LogInfo");
+			 //  }
+		  //}
 
 		  #endregion
 
@@ -303,9 +303,9 @@ namespace BackupSoftware
 					Debug.WriteLine("End backup...");
 
 
-					//Debug.WriteLine("DeleteFiles...");
-					//DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-					//Debug.WriteLine("End deletefiles...");
+					Debug.WriteLine("DeleteFiles...");
+					DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
+					Debug.WriteLine("End deletefiles...");
 
 			   }
 		  }
@@ -327,6 +327,7 @@ namespace BackupSoftware
 			   if (!Directory.Exists(dest))
 			   {
 					Directory.CreateDirectory(dest);
+					Debug.WriteLine("Created new folder " + dest);
 			   }
 
 			   foreach (var file in Directory.GetFiles(source))
@@ -393,7 +394,7 @@ namespace BackupSoftware
 
 					if (!Directory.Exists(fullFilePathInDest))
 					{
-						 Debug.WriteLine("Deleted folder " + fullFilePathInDest + " and all its subfolders and subfiles!");
+						 Debug.WriteLine("Deleted folder " + dir + " and all its subfolders and subfiles!");
 						 Directory.Delete(dir, true);
 					}
 					else

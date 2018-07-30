@@ -9,50 +9,74 @@
       Title="BackupDetailsForm">
 
      <Grid>
-          <ScrollViewer>
-               <StackPanel HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" Margin="10">
-                         <Label Content="List of folders:" />
-                         <ListBox Height="136" x:Name="FolderList"
+
+          <StackPanel HorizontalAlignment="Left">
+               <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="List of folders:" />
+                    <ListBox Height="136" x:Name="FolderList"
                                   ItemsSource="{Binding FolderPathsToBackup, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                  Width="409">
-                              <ListBox.ContextMenu>
-                                   <ContextMenu>
-                                        <MenuItem Header="Remove folder"
+                                  Width="409" Background="White">
+                         <ListBox.ContextMenu>
+                              <ContextMenu>
+                                   <MenuItem Header="Remove folder"
                                                   Command="{Binding MenuItemClickCommand}"/>
-                                   </ContextMenu>
-                              </ListBox.ContextMenu>
-                         </ListBox>
+                              </ContextMenu>
+                         </ListBox.ContextMenu>
 
-                         <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
+
+                         <ListBox.ItemTemplate>
+                              <DataTemplate>
+                                   <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                             <TextBlock Text="{Binding}" HorizontalAlignment="Left"/>
+                                             <Button Content="X" HorizontalAlignment="right"/>
+                                             
+                                        </StackPanel>
+                                        <CheckBox Content="Delete previous files" />
+                                        <Border Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=Width}">
+                                             <Border.Background>
+                                                  <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                       <GradientStop Color="White" Offset="0"/>
+                                                       <GradientStop Color="White" Offset="1"/>
+                                                       <GradientStop Color="#FFDEDDDD" Offset="0.5"/>
+                                                  </LinearGradientBrush>
+                                             </Border.Background>
+                                             <Border.Height>3</Border.Height>
+               
+                                        </Border>
+                                   </StackPanel>
+                              </DataTemplate>
+                         </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
                                  Command="{Binding ChooseFolderCommand}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="10">
-                         <Label Content="Backup Drive:" />
-                         <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}"/>
-                         <Button x:Name="browseBackupFolderButton"
+               </StackPanel>
+               <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="Backup Drive:" />
+                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}"/>
+                    <Button x:Name="browseBackupFolderButton"
                                  Content="..."
                                  Width="20"
                                  Height="20"
                                  Command="{Binding ChooseBackupFolderCommand}"/>
-                    </StackPanel>
-                    <Button x:Name="startBackupButton"
+               </StackPanel>
+               <Button x:Name="startBackupButton"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Content="Start Backup" Width="75"
                             Command="{Binding StartBackupCommand}"/>
-                    <Viewbox>
+               <Viewbox>
 
-                    </Viewbox>
-                    <Border>
-                         <TextBlock Text="Here will be logger..."
+               </Viewbox>
+               <Border>
+                    <TextBlock Text="Here will be logger..."
                                          FontSize="20"
                                     x:Name="LogInfo">
 
-                         </TextBlock>
-                    </Border>
-               </StackPanel>
-          </ScrollViewer>
+                    </TextBlock>
+               </Border>
+          </StackPanel>
      </Grid>
 </Page>
