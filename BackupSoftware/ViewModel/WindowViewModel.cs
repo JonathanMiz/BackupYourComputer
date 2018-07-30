@@ -2,6 +2,22 @@
 
 namespace BackupSoftware
 {
+	 /// <summary>
+	 /// The pages types
+	 /// </summary>
+	 public enum ApplicationPage
+	 {
+		  /// <summary>
+		  /// The backup data form page
+		  /// </summary>
+		  BackupDetailsForm = 0,
+
+		  /// <summary>
+		  /// The screen shots page
+		  /// </summary>
+		  ScreenshotsDetailsForm =1,
+	 }
+
 	 class WindowViewModel : ViewModelBase
 	 {
 		  /// <summary>
@@ -37,6 +53,8 @@ namespace BackupSoftware
 			   MinimizeCommand = new RelayCommand(MinimizeWindow);
 			   CloseCommand = new RelayCommand(m_Window.Close);
 		  }
+
+		  public ApplicationPage CurrentPage { get; set; } = ApplicationPage.BackupDetailsForm;
 
 		  #region Commands
 

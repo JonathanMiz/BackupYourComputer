@@ -7,6 +7,7 @@ using System.Windows;
 using System.IO;
 using System.Diagnostics;
 using GalaSoft.MvvmLight.Command;
+using System;
 
 namespace BackupSoftware
 {
@@ -156,59 +157,75 @@ namespace BackupSoftware
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
 			   {
-					// Take all the folders that was chosen
-					var folders = dlg.FileNames;
+					var newFoldersToBackup = dlg.FileNames;
 
 					// Temp list to add all the folders, because we cannot add to list while iterating on it
 					List<string> foldersToAddToListView = new List<string>();
 
-					bool Added = false;
+					// All the folders that needs to be removed, if they are subfolders of the new added folder
+					List<string> foldersToRemoveToListView = new List<string>();
+
 
 					// If the list is not empty
 					if (FolderPathsToBackup.Count > 0)
 					{
-						 // Iterate through all of the folders that the user added
-						 foreach (var folderName in folders)
+						 foreach (var newFolderToBackup in newFoldersToBackup)
 						 {
+							  bool Added = true;
 							  // // Iterate through all of the folders that are already in our data
-							  for (int i = 0; i < FolderPathsToBackup.Count && !Added; ++i)
+							  for (int i = 0; i < FolderPathsToBackup.Count; ++i)
 							  {
-								   var folder = FolderPathsToBackup[i];
-								   if (FolderPathsToBackup.Contains(folderName))
+								   var exisitingFolderToBackup = FolderPathsToBackup[i].ToString();
+								   if (FolderPathsToBackup.Contains(newFolderToBackup))
 								   {
-										MessageBox.Show("The folder you are trying to add already exists!");
+										MessageBox.Show(newFolderToBackup + " already exists in the list!");
+										Added = false;
 										break;
 								   }
 
-								   // Check to see if the new folder is not a sub folder of existing item
-								   if (!IsSubFolder(folder.ToString(), folderName))
+								   if (IsSubFolder(exisitingFolderToBackup, newFolderToBackup))
 								   {
-										// Add to the list
-										foldersToAddToListView.Add(folderName);
-										Added = true;
-								   }
-								   else
-								   {
-										// Break the loop, since if it exists we don't need to keep iterating
-										MessageBox.Show("The folder you are trying to add is a subfolder of an existing folder!");
+										MessageBox.Show(newFolderToBackup + " is a subfolder of " + exisitingFolderToBackup + ".");
+										Added = false;
 										break;
 								   }
 
+								   if (IsSubFolder(newFolderToBackup, exisitingFolderToBackup))
+								   {
+										foldersToRemoveToListView.Add(exisitingFolderToBackup);
+								   }
 							  }
 
+							  if (Added)
+							  {
+								   // Add to the list
+								   foldersToAddToListView.Add(newFolderToBackup);
+							  }
 						 }
+
 					}
 					else
 					{
-						 foreach (var folderName in folders)
+						 foreach (var newFolderToBackup in newFoldersToBackup)
 						 {
-							  foldersToAddToListView.Add(folderName);
+							  foldersToAddToListView.Add(newFolderToBackup);
 						 }
 					}
+
 
 					foreach (var folder in foldersToAddToListView)
 					{
 						 AddFolderToBackUp(folder);
+					}
+
+					if (foldersToRemoveToListView.Count > 0)
+					{
+						 MessageBox.Show("You added a parent folder, so all the subfolders are removed!");
+
+						 foreach (var folder in foldersToRemoveToListView)
+						 {
+							  RemoveFolderToBackUp(folder);
+						 }
 					}
 			   }
 		  }
@@ -241,7 +258,7 @@ namespace BackupSoftware
 					BackupFolder = folder;
 			   }
 		  }
-		  
+
 		  /// <summary>
 		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
 		  /// </summary>
@@ -281,13 +298,9 @@ namespace BackupSoftware
 
 					string folderInBackupDrive = this.BackupFolder + "\\" + folderName;
 
-					//Debug.WriteLine("Backup...");
-					LogInfo += "Backup...\n";
-					Debug.WriteLine(LogInfo);
+					Debug.WriteLine("Backup...");
 					Backup(folderFullPathToBackup, folderInBackupDrive);
-					LogInfo += "End Backup...\n";
-					Debug.WriteLine(LogInfo);
-					//Debug.WriteLine("End backup...");
+					Debug.WriteLine("End backup...");
 
 
 					//Debug.WriteLine("DeleteFiles...");
@@ -299,7 +312,7 @@ namespace BackupSoftware
 
 		  void MenuItemClick()
 		  {
-			   FolderPathsToBackup.Remove(SelectedItem.ToString());
+			   RemoveFolderToBackUp(SelectedItem.ToString());
 		  }
 		  #endregion
 
@@ -395,16 +408,20 @@ namespace BackupSoftware
 		  }
 
 		  /// <summary>
-		  /// If the path of folder is in checkFolder than the folder is subfolder
+		  /// If subfolder is sub folder of folder
 		  /// </summary>
 		  /// <param name="folder">The folder </param>
-		  /// <param name="checkFolder">The folder to check if it is subfolder</param>
+		  /// <param name="subFolder">The folder to check if it is subfolder</param>
 		  /// <returns></returns>
 		  /// Note(Jonathan): What if there is a folder names documents and a folder name documents-new
 		  /// Bad implementation
-		  private bool IsSubFolder(string folder, string checkFolder)
+		  private bool IsSubFolder(string folder, string subFolder)
 		  {
-			   return checkFolder.Contains(folder);
+			   string normailzedFolder = folder.Replace('\\', '/') + '/';
+			   string normlizedSubFolder = subFolder.Replace('\\', '/') + '/';
+
+			   bool result = normlizedSubFolder.Contains(normailzedFolder);
+			   return result;
 		  }
 
 		  /// <summary>

@@ -8,15 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BackupDetailsForm">
 
-    <Grid>
+     <Grid>
           <ScrollViewer>
                <StackPanel HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" Margin="10">
                          <Label Content="List of folders:" />
-                         <ListBox Height="50" x:Name="FolderList"
+                         <ListBox Height="136" x:Name="FolderList"
                                   ItemsSource="{Binding FolderPathsToBackup, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                  Width="350">
+                                  Width="409">
                               <ListBox.ContextMenu>
                                    <ContextMenu>
                                         <MenuItem Header="Remove folder"
@@ -24,7 +24,7 @@
                                    </ContextMenu>
                               </ListBox.ContextMenu>
                          </ListBox>
-                    
+
                          <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
                                  Command="{Binding ChooseFolderCommand}"/>
                     </StackPanel>
@@ -46,7 +46,7 @@
 
                     </Viewbox>
                     <Border>
-                         <TextBlock Text="{Binding LogInfo, Mode=TwoWay, FallbackValue=3131}"
+                         <TextBlock Text="Here will be logger..."
                                          FontSize="20"
                                     x:Name="LogInfo">
 

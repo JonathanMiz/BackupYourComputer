@@ -21,6 +21,7 @@
 	3. Add log
 	4. Add check if there is a subfolder in the list, and the user is trying to add a parent folder
 	5. Make the backup function work with thread so it won't make the program to stuck
+	6. Make that work with selecting multiple folders
 	
 	Bugs/Fixes:
 	

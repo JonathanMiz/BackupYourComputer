@@ -106,7 +106,7 @@
           <!-- Page content -->
           <Border Grid.Row="2" Background="CornflowerBlue">
                <Grid>
-                    <Frame x:Name="MainFrame" Source="Pages/BackupDetailsForm.xaml"  />
+                    <Frame x:Name="MainFrame" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}" />
                </Grid>
           </Border>
      </Grid>
