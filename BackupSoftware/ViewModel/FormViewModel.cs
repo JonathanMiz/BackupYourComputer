@@ -29,30 +29,36 @@ namespace BackupSoftware
 
 		  /// <summary>
 		  /// The list of the folders the user want to backup
-		  /// In order for the view to update the changes that occured in <see cref="m_folderPathsToBackup"/> we need <see cref="ObservableCollection{T}"/>
+		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
 		  /// </summary>
-		  private ObservableCollection<string> m_folderPathsToBackup = new ObservableCollection<string>();
+		  private ObservableCollection<FolderItem> m_folderItems = new ObservableCollection<FolderItem>();
+
 
 		  /// <summary>
 		  /// The folder in which the user want to backup his files
 		  /// </summary>
 		  private string m_backupFolder;
+		  /// <summary>
+		  /// The checkbox content to check if the user wants to delete previous content from his backup folder
+		  /// </summary>
+		  private bool m_DeletePrevContent;
 		  #endregion
 
 		  #region Public Members
 
+
 		  /// <summary>
-		  /// A refrence for <see cref="m_folderPathsToBackup"/> in order for the binding to work
+		  /// A refrence for <see cref="m_folderItems"/> in order for the binding to work
 		  /// </summary>
-		  public ObservableCollection<string> FolderPathsToBackup
+		  public ObservableCollection<FolderItem> FolderItems
 		  {
 			   get
 			   {
-					return m_folderPathsToBackup;
+					return m_folderItems;
 			   }
 			   set
 			   {
-					m_folderPathsToBackup = value;
+					m_folderItems = value;
 					OnPropertyChanged(FolderPathsToBackupPropertyName);
 			   }
 		  }
@@ -63,7 +69,7 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void AddFolderToBackUp(string folder)
 		  {
-			   m_folderPathsToBackup.Add(folder);
+			   m_folderItems.Add(new FolderItem(folder, false));
 			   OnPropertyChanged(FolderPathsToBackupPropertyName);
 		  }
 
@@ -73,8 +79,12 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void RemoveFolderToBackUp(string folder)
 		  {
-			   m_folderPathsToBackup.Remove(folder);
-			   OnPropertyChanged(FolderPathsToBackupPropertyName);
+			   FolderItem item = FindFolderItemByString(m_folderItems, folder);
+			   if (item != null)
+			   {
+					m_folderItems.Remove(item);
+					OnPropertyChanged(FolderPathsToBackupPropertyName);
+			   }
 		  }
 
 		  /// <summary>
@@ -96,43 +106,30 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  public object SelectedItem { get; set; }
-		  //public string LogInfo
-		  //{
-			 //  get
-			 //  {
-				//	return LogInfo;
-			 //  }
-			 //  set
-			 //  {
-				//	if (LogInfo == value)
-				//		 return;
-
-				//	LogInfo = value;
-				//	OnPropertyChanged("LogInfo");
-			 //  }
-		  //}
-
 		  #endregion
 
 		  #region Commands
 
+		  /// <summary>
+		  /// The command to choose folder to backup
+		  /// </summary>
 		  public RelayCommand ChooseFolderCommand { get; set; }
+		  /// <summary>
+		  /// The command to choose backup folder
+		  /// </summary>
 		  public RelayCommand ChooseBackupFolderCommand { get; set; }
+		  /// <summary>
+		  /// The command to start the backup
+		  /// </summary>
 		  public RelayCommand StartBackupCommand { get; set; }
-		  public RelayCommand MenuItemClickCommand { get; set; }
+		  /// <summary>
+		  /// The command to remove a list view item
+		  /// </summary>
 		  public RelayParameterizedCommand<string> RemoveItemCommand { get; set; }
 
 		  #endregion
 
-		  public FormViewModel()
-		  {
-			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
-			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
-			   StartBackupCommand = new RelayCommand(StartBackup);
-			   //MenuItemClickCommand = new RelayCommand(MenuItemClick);
-			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
-		  }
+
 
 		  #region Command Functions
 
@@ -169,16 +166,16 @@ namespace BackupSoftware
 
 
 					// If the list is not empty
-					if (FolderPathsToBackup.Count > 0)
+					if (FolderItems.Count > 0)
 					{
 						 foreach (var newFolderToBackup in newFoldersToBackup)
 						 {
 							  bool Added = true;
 							  // // Iterate through all of the folders that are already in our data
-							  for (int i = 0; i < FolderPathsToBackup.Count; ++i)
+							  for (int i = 0; i < FolderItems.Count; ++i)
 							  {
-								   var exisitingFolderToBackup = FolderPathsToBackup[i].ToString();
-								   if (FolderPathsToBackup.Contains(newFolderToBackup))
+								   var exisitingFolderToBackup = FolderItems[i].FolderPath.ToString();
+								   if (FindFolderItemByString(FolderItems, newFolderToBackup) != null)
 								   {
 										MessageBox.Show(newFolderToBackup + " already exists in the list!");
 										Added = false;
@@ -267,18 +264,18 @@ namespace BackupSoftware
 		  void StartBackup()
 		  {
 			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderPathsToBackup.Count == 0)
+			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderItems.Count == 0)
 			   {
 					MessageBox.Show("Fill in the list of folder and hard drive!");
 					return;
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (string path in this.FolderPathsToBackup)
+			   foreach (FolderItem item in this.FolderItems)
 			   {
-					if (!Directory.Exists(path))
+					if (!Directory.Exists(item.FolderPath))
 					{
-						 MessageBox.Show(path + " can not be found!");
+						 MessageBox.Show(item.FolderPath + " can not be found!");
 						 return;
 					}
 
@@ -291,9 +288,11 @@ namespace BackupSoftware
 			   }
 
 
-			   foreach (var folderPath in this.FolderPathsToBackup)
+
+			   foreach (FolderItem item in this.FolderItems)
 			   {
-					string folderFullPathToBackup = folderPath;
+					//int fCount = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories).Length;
+					string folderFullPathToBackup = item.FolderPath;
 
 					// Extract the name of the folder
 					string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
@@ -304,20 +303,28 @@ namespace BackupSoftware
 					Backup(folderFullPathToBackup, folderInBackupDrive);
 					Debug.WriteLine("End backup...");
 
-
-					Debug.WriteLine("DeleteFiles...");
-					DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-					Debug.WriteLine("End deletefiles...");
+					if (item.DeletePrevContent)
+					{
+						 Debug.WriteLine("DeleteFiles...");
+						 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
+						 Debug.WriteLine("End deletefiles...");
+					}
 
 			   }
 		  }
 
-		  void MenuItemClick()
-		  {
-			   RemoveFolderToBackUp(SelectedItem.ToString());
-		  }
-
 		  #endregion
+
+		  /// <summary>
+		  /// Default Constructor
+		  /// </summary>
+		  public FormViewModel()
+		  {
+			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
+			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
+			   StartBackupCommand = new RelayCommand(StartBackup);
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
+		  }
 
 		  #region Helpers
 		  /// <summary>
@@ -442,6 +449,19 @@ namespace BackupSoftware
 			   return normalizedPath.Substring(lastSlash + 1);
 		  }
 
+
+		  public FolderItem FindFolderItemByString(ObservableCollection<FolderItem> FolderItems, string folder)
+		  {
+			   for (int i = 0; i < FolderItems.Count; ++i)
+			   {
+					FolderItem item = FolderItems[i];
+					if (item.FolderPath == folder)
+					{
+						 return item;
+					}
+			   }
+			   return null;
+		  }
 
 		  #endregion
 
