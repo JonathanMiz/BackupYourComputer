@@ -8,12 +8,19 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BackupDetailsForm">
 
-     <Grid>
+     <Page.Resources>
+          <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+               <Setter Property="FontFamily" Value="Segoe UI Light" />
+               <Setter Property="FontSize" Value="20" />
+          </Style>
+     </Page.Resources>
+     
+     <Grid Margin="30 0">
 
           <StackPanel HorizontalAlignment="Left">
-               <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="List of folders:" />
-                    <ListBox Height="136" x:Name="FolderList"
+               <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
+                    <ListBox HorizontalAlignment="Left" Height="136" x:Name="FolderList"
                                   ItemsSource="{Binding FolderItems, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
                                   Width="409" Background="White">
@@ -64,8 +71,8 @@
                                  Command="{Binding ChooseFolderCommand}"/>
                </StackPanel>
                <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="Backup Drive:" />
-                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}"/>
+                    <Label Content="Backup Drive:" Style="{StaticResource LabelStyle}" />
+                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}" Height="22"/>
                     <Button x:Name="browseBackupFolderButton"
                                  Content="..."
                                  Width="20"
@@ -87,6 +94,36 @@
 
                     </TextBlock>
                </Border>
+
+               <ListView>
+                    <ListView.ItemTemplate>
+                         <DataTemplate>
+                              <StackPanel Orientation="Vertical">
+                                   <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Name:" />
+                                        <TextBlock x:Name="NameValue" />
+                                   </StackPanel>
+                                   <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="From:" />
+                                        <TextBlock x:Name="FromValue" />
+                                   </StackPanel>
+                                   <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="To:" />
+                                        <TextBlock x:Name="ToValue" />
+                                   </StackPanel>
+                                   <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Items remaining:" />
+                                        <TextBlock x:Name="ItemsRemainingValue" />
+                                   </StackPanel>
+                                   <ProgressBar />
+                              </StackPanel>
+                         </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListViewItem>
+                         dsa
+                    </ListViewItem>
+               </ListView>
           </StackPanel>
      </Grid>
 </Page>

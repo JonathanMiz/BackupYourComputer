@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BackupSoftware.Styles">
+
+
+     <Color x:Key="DarkBlue">#0c2461</Color>
+     <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}" />
+
+     <Color x:Key="DarkLightBlue">#1e3799</Color>
+     <SolidColorBrush x:Key="DarkLightBlueBrush" Color="{StaticResource DarkLightBlue}" />
+
+     <Color x:Key="LightBlue">#4a69bd</Color>
+     <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}" />
+
+     <Color x:Key="VeryLightBlue">#6a89cc</Color>
+     <SolidColorBrush x:Key="VeryLightBlueBursh" Color="{StaticResource VeryLightBlue}" />
+
+</ResourceDictionary>

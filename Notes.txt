@@ -14,6 +14,9 @@
 			3.1.2 If the folder is empty after the 3.1.1 delete it
 	4. When pressing start backup open a window log that will show to file that been replaced ...
 	
+	5. Add a scrollable list the will have the folders and files names with checkbox near them and all the check ones will be backed up
+		otherwise they wouldn't
+	
 	Todo:
 
 	1. Comment the code

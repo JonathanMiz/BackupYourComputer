@@ -51,7 +51,7 @@ namespace BackupSoftware
 		  {
 			   this.m_Window = window;
 			   MinimizeCommand = new RelayCommand(MinimizeWindow);
-			   CloseCommand = new RelayCommand(m_Window.Close);
+			   CloseCommand = new RelayCommand(CloseWindow);
 		  }
 
 		  public ApplicationPage CurrentPage { get; set; } = ApplicationPage.BackupDetailsForm;
@@ -64,6 +64,12 @@ namespace BackupSoftware
 		  public void MinimizeWindow()
 		  {
 			   m_Window.WindowState = WindowState.Minimized;
+		  }
+
+		  public void CloseWindow()
+		  {
+			   MessageBox.Show("Tet");
+			   m_Window.Close();
 		  }
 
 		  #endregion

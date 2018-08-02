@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BackupSoftware"
-        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="BackupSoftware.MainWindow"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        x:Class="BackupSoftware.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="600" Width="900"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" 
         Style="{DynamicResource WindowStyle1}"
@@ -104,9 +105,19 @@
           </Border>
 
           <!-- Page content -->
-          <Border Grid.Row="2" Background="CornflowerBlue">
+          <Border Grid.Row="2" Background="#3498db">
                <Grid>
-                    <Frame x:Name="MainFrame" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}" />
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <local:SideMenuControl>
+                         <local:MenuList>
+                              
+                         </local:MenuList>
+                    </local:SideMenuControl>
+                    <Frame Grid.Column="1" x:Name="MainFrame" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}" />
                </Grid>
           </Border>
      </Grid>

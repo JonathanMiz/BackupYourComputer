@@ -6,8 +6,9 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
-using GalaSoft.MvvmLight.Command;
 using System;
+using System.Xaml;
+using System.Configuration;
 
 namespace BackupSoftware
 {
@@ -38,10 +39,6 @@ namespace BackupSoftware
 		  /// The folder in which the user want to backup his files
 		  /// </summary>
 		  private string m_backupFolder;
-		  /// <summary>
-		  /// The checkbox content to check if the user wants to delete previous content from his backup folder
-		  /// </summary>
-		  private bool m_DeletePrevContent;
 		  #endregion
 
 		  #region Public Members
@@ -103,6 +100,21 @@ namespace BackupSoftware
 
 					m_backupFolder = value;
 					OnPropertyChanged(BackupFolderPropertyName);
+			   }
+		  }
+
+		  public void SaveSettings()
+		  {
+			   XamlServices.Save(@"settings.xaml", m_folderItems);
+			   Debugger.Break();
+		  }
+
+		  public void LoadSettings()
+		  {
+			   if (File.Exists("settings.xaml"))
+			   {
+					m_folderItems = (ObservableCollection<FolderItem>)XamlServices.Load("settings.xaml");
+					Debugger.Break();
 			   }
 		  }
 
@@ -263,6 +275,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  void StartBackup()
 		  {
+			   SaveSettings();
 			   // Checks to see if there is content in the fields
 			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderItems.Count == 0)
 			   {
@@ -291,7 +304,6 @@ namespace BackupSoftware
 
 			   foreach (FolderItem item in this.FolderItems)
 			   {
-					//int fCount = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories).Length;
 					string folderFullPathToBackup = item.FolderPath;
 
 					// Extract the name of the folder
@@ -299,15 +311,16 @@ namespace BackupSoftware
 
 					string folderInBackupDrive = this.BackupFolder + "\\" + folderName;
 
-					Debug.WriteLine("Backup...");
+					Debug.WriteLine("Start backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
 					Backup(folderFullPathToBackup, folderInBackupDrive);
-					Debug.WriteLine("End backup...");
+					Debug.WriteLine("End backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
+
 
 					if (item.DeletePrevContent)
 					{
-						 Debug.WriteLine("DeleteFiles...");
+						 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
 						 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-						 Debug.WriteLine("End deletefiles...");
+						 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
 					}
 
 			   }
@@ -355,20 +368,22 @@ namespace BackupSoftware
 							  // Repalce
 							  File.Delete(fullFilePathInDst);
 							  File.Copy(file, fullFilePathInDst);
-							  Debug.WriteLine("Replaced " + file + "...");
+							  Debug.WriteLine("The file " + file + " has been modified, replacing it with new content in " + fullFilePathInDst + "...");
 						 }
 					}
 					else
 					{
 						 File.Copy(file, fullFilePathInDst);
-						 Debug.WriteLine("Copied " + file + "...");
+						 Debug.WriteLine("Copying " + file + "...");
 					};
 			   }
 
 			   foreach (var dir in Directory.GetDirectories(source))
 			   {
 					string fullDirPathInDst = System.IO.Path.Combine(dest, ExtractFileFolderNameFromFullPath(dir));
+					Debug.WriteLine("Backing up " + dir + " to " + fullDirPathInDst);
 					Backup(dir, fullDirPathInDst);
+					Debug.WriteLine("Ended backing up " + dir + " to " + fullDirPathInDst);
 			   }
 
 			   if (Directory.GetDirectories(source).Length == 0)

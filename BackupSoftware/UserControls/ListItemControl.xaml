@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="BackupSoftware.ListItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BackupSoftware"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="300">
+     <Grid Background="White">
+          <Grid.RowDefinitions>
+               <RowDefinition Height="37*"/>
+               <RowDefinition/>
+          </Grid.RowDefinitions>
+          <StackPanel Orientation="Vertical" Grid.RowSpan="2">
+               <Grid>
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="Auto"/>
+                         <ColumnDefinition Width="*"/>
+                         <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--<Image x:Name="folderIcon" Grid.Column="0" Source="Images/backup.png" />-->
+
+                    <StackPanel Grid.Column="1"  Orientation="Vertical">
+                         <TextBlock Text="C:/Jonathan/Test" HorizontalAlignment="Left"
+                               Foreground="Black"
+                                TextTrimming="CharacterEllipsis"
+                               Padding="10"/>
+                         <CheckBox Content="Delete previous files" 
+                              IsChecked="{Binding DeletePrevContent}"
+                              x:Name ="DeletePrevContent"
+                              Margin="10 0"/>
+                    </StackPanel>
+
+
+                    <Button Grid.Column="2" Content="X" HorizontalAlignment="Center"
+                            Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                            CommandParameter="{Binding FolderPath}" Padding="10" Margin="0 0 10 0" />
+
+
+                    <!--<Border Width="300">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="White" Offset="0"/>
+                            <GradientStop Color="White" Offset="1"/>
+                            <GradientStop Color="#FFDEDDDD" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Height>3</Border.Height>
+
+                </Border>-->
+               </Grid>
+          </StackPanel>
+     </Grid>
+</UserControl>
