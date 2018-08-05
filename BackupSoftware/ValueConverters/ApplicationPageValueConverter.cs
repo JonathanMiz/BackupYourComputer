@@ -24,6 +24,10 @@ namespace BackupSoftware
 						 {
 							  return new ScreenshotsDetails();
 						 }
+					case ApplicationPage.SelectFolders:
+						 {
+							  return new SelectFoldersPage();
+						 }
 					default:
 						 Debugger.Break();
 						 return null;

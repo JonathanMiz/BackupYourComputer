@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System;
 using System.Xaml;
 using System.Configuration;
+using Ninject;
 
 namespace BackupSoftware
 {
@@ -27,11 +28,21 @@ namespace BackupSoftware
 		  /// </summary>
 		  public string Title { get; set; }
 
+		  /// <summary>
+		  /// The page of this menu item
+		  /// </summary>
+		  public ApplicationPage Page { get; set; }
 
-		  public ApplicationPage applicationPage { get; set; }
+		  public RelayCommand OpenPageCommand { get; set; }
 
 		  public MenuItemViewModel()
-		  {  
+		  {
+			   OpenPageCommand = new RelayCommand(OpenPage);
+		  }
+
+		  void OpenPage()
+		  {
+			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = Page;
 		  }
 	 }
 }

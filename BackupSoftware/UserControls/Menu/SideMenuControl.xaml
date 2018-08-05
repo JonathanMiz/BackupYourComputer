@@ -12,6 +12,11 @@
           <ControlTemplate TargetType="UserControl">
                <Grid Background="{StaticResource DarkBlueBrush}">
                     <ContentPresenter />
+                    <TextBlock VerticalAlignment="Bottom" Text="BackupSoftware"
+                               Foreground="White"
+                               FontFamily="{StaticResource FontAwesome}"
+                               FontSize="20"
+                               Padding="20"/>
                </Grid>
 
 

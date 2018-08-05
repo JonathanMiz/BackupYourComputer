@@ -15,7 +15,12 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The screen shots page
 		  /// </summary>
-		  ScreenshotsDetailsForm =1,
+		  ScreenshotsDetailsForm = 1,
+
+		  /// <summary>
+		  /// The select folders to backup page
+		  /// </summary>
+		  SelectFolders = 2,
 	 }
 
 	 class WindowViewModel : ViewModelBase
@@ -54,8 +59,6 @@ namespace BackupSoftware
 			   CloseCommand = new RelayCommand(CloseWindow);
 		  }
 
-		  public ApplicationPage CurrentPage { get; set; } = ApplicationPage.BackupDetailsForm;
-
 		  #region Commands
 
 		  public RelayCommand MinimizeCommand { get; set; }
@@ -68,7 +71,6 @@ namespace BackupSoftware
 
 		  public void CloseWindow()
 		  {
-			   MessageBox.Show("Tet");
 			   m_Window.Close();
 		  }
 

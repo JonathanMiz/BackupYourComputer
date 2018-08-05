@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System;
 using System.Xaml;
 using System.Configuration;
+using Ninject;
 
 namespace BackupSoftware
 {
@@ -18,16 +19,6 @@ namespace BackupSoftware
 	 public class FormViewModel : ViewModelBase
 	 {
 		  #region Private Members
-		  /// <summary>
-		  /// The propery name of <see cref="BackupFolder"/>
-		  /// </summary>
-		  public string BackupFolderPropertyName { get; set; } = "BackupFolder";
-
-		  /// <summary>
-		  /// The propertry name of <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  public string FolderPathsToBackupPropertyName { get; set; } = "FolderList";
-
 		  /// <summary>
 		  /// The list of the folders the user want to backup
 		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
@@ -56,7 +47,7 @@ namespace BackupSoftware
 			   set
 			   {
 					m_folderItems = value;
-					OnPropertyChanged(FolderPathsToBackupPropertyName);
+					OnPropertyChanged(nameof(FolderItems));
 			   }
 		  }
 
@@ -67,7 +58,7 @@ namespace BackupSoftware
 		  public void AddFolderToBackUp(string folder)
 		  {
 			   m_folderItems.Add(new FolderItem(folder, false));
-			   OnPropertyChanged(FolderPathsToBackupPropertyName);
+			   OnPropertyChanged(nameof(FolderItems));
 		  }
 
 		  /// <summary>
@@ -80,7 +71,7 @@ namespace BackupSoftware
 			   if (item != null)
 			   {
 					m_folderItems.Remove(item);
-					OnPropertyChanged(FolderPathsToBackupPropertyName);
+					OnPropertyChanged(nameof(FolderItems));
 			   }
 		  }
 
@@ -99,7 +90,7 @@ namespace BackupSoftware
 						 return;
 
 					m_backupFolder = value;
-					OnPropertyChanged(BackupFolderPropertyName);
+					OnPropertyChanged(nameof(BackupFolder));
 			   }
 		  }
 
@@ -138,6 +129,8 @@ namespace BackupSoftware
 		  /// The command to remove a list view item
 		  /// </summary>
 		  public RelayParameterizedCommand<string> RemoveItemCommand { get; set; }
+
+		  public RelayCommand TestCommand { get; set; }
 
 		  #endregion
 
@@ -275,7 +268,6 @@ namespace BackupSoftware
 		  /// </summary>
 		  void StartBackup()
 		  {
-			   SaveSettings();
 			   // Checks to see if there is content in the fields
 			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderItems.Count == 0)
 			   {

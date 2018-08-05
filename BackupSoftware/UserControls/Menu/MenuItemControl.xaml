@@ -14,23 +14,23 @@
                <Setter Property="Template">
                     <Setter.Value>
                          <ControlTemplate TargetType="{x:Type ButtonBase}">
-                              <!-- TODO: make the item with corner radius attached properites! -->
-                              <Grid  Margin="0 0 0 0"  x:Name="container"  Background="{StaticResource DarkBlueBrush}" Height="40">
-                                   <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                   </Grid.ColumnDefinitions>
-
-                                   <!-- Icon -->
-                                   <Grid Margin="10 0" Background="Transparent">
+                              <Border x:Name="container" Background="{StaticResource DarkBlueBrush}" CornerRadius="3">
+                                   <Grid  Margin="0 0 0 0"   Height="40">
                                         <Grid.ColumnDefinitions>
                                              <ColumnDefinition Width="Auto" />
                                              <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        
                                         <!-- Icon -->
-                                        <TextBlock Grid.Column="0" FontFamily="{StaticResource FontAwesome}"
+                                        <Grid Margin="10 0" Background="Transparent">
+                                             <Grid.ColumnDefinitions>
+                                                  <ColumnDefinition Width="Auto" />
+                                                  <ColumnDefinition Width="Auto" />
+                                             </Grid.ColumnDefinitions>
+
+
+                                             <!-- Icon -->
+                                             <TextBlock Grid.Column="0" FontFamily="{StaticResource FontAwesome}"
                                               Text="{Binding IconCode, FallbackValue=&#xf108;}"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
@@ -42,20 +42,20 @@
 
                                               />
 
-                                        <!-- Item title -->
-                                        <TextBlock Grid.Column="1"
+                                             <!-- Item title -->
+                                             <TextBlock Grid.Column="1"
                                               Text="{Binding Title, FallbackValue=Screenshots}"
                                               Foreground="White"
                                               FontSize="15"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               FontFamily="{StaticResource FontAwesome}"
-                                                   Padding="5 0"
+                                              Padding="5 0"
                                              />
 
+                                        </Grid>
                                    </Grid>
-
-                              </Grid>
+                              </Border>
                               <ControlTemplate.Triggers>
                                    <EventTrigger RoutedEvent="MouseEnter">
                                         <BeginStoryboard>
@@ -86,5 +86,5 @@
 
 
      <Button Content="" Style="{StaticResource MenuItemButton}"
-             Command="{Binding TestCommand}"/>
+             Command="{Binding OpenPageCommand}"/>
 </UserControl>

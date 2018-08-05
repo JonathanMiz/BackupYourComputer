@@ -7,12 +7,13 @@
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
         x:Class="BackupSoftware.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900"
+        Title="MainWindow" Height="600" Width="1024"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" 
         Style="{DynamicResource WindowStyle1}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
+        x:Name="Window"
         >
      <Window.Resources>
           <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type Window}">
@@ -117,7 +118,13 @@
                               
                          </local:MenuList>
                     </local:SideMenuControl>
-                    <Frame Grid.Column="1" x:Name="MainFrame" Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}" />
+                    
+                    <Frame Grid.Column="1"
+                           x:Name="MainFrame"
+                           Content="{Binding ApplicationViewModel.CurrentPage,
+                                    Source={x:Static local:ViewModelLocator.Instance},
+                                    Converter={local:ApplicationPageValueConverter}}"
+                           Background="Transparent"/>
                </Grid>
           </Border>
      </Grid>

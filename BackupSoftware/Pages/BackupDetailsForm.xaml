@@ -9,29 +9,68 @@
       Title="BackupDetailsForm">
 
      <Page.Resources>
-          <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
-               <Setter Property="FontFamily" Value="Segoe UI Light" />
-               <Setter Property="FontSize" Value="20" />
-          </Style>
-     </Page.Resources>
-     
-     <Grid Margin="30 0">
 
-          <StackPanel HorizontalAlignment="Left">
+          <!-- Choose backup folder button -->
+          <Style x:Key="BackupFolderButton" TargetType="{x:Type Button}">
+               <Setter Property="Background" Value="White" />
+               <Setter Property="Template">
+                    <Setter.Value>
+                         <ControlTemplate TargetType="{x:Type Button}">
+                              <Border x:Name="border"
+                                      BorderBrush="#2f3640"
+                                      BorderThickness="2" Background="white"
+                                      Height="200" Width="150">
+                                   <StackPanel Orientation="Vertical" >
+                                        <Image Source="/BackupSoftware;component/Images/backup.png"
+                                               Width="70"
+                                               Margin="0 10 0 4"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                        <TextBlock Text="Backup Folder"
+                                                   HorizontalAlignment="Center"
+                                                   FontFamily="Adobe Caslon Pro"
+                                                   Margin="0 5 0 3"
+                                                   />
+                                        <TextBlock Text="{Binding BackupFolder, Mode=TwoWay}"
+                                                   HorizontalAlignment="Center"
+                                                   FontFamily="Adobe Caslon Pro"
+                                                   FontSize="10"
+                                                   />
+                                   </StackPanel>
+                              </Border>
+                         </ControlTemplate>
+                    </Setter.Value>
+               </Setter>
+          </Style>
+
+
+     </Page.Resources>
+
+     <Grid Background="#f5f6fa">
+          <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="*"/>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <Border Grid.Row="0"  Background="#dcdde1" Height="30"/>
+
+          <Grid Grid.Row="1" HorizontalAlignment="Center"
+                 VerticalAlignment="Center">
+               <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+               </Grid.ColumnDefinitions>
+
+
                <StackPanel Orientation="Vertical" Margin="10">
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
-                    <ListBox HorizontalAlignment="Left" Height="136" x:Name="FolderList"
+                    <ListBox HorizontalAlignment="Left" Height="142" x:Name="FolderList"
                                   ItemsSource="{Binding FolderItems, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                  Width="409" Background="White">
-                         <ListBox.ContextMenu>
-                              <ContextMenu>
-                                   <MenuItem Header="Remove folder"
-                                                  Command="{Binding MenuItemClickCommand}"/>
-                              </ContextMenu>
-                         </ListBox.ContextMenu>
-
-
+                                  Width="320" Background="White">
                          <ListBox.ItemTemplate>
                               <DataTemplate>
                                    <StackPanel Orientation="Vertical">
@@ -44,14 +83,14 @@
                                              <Button Grid.Column="1" Content="X" HorizontalAlignment="right"
                                                      Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                                      CommandParameter="{Binding FolderPath}"/>
-                                             
+
                                         </Grid>
                                         <CheckBox Content="Delete previous files" 
                                                   IsChecked="{Binding DeletePrevContent}"
                                                   x:Name ="DeletePrevContent"
                                                   />
-                                        
-                                        <Border Width="400">
+
+                                        <Border Width="{Binding RelativeSource={RelativeSource Self}, Path=Parent.Width}">
                                              <Border.Background>
                                                   <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                        <GradientStop Color="White" Offset="0"/>
@@ -60,42 +99,34 @@
                                                   </LinearGradientBrush>
                                              </Border.Background>
                                              <Border.Height>3</Border.Height>
-               
+
                                         </Border>
                                    </StackPanel>
                               </DataTemplate>
                          </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Button x:Name="browseFolderToBackupButton" Content="..." Width="20" Height="20"
-                                 Command="{Binding ChooseFolderCommand}"/>
+                    <Button
+                            Command="{Binding ChooseFolderCommand}"
+                            Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=Width}"
+                            Height="20"
+                            Content="..."/>
                </StackPanel>
-               <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="Backup Drive:" Style="{StaticResource LabelStyle}" />
-                    <TextBox Width="300" x:Name="BackupFolder" IsReadOnly="True" Text="{Binding BackupFolder, Mode=TwoWay}" Height="22"/>
-                    <Button x:Name="browseBackupFolderButton"
-                                 Content="..."
-                                 Width="20"
-                                 Height="20"
-                                 Command="{Binding ChooseBackupFolderCommand}"/>
-               </StackPanel>
-               <Button x:Name="startBackupButton"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Content="Start Backup" Width="75"
-                            Command="{Binding StartBackupCommand}"/>
-               <Viewbox>
 
-               </Viewbox>
-               <Border>
-                    <TextBlock Text="Here will be logger..."
-                                         FontSize="20"
-                                    x:Name="LogInfo">
+               <TextBlock Grid.Column="1" Text="&#xf061;"
+                          FontFamily="{StaticResource FontAwesome}"
+                          FontSize="30"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Padding="10"/>
 
-                    </TextBlock>
-               </Border>
+               <Button  Grid.Column="2"
+                                   Style="{StaticResource BackupFolderButton}"
+                                 Command="{Binding ChooseBackupFolderCommand, FallbackValue=Select Folder}"/>
 
-               <ListView>
+          </Grid>
+
+          <!--<ListView>
                     <ListView.ItemTemplate>
                          <DataTemplate>
                               <StackPanel Orientation="Vertical">
@@ -121,9 +152,27 @@
                     </ListView.ItemTemplate>
 
                     <ListViewItem>
-                         dsa
                     </ListViewItem>
-               </ListView>
-          </StackPanel>
+               </ListView>-->
+
+
+
+
+
+          <Button Grid.Row="2" x:Name="startBackupButton"
+                            HorizontalAlignment="Center"
+                            Content="Start Backup" Width="75"
+                            Command="{Binding StartBackupCommand}"/>
+
+
+
+          <!--<Button Grid.Row="2" Style="{StaticResource BackupFolderButton}"/>-->
+          <Border Grid.Row="3"  Background="#dcdde1" Height="30">
+               <TextBlock Text="Here will be logger..."
+                                         FontSize="20"
+                                    x:Name="LogInfo">
+
+               </TextBlock>
+          </Border>
      </Grid>
 </Page>

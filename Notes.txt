@@ -15,7 +15,7 @@
 	4. When pressing start backup open a window log that will show to file that been replaced ...
 	
 	5. Add a scrollable list the will have the folders and files names with checkbox near them and all the check ones will be backed up
-		otherwise they wouldn't
+		otherwise they won't
 	
 	Todo:
 
@@ -23,6 +23,8 @@
 	2. Refactor the code
 	3. Add log
 	5. Make the backup function work with thread so it won't make the program to stuck
+	6. Finish the menu, navigating between pages
+	7. Implement the effect of selecting button in the menu
 	
 	Bugs/Fixes:
 	
@@ -34,3 +36,12 @@
 	------2. Edit the style of the window buttons and for the regular buttons
 	------3. Add some basic icon
 	4. Add global fonts to all of the program
+	
+	
+	nameof
+	
+	Things to understand better:
+	1. Ninject
+	2. StoryBoard
+	3. Templates
+	4. Converters
