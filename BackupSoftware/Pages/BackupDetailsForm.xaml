@@ -1,9 +1,10 @@
-﻿<Page x:Class="BackupSoftware.BackupDetailsForm"
+﻿<Page
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BackupSoftware"
+      xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="BackupSoftware.BackupDetailsForm"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BackupDetailsForm">
@@ -17,24 +18,27 @@
                     <Setter.Value>
                          <ControlTemplate TargetType="{x:Type Button}">
                               <Border x:Name="border"
-                                      BorderBrush="#2f3640"
+                                      BorderBrush="#dfe4ea"
                                       BorderThickness="2" Background="white"
-                                      Height="200" Width="150">
+                                      Height="300" Width="250"
+                                      CornerRadius="3">
                                    <StackPanel Orientation="Vertical" >
                                         <Image Source="/BackupSoftware;component/Images/backup.png"
-                                               Width="70"
-                                               Margin="0 10 0 4"
+                                               Width="100"
+                                               Margin="0 50 0 4"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"/>
-                                        <TextBlock Text="Backup Folder"
+                                        <TextBlock Text="{TemplateBinding Content}"
                                                    HorizontalAlignment="Center"
-                                                   FontFamily="Adobe Caslon Pro"
-                                                   Margin="0 5 0 3"
+                                                   FontFamily="Segoe UI"
+                                                   FontSize="20"
+                                                   Margin="0 5 0 3" FontWeight="Bold"
                                                    />
                                         <TextBlock Text="{Binding BackupFolder, Mode=TwoWay}"
                                                    HorizontalAlignment="Center"
-                                                   FontFamily="Adobe Caslon Pro"
-                                                   FontSize="10"
+                                                   FontFamily="Segoe UI Light"
+                                                   Margin="0 10 0 0"
+                                                   FontSize="15"
                                                    />
                                    </StackPanel>
                               </Border>
@@ -43,6 +47,41 @@
                </Setter>
           </Style>
 
+          <!-- Choose folders button -->
+          <Style x:Key="ChooseFolderButton" TargetType="{x:Type Button}">
+               <Setter Property="Background" Value="White" />
+               <Setter Property="Template">
+                    <Setter.Value>
+                         <ControlTemplate TargetType="{x:Type Button}">
+                              <Border x:Name="border"
+                                      BorderBrush="#dfe4ea"
+                                      BorderThickness="2" Background="white"
+                                      Height="300" Width="250"
+                                      CornerRadius="3">
+                                   <StackPanel Orientation="Vertical" >
+                                        <Image Source="/BackupSoftware;component/Images/folder.png"
+                                               Width="100"
+                                               Margin="0 50 0 4"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                        <TextBlock Text="{TemplateBinding Content}"
+                                                   HorizontalAlignment="Center"
+                                                   FontFamily="Segoe UI"
+                                                   FontSize="20"
+                                                   Margin="0 5 0 3" FontWeight="Bold"
+                                                   />
+                                        <TextBlock Text="{Binding Folders, FallbackValue=Select folder}"
+                                                   HorizontalAlignment="Center"
+                                                   FontFamily="Segoe UI Light"
+                                                   Margin="0 10 0 0"
+                                                   FontSize="15"
+                                                   />
+                                   </StackPanel>
+                              </Border>
+                         </ControlTemplate>
+                    </Setter.Value>
+               </Setter>
+          </Style>
 
      </Page.Resources>
 
@@ -51,7 +90,7 @@
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="*"/>
                <RowDefinition Height="Auto"/>
-               <RowDefinition Height="Auto"/>
+               <!--<RowDefinition Height="Auto"/>-->
           </Grid.RowDefinitions>
 
           <Border Grid.Row="0"  Background="#dcdde1" Height="30"/>
@@ -65,64 +104,24 @@
                </Grid.ColumnDefinitions>
 
 
-               <StackPanel Orientation="Vertical" Margin="10">
-                    <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
-                    <ListBox HorizontalAlignment="Left" Height="142" x:Name="FolderList"
-                                  ItemsSource="{Binding FolderItems, Mode=TwoWay}"
-                                  SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                  Width="320" Background="White">
-                         <ListBox.ItemTemplate>
-                              <DataTemplate>
-                                   <StackPanel Orientation="Vertical">
-                                        <Grid>
-                                             <Grid.ColumnDefinitions>
-                                                  <ColumnDefinition Width="*"/>
-                                                  <ColumnDefinition Width="Auto"/>
-                                             </Grid.ColumnDefinitions>
-                                             <TextBlock Grid.Column="0" Text="{Binding FolderPath}" HorizontalAlignment="Left"/>
-                                             <Button Grid.Column="1" Content="X" HorizontalAlignment="right"
-                                                     Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                                     CommandParameter="{Binding FolderPath}"/>
 
-                                        </Grid>
-                                        <CheckBox Content="Delete previous files" 
-                                                  IsChecked="{Binding DeletePrevContent}"
-                                                  x:Name ="DeletePrevContent"
-                                                  />
+               <Button Style="{StaticResource ChooseFolderButton}"
+                       Command="{Binding ChooseFoldersToBackup}"
+                       Tag="/BackupSoftware;component/Images/backup.png"
+                       Content="Files and Folders"/>
 
-                                        <Border Width="{Binding RelativeSource={RelativeSource Self}, Path=Parent.Width}">
-                                             <Border.Background>
-                                                  <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                       <GradientStop Color="White" Offset="0"/>
-                                                       <GradientStop Color="White" Offset="1"/>
-                                                       <GradientStop Color="#FFDEDDDD" Offset="0.5"/>
-                                                  </LinearGradientBrush>
-                                             </Border.Background>
-                                             <Border.Height>3</Border.Height>
 
-                                        </Border>
-                                   </StackPanel>
-                              </DataTemplate>
-                         </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <Button
-                            Command="{Binding ChooseFolderCommand}"
-                            Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=Width}"
-                            Height="20"
-                            Content="..."/>
-               </StackPanel>
-
-               <TextBlock Grid.Column="1" Text="&#xf061;"
+               <TextBlock Grid.Column="1" Text="&#xF061;"
                           FontFamily="{StaticResource FontAwesome}"
                           FontSize="30"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           Padding="10"/>
 
-               <Button  Grid.Column="2"
+               <Button  Grid.Column="2" Content="Backup Folder"
+                        Tag="/BackupSoftware;component/Images/folder.png"
                                    Style="{StaticResource BackupFolderButton}"
-                                 Command="{Binding ChooseBackupFolderCommand, FallbackValue=Select Folder}"/>
+                                 Command="{Binding ChooseBackupFolderCommand}"/>
 
           </Grid>
 
@@ -159,20 +158,25 @@
 
 
 
-          <Button Grid.Row="2" x:Name="startBackupButton"
-                            HorizontalAlignment="Center"
-                            Content="Start Backup" Width="75"
-                            Command="{Binding StartBackupCommand}"/>
+
 
 
 
           <!--<Button Grid.Row="2" Style="{StaticResource BackupFolderButton}"/>-->
-          <Border Grid.Row="3"  Background="#dcdde1" Height="30">
-               <TextBlock Text="Here will be logger..."
-                                         FontSize="20"
-                                    x:Name="LogInfo">
-
-               </TextBlock>
+          <Border Grid.Row="2"  Background="#dcdde1" Height="50">
+               <Grid>
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="4*" />
+                         <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
+                    <ProgressBar Height="20" Margin="30 0 0 0" Width="Auto"/>
+                    <Button Grid.Column="1" 
+                       HorizontalAlignment="right"
+                       Content="Start Backup" Width="75"
+                       Margin="0 0 10 0"
+                       Command="{Binding StartBackupCommand}" />
+               </Grid>
           </Border>
      </Grid>
 </Page>

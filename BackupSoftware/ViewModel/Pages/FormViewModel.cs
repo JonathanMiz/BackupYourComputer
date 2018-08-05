@@ -19,61 +19,11 @@ namespace BackupSoftware
 	 public class FormViewModel : ViewModelBase
 	 {
 		  #region Private Members
-		  /// <summary>
-		  /// The list of the folders the user want to backup
-		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
-		  /// </summary>
-		  private ObservableCollection<FolderItem> m_folderItems = new ObservableCollection<FolderItem>();
-
 
 		  /// <summary>
-		  /// The folder in which the user want to backup his files
+		  /// The dest folder to backup the folders
 		  /// </summary>
-		  private string m_backupFolder;
-		  #endregion
-
-		  #region Public Members
-
-
-		  /// <summary>
-		  /// A refrence for <see cref="m_folderItems"/> in order for the binding to work
-		  /// </summary>
-		  public ObservableCollection<FolderItem> FolderItems
-		  {
-			   get
-			   {
-					return m_folderItems;
-			   }
-			   set
-			   {
-					m_folderItems = value;
-					OnPropertyChanged(nameof(FolderItems));
-			   }
-		  }
-
-		  /// <summary>
-		  /// Add new folder to backup to <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  /// <param name="folder"></param>
-		  public void AddFolderToBackUp(string folder)
-		  {
-			   m_folderItems.Add(new FolderItem(folder, false));
-			   OnPropertyChanged(nameof(FolderItems));
-		  }
-
-		  /// <summary>
-		  /// Remove folder to backup to <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  /// <param name="folder"></param>
-		  public void RemoveFolderToBackUp(string folder)
-		  {
-			   FolderItem item = FindFolderItemByString(m_folderItems, folder);
-			   if (item != null)
-			   {
-					m_folderItems.Remove(item);
-					OnPropertyChanged(nameof(FolderItems));
-			   }
-		  }
+		  private string m_backupFolder { get; set; }
 
 		  /// <summary>
 		  /// A refrence for <see cref="m_backupFolder"/> in order for the binding to work
@@ -94,29 +44,57 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  public void SaveSettings()
-		  {
-			   XamlServices.Save(@"settings.xaml", m_folderItems);
-			   Debugger.Break();
-		  }
+		  private string m_Folders { get; set; }
 
-		  public void LoadSettings()
+		  /// <summary>
+		  /// A refrence for <see cref="m_backupFolder"/> in order for the binding to work
+		  /// </summary>
+		  public string Folders
 		  {
-			   if (File.Exists("settings.xaml"))
+			   get
 			   {
-					m_folderItems = (ObservableCollection<FolderItem>)XamlServices.Load("settings.xaml");
-					Debugger.Break();
+					return m_Folders;
+			   }
+			   set
+			   {
+					if (m_Folders == value)
+						 return;
+
+					m_Folders = value;
+					OnPropertyChanged(nameof(Folders));
 			   }
 		  }
+
+		  string Test()
+		  {
+			   string list = "";
+			   foreach (FolderItem item in IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems)
+			   {
+					list += ExtractFileFolderNameFromFullPath(item.FolderPath);
+					list += ", ";
+			   }
+			   return list.Substring(0, list.Length - 2);
+		  }
+
+		  //public void SaveSettings()
+		  //{
+			 //  XamlServices.Save(@"settings.xaml", m_folderItems);
+			 //  Debugger.Break();
+		  //}
+
+		  //public void LoadSettings()
+		  //{
+			 //  if (File.Exists("settings.xaml"))
+			 //  {
+				//	m_folderItems = (ObservableCollection<FolderItem>)XamlServices.Load("settings.xaml");
+				//	Debugger.Break();
+			 //  }
+		  //}
 
 		  #endregion
 
 		  #region Commands
 
-		  /// <summary>
-		  /// The command to choose folder to backup
-		  /// </summary>
-		  public RelayCommand ChooseFolderCommand { get; set; }
 		  /// <summary>
 		  /// The command to choose backup folder
 		  /// </summary>
@@ -126,113 +104,14 @@ namespace BackupSoftware
 		  /// </summary>
 		  public RelayCommand StartBackupCommand { get; set; }
 		  /// <summary>
-		  /// The command to remove a list view item
+		  /// The command to open the page of selecting folders to backup
 		  /// </summary>
-		  public RelayParameterizedCommand<string> RemoveItemCommand { get; set; }
-
-		  public RelayCommand TestCommand { get; set; }
-
+		  public RelayCommand ChooseFoldersToBackup { get; set; }
 		  #endregion
 
 
 
 		  #region Command Functions
-
-		  /// <summary>
-		  ///  The action when the user choose folder add to the <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  void ChooseFolder()
-		  {
-			   var dlg = new CommonOpenFileDialog();
-			   dlg.ResetUserSelections();
-			   dlg.Title = "Choose folder";
-			   dlg.IsFolderPicker = true;
-			   dlg.InitialDirectory = null;
-
-			   dlg.AddToMostRecentlyUsedList = false;
-			   dlg.AllowNonFileSystemItems = false;
-			   dlg.DefaultDirectory = null;
-			   dlg.EnsureFileExists = true;
-			   dlg.EnsurePathExists = true;
-			   dlg.EnsureReadOnly = false;
-			   dlg.EnsureValidNames = true;
-			   dlg.Multiselect = true;
-			   dlg.ShowPlacesList = true;
-
-			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
-			   {
-					var newFoldersToBackup = dlg.FileNames;
-
-					// Temp list to add all the folders, because we cannot add to list while iterating on it
-					List<string> foldersToAddToListView = new List<string>();
-
-					// All the folders that needs to be removed, if they are subfolders of the new added folder
-					List<string> foldersToRemoveToListView = new List<string>();
-
-
-					// If the list is not empty
-					if (FolderItems.Count > 0)
-					{
-						 foreach (var newFolderToBackup in newFoldersToBackup)
-						 {
-							  bool Added = true;
-							  // // Iterate through all of the folders that are already in our data
-							  for (int i = 0; i < FolderItems.Count; ++i)
-							  {
-								   var exisitingFolderToBackup = FolderItems[i].FolderPath.ToString();
-								   if (FindFolderItemByString(FolderItems, newFolderToBackup) != null)
-								   {
-										MessageBox.Show(newFolderToBackup + " already exists in the list!");
-										Added = false;
-										break;
-								   }
-
-								   if (IsSubFolder(exisitingFolderToBackup, newFolderToBackup))
-								   {
-										MessageBox.Show(newFolderToBackup + " is a subfolder of " + exisitingFolderToBackup + ".");
-										Added = false;
-										break;
-								   }
-
-								   if (IsSubFolder(newFolderToBackup, exisitingFolderToBackup))
-								   {
-										foldersToRemoveToListView.Add(exisitingFolderToBackup);
-								   }
-							  }
-
-							  if (Added)
-							  {
-								   // Add to the list
-								   foldersToAddToListView.Add(newFolderToBackup);
-							  }
-						 }
-
-					}
-					else
-					{
-						 foreach (var newFolderToBackup in newFoldersToBackup)
-						 {
-							  foldersToAddToListView.Add(newFolderToBackup);
-						 }
-					}
-
-
-					foreach (var folder in foldersToAddToListView)
-					{
-						 AddFolderToBackUp(folder);
-					}
-
-					if (foldersToRemoveToListView.Count > 0)
-					{
-						 MessageBox.Show("You added a parent folder, so all the subfolders are removed!");
-
-						 foreach (var folder in foldersToRemoveToListView)
-						 {
-							  RemoveFolderToBackUp(folder);
-						 }
-					}
-			   }
-		  }
 
 		  /// <summary>
 		  /// The action when the user choose backup folder
@@ -263,20 +142,28 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  void ChooseFolder()
+		  {
+			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.SelectFolders;
+			   Folders = Test();
+			   Debug.WriteLine(Folders);
+		  }
+
 		  /// <summary>
 		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
 		  /// </summary>
 		  void StartBackup()
 		  {
+			   var FolderItems = IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems;
 			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(this.BackupFolder) || this.FolderItems.Count == 0)
+			   if (string.IsNullOrEmpty(this.BackupFolder) || FolderItems.Count == 0)
 			   {
 					MessageBox.Show("Fill in the list of folder and hard drive!");
 					return;
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (FolderItem item in this.FolderItems)
+			   foreach (FolderItem item in FolderItems)
 			   {
 					if (!Directory.Exists(item.FolderPath))
 					{
@@ -294,7 +181,7 @@ namespace BackupSoftware
 
 
 
-			   foreach (FolderItem item in this.FolderItems)
+			   foreach (FolderItem item in FolderItems)
 			   {
 					string folderFullPathToBackup = item.FolderPath;
 
@@ -325,10 +212,9 @@ namespace BackupSoftware
 		  /// </summary>
 		  public FormViewModel()
 		  {
-			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
+			   ChooseFoldersToBackup = new RelayCommand(ChooseFolder);
 			   StartBackupCommand = new RelayCommand(StartBackup);
-			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
 		  }
 
 		  #region Helpers
@@ -353,7 +239,6 @@ namespace BackupSoftware
 					{
 						 FileInfo fileInDestInfo = new FileInfo(fullFilePathInDst);
 						 FileInfo fileInfo = new FileInfo(file);
-
 
 						 if (fileInfo.Length != fileInDestInfo.Length)
 						 {
@@ -431,8 +316,6 @@ namespace BackupSoftware
 		  /// <param name="folder">The folder </param>
 		  /// <param name="subFolder">The folder to check if it is subfolder</param>
 		  /// <returns></returns>
-		  /// Note(Jonathan): What if there is a folder names documents and a folder name documents-new
-		  /// Bad implementation
 		  private bool IsSubFolder(string folder, string subFolder)
 		  {
 			   string normailzedFolder = folder.Replace('\\', '/') + '/';
@@ -454,20 +337,6 @@ namespace BackupSoftware
 			   int lastSlash = normalizedPath.LastIndexOf('/');
 
 			   return normalizedPath.Substring(lastSlash + 1);
-		  }
-
-
-		  public FolderItem FindFolderItemByString(ObservableCollection<FolderItem> FolderItems, string folder)
-		  {
-			   for (int i = 0; i < FolderItems.Count; ++i)
-			   {
-					FolderItem item = FolderItems[i];
-					if (item.FolderPath == folder)
-					{
-						 return item;
-					}
-			   }
-			   return null;
 		  }
 
 		  #endregion

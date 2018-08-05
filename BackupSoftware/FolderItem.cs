@@ -17,6 +17,11 @@ namespace BackupSoftware
 		  public bool DeletePrevContent { get; set; }
 
 		  /// <summary>
+		  /// The count of the files and folders
+		  /// </summary>
+		  public int ContentCount { get; set; }
+
+		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
 		  public FolderItem()

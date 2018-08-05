@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ninject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace BackupSoftware
 		  public SelectFoldersPage()
 		  {
 			   InitializeComponent();
-			   DataContext = new SelectedFoldersViewModel();
+			   DataContext = IoC.Kernel.Get<SelectedFoldersViewModel>();//new SelectedFoldersViewModel();
 		  }
 	 }
 }

@@ -35,13 +35,20 @@ namespace BackupSoftware
 
 		  public RelayCommand OpenPageCommand { get; set; }
 
+		  /// <summary>
+		  /// Default constructor
+		  /// </summary>
 		  public MenuItemViewModel()
 		  {
 			   OpenPageCommand = new RelayCommand(OpenPage);
 		  }
 
+		  /// <summary>
+		  /// The commnad for opening a page
+		  /// </summary>
 		  void OpenPage()
 		  {
+			   // Change the current page to the page of the menu item
 			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = Page;
 		  }
 	 }

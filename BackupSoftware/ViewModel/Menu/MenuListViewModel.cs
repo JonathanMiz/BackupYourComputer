@@ -34,7 +34,7 @@ namespace BackupSoftware
 					{
 						 IconCode = "\uf574",
 						 Title = "Backup",
-						 Page = ApplicationPage.BackupDetailsForm
+						 Page = ApplicationPage.BackupDetailsForm,
 					},
 					new MenuItemViewModel
 					{
@@ -46,7 +46,7 @@ namespace BackupSoftware
 					{
 						 IconCode = "\uf013",
 						 Title = "Settings",
-
+						 Page = ApplicationPage.SelectFolders
 					}
 			   };
 		  }

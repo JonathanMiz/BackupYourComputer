@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System;
 using System.Xaml;
 using System.Configuration;
+using Ninject;
+using System.Threading.Tasks;
 
 namespace BackupSoftware
 {
@@ -18,10 +20,6 @@ namespace BackupSoftware
 	 public class SelectedFoldersViewModel : ViewModelBase
 	 {
 		  #region Private Members
-		  /// <summary>
-		  /// The propertry name of <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  public string FolderPathsToBackupPropertyName { get; set; } = "FolderList";
 
 		  /// <summary>
 		  /// The list of the folders the user want to backup
@@ -29,9 +27,27 @@ namespace BackupSoftware
 		  /// </summary>
 		  private ObservableCollection<FolderItem> m_folderItems = new ObservableCollection<FolderItem>();
 
+		  private string m_Log { get; set; }
+
 		  #endregion
 
 		  #region Public Members
+
+		  public string Log
+		  {
+			   get
+			   {
+					return m_Log;
+			   }
+			   set
+			   {
+					if (m_Log == value)
+						 return;
+
+					m_Log = value;
+					OnPropertyChanged(nameof(Log));
+			   }
+		  }
 
 
 		  /// <summary>
@@ -46,7 +62,7 @@ namespace BackupSoftware
 			   set
 			   {
 					m_folderItems = value;
-					OnPropertyChanged(FolderPathsToBackupPropertyName);
+					OnPropertyChanged(nameof(FolderItems));
 			   }
 		  }
 
@@ -57,7 +73,7 @@ namespace BackupSoftware
 		  public void AddFolderToBackUp(string folder)
 		  {
 			   m_folderItems.Add(new FolderItem(folder, false));
-			   OnPropertyChanged(FolderPathsToBackupPropertyName);
+			   OnPropertyChanged(nameof(FolderItems));
 		  }
 
 		  /// <summary>
@@ -70,7 +86,7 @@ namespace BackupSoftware
 			   if (item != null)
 			   {
 					m_folderItems.Remove(item);
-					OnPropertyChanged(FolderPathsToBackupPropertyName);
+					OnPropertyChanged(nameof(FolderItems));
 			   }
 		  }
 
@@ -193,7 +209,24 @@ namespace BackupSoftware
 			   }
 		  }
 
+		 void Select()
+		  {
+			   Log = "Calculating folders' size...";
 
+			   for(int i = 0; i < FolderItems.Count; ++i)
+			   {
+					FolderItem item = FolderItems[i];
+					int fileCount = Directory.GetFiles(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
+					int folderCount = Directory.GetDirectories(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
+
+
+					item.ContentCount = fileCount + folderCount;
+					
+			   }
+
+			   Log = "Transfering you to backup page...";
+			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDetailsForm;
+		  }
 
 		  #endregion
 
@@ -203,8 +236,10 @@ namespace BackupSoftware
 		  public SelectedFoldersViewModel()
 		  {
 			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
-			   //SelectButtonCommand = new RelayCommand(StartBackup);
+			   SelectButtonCommand = new RelayCommand(Select);
 			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
+
+			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
 		  }
 
 		  #region Helpers

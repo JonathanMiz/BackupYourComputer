@@ -23,8 +23,8 @@
 	2. Refactor the code
 	3. Add log
 	5. Make the backup function work with thread so it won't make the program to stuck
-	6. Finish the menu, navigating between pages
 	7. Implement the effect of selecting button in the menu
+	8. How can I get the data form another usercontrol
 	
 	Bugs/Fixes:
 	
@@ -36,6 +36,7 @@
 	------2. Edit the style of the window buttons and for the regular buttons
 	------3. Add some basic icon
 	4. Add global fonts to all of the program
+	5. when loading page make a fading effect
 	
 	
 	nameof
@@ -45,3 +46,11 @@
 	2. StoryBoard
 	3. Templates
 	4. Converters
+	
+	Backup page
+	
+		1. Make costum buttons
+		2. Add images for the folders
+		3. add progress bar at the bottom ( take the count of the top directories and decrease the count)
+		4. In the header add the time of the last update
+		5. Figure out how to use tasks so it won't stuck the program

@@ -80,7 +80,7 @@
           </StackPanel>
           
           <Button Grid.Row="2" x:Name="selectButton" 
-                            Command="{Binding ChooseFolderCommand}"
+                            Command="{Binding SelectButtonCommand}"
                             Width="150"
                             Height="35"
                               Padding="5"
@@ -90,7 +90,7 @@
                   Margin="0 0 10 10"/>
 
           <Border Grid.Row="3"  Background="#dcdde1" Height="30">
-               <TextBlock Text="" FontSize="20" />
+               <TextBlock Text="{Binding Log}" FontSize="20" />
           </Border>
      </Grid>
 </Page>

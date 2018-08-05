@@ -27,7 +27,7 @@ namespace BackupSoftware
 
 			   // Bind to a single instance of Application view model
 			   Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
+			   Kernel.Bind<SelectedFoldersViewModel>().ToConstant(new SelectedFoldersViewModel());
 
 		  }
     }
