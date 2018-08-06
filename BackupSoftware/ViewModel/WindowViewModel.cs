@@ -22,6 +22,11 @@ namespace BackupSoftware
 		  /// The select folders to backup page
 		  /// </summary>
 		  SelectFolders = 2,
+
+		  /// <summary>
+		  /// The select folders to backup page
+		  /// </summary>
+		  BackupDisplay = 3,
 	 }
 
 	 class WindowViewModel : ViewModelBase

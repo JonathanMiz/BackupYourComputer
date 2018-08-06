@@ -46,7 +46,7 @@ namespace BackupSoftware
 					{
 						 IconCode = "\uf013",
 						 Title = "Settings",
-						 Page = ApplicationPage.SelectFolders
+						 Page = ApplicationPage.BackupDisplay
 					}
 			   };
 		  }

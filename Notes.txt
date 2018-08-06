@@ -36,16 +36,15 @@
 	------2. Edit the style of the window buttons and for the regular buttons
 	------3. Add some basic icon
 	4. Add global fonts to all of the program
-	5. when loading page make a fading effect
-	
-	
-	nameof
+	5. when loading page make a fading effect like in ESET
+	6. Make a page style for all the pages
 	
 	Things to understand better:
 	1. Ninject
 	2. StoryBoard
 	3. Templates
 	4. Converters
+	5. UserControls
 	
 	Backup page
 	

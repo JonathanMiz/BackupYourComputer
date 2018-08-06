@@ -125,44 +125,6 @@
 
           </Grid>
 
-          <!--<ListView>
-                    <ListView.ItemTemplate>
-                         <DataTemplate>
-                              <StackPanel Orientation="Vertical">
-                                   <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Name:" />
-                                        <TextBlock x:Name="NameValue" />
-                                   </StackPanel>
-                                   <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="From:" />
-                                        <TextBlock x:Name="FromValue" />
-                                   </StackPanel>
-                                   <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="To:" />
-                                        <TextBlock x:Name="ToValue" />
-                                   </StackPanel>
-                                   <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Items remaining:" />
-                                        <TextBlock x:Name="ItemsRemainingValue" />
-                                   </StackPanel>
-                                   <ProgressBar />
-                              </StackPanel>
-                         </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                    <ListViewItem>
-                    </ListViewItem>
-               </ListView>-->
-
-
-
-
-
-
-
-
-
-          <!--<Button Grid.Row="2" Style="{StaticResource BackupFolderButton}"/>-->
           <Border Grid.Row="2"  Background="#dcdde1" Height="50">
                <Grid>
                     <Grid.ColumnDefinitions>

@@ -28,6 +28,10 @@ namespace BackupSoftware
 						 {
 							  return new SelectFoldersPage();
 						 }
+					case ApplicationPage.BackupDisplay:
+						 {
+							  return new BackupDisplayPage();
+						 }
 					default:
 						 Debugger.Break();
 						 return null;

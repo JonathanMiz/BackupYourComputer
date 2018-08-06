@@ -42,6 +42,7 @@
                                               Width="30"
 
                                               />
+                                              
 
                                              <!-- Item title -->
                                              <TextBlock Grid.Column="1"
