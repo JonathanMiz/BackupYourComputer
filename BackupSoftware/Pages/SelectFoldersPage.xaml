@@ -25,61 +25,114 @@
 
           </Border>
 
+          <StackPanel Grid.Row="1"  Orientation="Horizontal">
+               <StackPanel  Margin="20">
+                
+                    <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
+                    <ListBox HorizontalAlignment="Left" x:Name="FolderList"
+                                            ItemsSource="{Binding FolderItems, Mode=TwoWay}"
+                                            SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
+                                            Width="615" Height="250" Background="White">
+                         <ListBox.ItemContainerStyle>
+                              <Style TargetType="{x:Type ListBoxItem}">
+                                   <Setter Property="Template">
+                                        <Setter.Value>
+                                             <ControlTemplate TargetType="ListBoxItem">
+                                                  <Border x:Name="container" Background="Transparent">
+                                                       <StackPanel Orientation="Vertical" Width="600">
+                                                            <Border Padding="5" VerticalAlignment="Center">
+                                                                 <Grid>
+                                                                      <Grid.ColumnDefinitions>
+                                                                           <ColumnDefinition Width="Auto"/>
+                                                                           <ColumnDefinition Width="*"/>
+                                                                      </Grid.ColumnDefinitions>
 
-               <StackPanel  Grid.Row="1" Margin="30 30 0 0">
-               <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
-               <ListBox HorizontalAlignment="Left" x:Name="FolderList"
-                                       ItemsSource="{Binding FolderItems, Mode=TwoWay}"
-                                       SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-                                       Width="615" Height="250" Background="White">
-                    <ListBox.ItemTemplate>
-                         <DataTemplate>
-                              <StackPanel Orientation="Vertical">
-                                   <Grid>
-                                        <Grid.ColumnDefinitions>
-                                             <ColumnDefinition Width="*"/>
-                                             <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="{Binding FolderPath}" HorizontalAlignment="Left"/>
-                                        <Button Grid.Column="1" Content="X" HorizontalAlignment="right"
-                                                          Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                                          CommandParameter="{Binding FolderPath}"/>
-
-                                   </Grid>
-                                   <CheckBox Content="Delete previous files" 
-                                                       IsChecked="{Binding DeletePrevContent}"
-                                                       x:Name ="DeletePrevContent"
-                                                       />
-
-                                   <Border Width="400">
-                                        <Border.Background>
-                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                  <GradientStop Color="White" Offset="0"/>
-                                                  <GradientStop Color="White" Offset="1"/>
-                                                  <GradientStop Color="#FFDEDDDD" Offset="0.5"/>
-                                             </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Border.Height>3</Border.Height>
-
-                                   </Border>
-
-                              </StackPanel>
-                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-               </ListBox>
-
-               <!-- Browse button -->
-               <Button x:Name="browseFolderToBackupButton" 
-                            Command="{Binding ChooseFolderCommand}"
-                            Width="{Binding Width, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                            Height="30"
-                            Content="..."/>
+                                                                      <StackPanel Grid.Column="0"  Orientation="Vertical">
+                                                                           <StackPanel Orientation="Horizontal" Margin="6 0 0 0">
+                                                                                <Image Source="/Images/icon_folder.png" Width="30"/>
+                                                                                <TextBlock
+                                                                       Text="{Binding FolderPath, FallbackValue=C:/Jonathan/Test}"
+                                                                       HorizontalAlignment="Left"
+                                                                       Foreground="Black"
+                                                                       TextTrimming="CharacterEllipsis"
+                                                                       Padding="10">
+                                                                                </TextBlock>
+                                                                           </StackPanel>
+                                                                           <CheckBox Content="Delete previous files" 
+                                                                 IsChecked="{Binding DeletePrevContent}"
+                                                                 x:Name ="DeletePrevContent"
+                                                                 Margin="10 0"/>
+                                                                      </StackPanel>
 
 
-               <!-- Select button -->
-          </StackPanel>
+                                                                      <Button Grid.Column="1"
+                                                                         Content="X"
+                                                                         HorizontalAlignment="Right"
+                                                                         Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                                                         CommandParameter="{Binding FolderPath}"
+                                                                         Padding="10" Margin="0 0 0 0"
+                                                                         Style="{StaticResource HoverlessButton}"
+                                                                         Foreground="Red"
+                                                                         FontSize="20"
+                                                                         />
+                                                                 </Grid>
+                                                            </Border>
+
+                                                       </StackPanel>
+                                                  </Border>
+                                                  <ControlTemplate.Triggers>
+                                                       <Trigger Property="IsSelected" Value="True">
+                                                            <Setter Property="Background" Value="White" />
+                                                       </Trigger>
+                                                       <EventTrigger RoutedEvent="MouseEnter">
+                                                            <BeginStoryboard>
+                                                                 <Storyboard>
+                                                                      <ColorAnimation Storyboard.TargetName="container"
+                                                                                      Storyboard.TargetProperty="Background.Color"
+                                                                                      Duration="0:0:0.2"
+                                                                                      To="{StaticResource VeryLightBlue}"
+                                                                                      />
+                                                                 </Storyboard>
+                                                                 
+                                                            </BeginStoryboard>
+                                                       </EventTrigger>
+                                                       <EventTrigger RoutedEvent="MouseLeave">
+                                                            <BeginStoryboard>
+                                                                 <Storyboard>
+                                                                      <ColorAnimation Storyboard.TargetName="container"
+                                                                                      Storyboard.TargetProperty="Background.Color"
+                                                                                      Duration="0:0:0.2"
+                                                                                      To="White"
+                                                                                      />
+                                                                 </Storyboard>
+
+                                                            </BeginStoryboard>
+                                                       </EventTrigger>
+                                                  </ControlTemplate.Triggers>
+                                             </ControlTemplate>
+                                             
+                                        </Setter.Value>
+                                   </Setter>
+                              </Style>
+                         </ListBox.ItemContainerStyle>
+                    </ListBox>
+
+               </StackPanel>
           
-          <Button Grid.Row="2" x:Name="selectButton" 
+               <!-- Browse button -->
+               <Button
+                                 Command="{Binding ChooseFolderCommand}"
+                                 Width="100"
+                                 Height="30"
+                    VerticalAlignment="Center"
+                                 >
+                    <TextBlock Text="..." FontSize="20" HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+               </Button>
+          </StackPanel>
+
+          <!-- Select button -->
+          <Button Grid.Row="2"
                             Command="{Binding SelectButtonCommand}"
                             Width="150"
                             Height="35"

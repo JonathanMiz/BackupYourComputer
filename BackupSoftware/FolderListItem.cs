@@ -4,7 +4,7 @@ namespace BackupSoftware
 	 /// <summary>
 	 /// This class represents each item in the list box 
 	 /// </summary>
-	 public class FolderItem
+	 public class FolderListItem
 	 {
 		  /// <summary>
 		  /// The path of the folder
@@ -24,13 +24,13 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
-		  public FolderItem()
+		  public FolderListItem()
 		  {
 			   FolderPath = string.Empty;
 			   DeletePrevContent = false;
 		  }
 
-		  public FolderItem(string folderPath, bool deletePrevContent)
+		  public FolderListItem(string folderPath, bool deletePrevContent)
 		  {
 			   FolderPath = folderPath;
 			   DeletePrevContent = deletePrevContent;

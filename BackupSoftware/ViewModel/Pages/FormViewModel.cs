@@ -68,7 +68,7 @@ namespace BackupSoftware
 		  string Test()
 		  {
 			   string list = "";
-			   foreach (FolderItem item in IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems)
+			   foreach (FolderListItem item in IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems)
 			   {
 					list += ExtractFileFolderNameFromFullPath(item.FolderPath);
 					list += ", ";
@@ -163,7 +163,7 @@ namespace BackupSoftware
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (FolderItem item in FolderItems)
+			   foreach (FolderListItem item in FolderItems)
 			   {
 					if (!Directory.Exists(item.FolderPath))
 					{
@@ -181,7 +181,7 @@ namespace BackupSoftware
 
 
 
-			   foreach (FolderItem item in FolderItems)
+			   foreach (FolderListItem item in FolderItems)
 			   {
 					string folderFullPathToBackup = item.FolderPath;
 

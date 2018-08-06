@@ -25,7 +25,7 @@ namespace BackupSoftware
 		  /// The list of the folders the user want to backup
 		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
 		  /// </summary>
-		  private ObservableCollection<FolderItem> m_folderItems = new ObservableCollection<FolderItem>();
+		  private ObservableCollection<FolderListItem> m_folderItems = new ObservableCollection<FolderListItem>();
 
 		  private string m_Log { get; set; }
 
@@ -53,7 +53,7 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// A refrence for <see cref="m_folderItems"/> in order for the binding to work
 		  /// </summary>
-		  public ObservableCollection<FolderItem> FolderItems
+		  public ObservableCollection<FolderListItem> FolderItems
 		  {
 			   get
 			   {
@@ -72,7 +72,7 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void AddFolderToBackUp(string folder)
 		  {
-			   m_folderItems.Add(new FolderItem(folder, false));
+			   m_folderItems.Add(new FolderListItem(folder, false));
 			   OnPropertyChanged(nameof(FolderItems));
 		  }
 
@@ -82,11 +82,14 @@ namespace BackupSoftware
 		  /// <param name="folder"></param>
 		  public void RemoveFolderToBackUp(string folder)
 		  {
-			   FolderItem item = FindFolderItemByString(m_folderItems, folder);
-			   if (item != null)
+			   if (MessageBox.Show("Are you sure you want to remove this folder?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
 			   {
-					m_folderItems.Remove(item);
-					OnPropertyChanged(nameof(FolderItems));
+					FolderListItem item = FindFolderItemByString(FolderItems, folder);
+					if (item != null)
+					{
+						 m_folderItems.Remove(item);
+						 OnPropertyChanged(nameof(FolderItems));
+					}
 			   }
 		  }
 
@@ -215,7 +218,7 @@ namespace BackupSoftware
 
 			   for(int i = 0; i < FolderItems.Count; ++i)
 			   {
-					FolderItem item = FolderItems[i];
+					FolderListItem item = FolderItems[i];
 					int fileCount = Directory.GetFiles(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
 					int folderCount = Directory.GetDirectories(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
 
@@ -276,11 +279,11 @@ namespace BackupSoftware
 		  }
 
 
-		  public FolderItem FindFolderItemByString(ObservableCollection<FolderItem> FolderItems, string folder)
+		  public FolderListItem FindFolderItemByString(ObservableCollection<FolderListItem> FolderItems, string folder)
 		  {
 			   for (int i = 0; i < FolderItems.Count; ++i)
 			   {
-					FolderItem item = FolderItems[i];
+					FolderListItem item = FolderItems[i];
 					if (item.FolderPath == folder)
 					{
 						 return item;
