@@ -8,5 +8,6 @@ namespace BackupSoftware
 		  public static ViewModelLocator Instance  { get; private set; } = new ViewModelLocator();
 
 		  public static ApplicationViewModel ApplicationViewModel => IoC.Kernel.Get<ApplicationViewModel>();
+		  public static CacheViewModel CacheViewModel => IoC.Kernel.Get<CacheViewModel>();
 	 }
 }

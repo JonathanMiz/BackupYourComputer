@@ -20,30 +20,6 @@ namespace BackupSoftware
 	 {
 		  #region Private Members
 
-		  /// <summary>
-		  /// The dest folder to backup the folders
-		  /// </summary>
-		  private string m_backupFolder { get; set; }
-
-		  /// <summary>
-		  /// A refrence for <see cref="m_backupFolder"/> in order for the binding to work
-		  /// </summary>
-		  public string BackupFolder
-		  {
-			   get
-			   {
-					return m_backupFolder;
-			   }
-			   set
-			   {
-					if (m_backupFolder == value)
-						 return;
-
-					m_backupFolder = value;
-					OnPropertyChanged(nameof(BackupFolder));
-			   }
-		  }
-
 		  private string m_Folders { get; set; }
 
 		  /// <summary>
@@ -65,10 +41,22 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  public string BackupFolder
+		  {
+			   get
+			   {
+					return IoC.Kernel.Get<CacheViewModel>().BackupFolder;
+			   }
+			   set
+			   {
+					IoC.Kernel.Get<CacheViewModel>().BackupFolder = value;
+			   }
+		  }
+
 		  string Test()
 		  {
 			   string list = "";
-			   foreach (FolderListItem item in IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems)
+			   foreach (FolderListItem item in IoC.Kernel.Get<CacheViewModel>().FolderItems)
 			   {
 					list += ExtractFileFolderNameFromFullPath(item.FolderPath);
 					list += ", ";
@@ -149,61 +137,61 @@ namespace BackupSoftware
 			   Debug.WriteLine(Folders);
 		  }
 
-		  /// <summary>
-		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
-		  /// </summary>
-		  void StartBackup()
-		  {
-			   var FolderItems = IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems;
-			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(this.BackupFolder) || FolderItems.Count == 0)
-			   {
-					MessageBox.Show("Fill in the list of folder and hard drive!");
-					return;
-			   }
+		  ///// <summary>
+		  ///// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
+		  ///// </summary>
+		  //void StartBackup()
+		  //{
+			 //  var FolderItems = IoC.Kernel.Get<SelectedFoldersViewModel>().FolderItems;
+			 //  // Checks to see if there is content in the fields
+			 //  if (string.IsNullOrEmpty(this.BackupFolder) || FolderItems.Count == 0)
+			 //  {
+				//	MessageBox.Show("Fill in the list of folder and hard drive!");
+				//	return;
+			 //  }
 
-			   // Check to see if the folders exists
-			   foreach (FolderListItem item in FolderItems)
-			   {
-					if (!Directory.Exists(item.FolderPath))
-					{
-						 MessageBox.Show(item.FolderPath + " can not be found!");
-						 return;
-					}
+			 //  // Check to see if the folders exists
+			 //  foreach (FolderListItem item in FolderItems)
+			 //  {
+				//	if (!Directory.Exists(item.FolderPath))
+				//	{
+				//		 MessageBox.Show(item.FolderPath + " can not be found!");
+				//		 return;
+				//	}
 
-			   }
+			 //  }
 
-			   if (!Directory.Exists(this.BackupFolder))
-			   {
-					MessageBox.Show(BackupFolder + " can not be found!");
-					return;
-			   }
-
-
-
-			   foreach (FolderListItem item in FolderItems)
-			   {
-					string folderFullPathToBackup = item.FolderPath;
-
-					// Extract the name of the folder
-					string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
-
-					string folderInBackupDrive = this.BackupFolder + "\\" + folderName;
-
-					Debug.WriteLine("Start backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
-					Backup(folderFullPathToBackup, folderInBackupDrive);
-					Debug.WriteLine("End backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
+			 //  if (!Directory.Exists(this.BackupFolder))
+			 //  {
+				//	MessageBox.Show(BackupFolder + " can not be found!");
+				//	return;
+			 //  }
 
 
-					if (item.DeletePrevContent)
-					{
-						 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
-						 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-						 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
-					}
 
-			   }
-		  }
+			 //  foreach (FolderListItem item in FolderItems)
+			 //  {
+				//	string folderFullPathToBackup = item.FolderPath;
+
+				//	// Extract the name of the folder
+				//	string folderName = ExtractFileFolderNameFromFullPath(folderFullPathToBackup);
+
+				//	string folderInBackupDrive = this.BackupFolder + "\\" + folderName;
+
+				//	Debug.WriteLine("Start backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
+				//	Backup(folderFullPathToBackup, folderInBackupDrive);
+				//	Debug.WriteLine("End backing up " + folderFullPathToBackup + " to " + folderInBackupDrive + "...");
+
+
+				//	if (item.DeletePrevContent)
+				//	{
+				//		 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
+				//		 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
+				//		 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
+				//	}
+
+			 //  }
+		  //}
 
 		  #endregion
 
@@ -214,7 +202,7 @@ namespace BackupSoftware
 		  {
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
 			   ChooseFoldersToBackup = new RelayCommand(ChooseFolder);
-			   StartBackupCommand = new RelayCommand(StartBackup);
+			   //StartBackupCommand = new RelayCommand(StartBackup);
 		  }
 
 		  #region Helpers

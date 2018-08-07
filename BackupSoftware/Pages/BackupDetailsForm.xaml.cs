@@ -32,7 +32,6 @@ namespace BackupSoftware
 
 			   // Set default values
 			   //formViewModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   formViewModel.BackupFolder = "H:\\";
 
 			   // Setting some default folders to save me some time
 			   // TODO: save all the added folders in database or something similar

@@ -21,11 +21,17 @@ namespace BackupSoftware
 	 {
 		  #region Private Members
 
-		  /// <summary>
-		  /// The list of the folders the user want to backup
-		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
-		  /// </summary>
-		  private ObservableCollection<FolderListItem> m_folderItems = new ObservableCollection<FolderListItem>();
+		  public ObservableCollection<FolderListItem> FolderItems
+		  {
+			   get
+			   {
+					return IoC.Kernel.Get<CacheViewModel>().FolderItems;
+			   }
+			   set
+			   {
+					IoC.Kernel.Get<CacheViewModel>().FolderItems = value;
+			   }
+		  }
 
 		  private string m_Log { get; set; }
 
@@ -49,30 +55,13 @@ namespace BackupSoftware
 			   }
 		  }
 
-
-		  /// <summary>
-		  /// A refrence for <see cref="m_folderItems"/> in order for the binding to work
-		  /// </summary>
-		  public ObservableCollection<FolderListItem> FolderItems
-		  {
-			   get
-			   {
-					return m_folderItems;
-			   }
-			   set
-			   {
-					m_folderItems = value;
-					OnPropertyChanged(nameof(FolderItems));
-			   }
-		  }
-
 		  /// <summary>
 		  /// Add new folder to backup to <see cref="FolderPathsToBackup"/>
 		  /// </summary>
 		  /// <param name="folder"></param>
 		  public void AddFolderToBackUp(string folder)
 		  {
-			   m_folderItems.Add(new FolderListItem(folder, false));
+			   FolderItems.Add(new FolderListItem(folder, false));
 			   OnPropertyChanged(nameof(FolderItems));
 		  }
 
@@ -87,7 +76,7 @@ namespace BackupSoftware
 					FolderListItem item = FindFolderItemByString(FolderItems, folder);
 					if (item != null)
 					{
-						 m_folderItems.Remove(item);
+						 FolderItems.Remove(item);
 						 OnPropertyChanged(nameof(FolderItems));
 					}
 			   }
