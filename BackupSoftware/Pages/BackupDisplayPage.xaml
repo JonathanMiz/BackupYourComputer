@@ -16,9 +16,12 @@
                <!--<RowDefinition Height="Auto"/>-->
           </Grid.RowDefinitions>
 
-          <Border Grid.Row="0"  Background="#dcdde1" Height="30"/>
+          <Border Grid.Row="0"  Background="#dcdde1" Height="30">
+               <Button Content="Back to backup page" Command="{Binding BackupPageCommand}" />
+          </Border>
 
-          <ItemsControl Grid.Row="1" ItemsSource="{Binding Folders}" Padding="10">
+
+               <ItemsControl Grid.Row="1" ItemsSource="{Binding CacheViewModel.FolderItems, Source={x:Static local:ViewModelLocator.Instance}}" Padding="10">
                <ItemsControl.ItemTemplate>
                     <DataTemplate>
                          <Border>
@@ -28,6 +31,7 @@
                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                              <ColumnDefinition Width="Auto" />
+                                             <ColumnDefinition Width="*" />
                                              <ColumnDefinition Width="*" />
                                              <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
@@ -39,7 +43,7 @@
                                              </StackPanel>
                                              <StackPanel Orientation="Horizontal">
                                                   <TextBlock Text="From:" FontFamily="Segoe UI Light" />
-                                                  <TextBlock Text="{Binding From}" Margin="5 0" />
+                                                  <TextBlock Text="{Binding FolderPath}" Margin="5 0" />
                                              </StackPanel>
                                              <StackPanel Orientation="Horizontal">
                                                   <TextBlock Text="To:" FontFamily="Segoe UI Light"/>
@@ -50,11 +54,12 @@
                                                   <TextBlock x:Name="ItemsRemainingValue" />
                                              </StackPanel>
                                         </StackPanel>
-                                        <Image Grid.Column="2" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <ScrollViewer Grid.Column="2">
+                                             <TextBlock Text="{Binding Log}" />
+                                        </ScrollViewer>
+                                        <Image Grid.Column="3" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
                                    </Grid>
-                                   <ProgressBar Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=Width}"
-                                                Height="20" 
-                                                Margin="0 10 0 10"/>
+                                   <ProgressBar Height="20" Margin="0 10 0 10" Value="{Binding ContentCount}" />
                                    
                               </StackPanel>
                          </Border>
@@ -66,7 +71,7 @@
           <Border Grid.Row="2"  Background="#dcdde1" Height="50">
 
                     <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
-                    <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto"/>
+               <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto" />
           </Border>
      </Grid>
 </Page>

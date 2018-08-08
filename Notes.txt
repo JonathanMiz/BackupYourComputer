@@ -20,7 +20,7 @@
 	Todo:
 
 	1. Comment the code
-	2. Refactor the code
+	2. Refactor the code (move helper functions to separate class?)
 	3. Add log
 	5. Make the backup function work with thread so it won't make the program to stuck
 	7. Implement the effect of selecting button in the menu
@@ -28,7 +28,8 @@
 	
 	Bugs/Fixes:
 	
-	6. Fix the drag of the window, it is not accurate
+	1. Fix the case when the user is adding a parent folder and then all the sub-folder are going to be removed, a messagebox is poping up
+	2. Handle the case when a file is been used by another process
 	
 	Aesthetics:
 	

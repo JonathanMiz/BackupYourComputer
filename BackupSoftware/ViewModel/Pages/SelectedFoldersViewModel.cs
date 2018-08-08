@@ -55,33 +55,6 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  /// <summary>
-		  /// Add new folder to backup to <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  /// <param name="folder"></param>
-		  public void AddFolderToBackUp(string folder)
-		  {
-			   FolderItems.Add(new FolderListItem(folder, false));
-			   OnPropertyChanged(nameof(FolderItems));
-		  }
-
-		  /// <summary>
-		  /// Remove folder to backup to <see cref="FolderPathsToBackup"/>
-		  /// </summary>
-		  /// <param name="folder"></param>
-		  public void RemoveFolderToBackUp(string folder)
-		  {
-			   if (MessageBox.Show("Are you sure you want to remove this folder?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-			   {
-					FolderListItem item = FindFolderItemByString(FolderItems, folder);
-					if (item != null)
-					{
-						 FolderItems.Remove(item);
-						 OnPropertyChanged(nameof(FolderItems));
-					}
-			   }
-		  }
-
 		  #endregion
 
 		  #region Commands
@@ -147,7 +120,7 @@ namespace BackupSoftware
 							  for (int i = 0; i < FolderItems.Count; ++i)
 							  {
 								   var exisitingFolderToBackup = FolderItems[i].FolderPath.ToString();
-								   if (FindFolderItemByString(FolderItems, newFolderToBackup) != null)
+								   if (IoC.Kernel.Get<CacheViewModel>().FindFolderItemByString(FolderItems, newFolderToBackup) != null)
 								   {
 										MessageBox.Show(newFolderToBackup + " already exists in the list!");
 										Added = false;
@@ -186,7 +159,7 @@ namespace BackupSoftware
 
 					foreach (var folder in foldersToAddToListView)
 					{
-						 AddFolderToBackUp(folder);
+						 IoC.Kernel.Get<CacheViewModel>().AddFolderToBackUp(folder);
 					}
 
 					if (foldersToRemoveToListView.Count > 0)
@@ -195,7 +168,7 @@ namespace BackupSoftware
 
 						 foreach (var folder in foldersToRemoveToListView)
 						 {
-							  RemoveFolderToBackUp(folder);
+							  IoC.Kernel.Get<CacheViewModel>().RemoveFolderToBackUp(folder);
 						 }
 					}
 			   }
@@ -203,20 +176,6 @@ namespace BackupSoftware
 
 		 void Select()
 		  {
-			   Log = "Calculating folders' size...";
-
-			   for(int i = 0; i < FolderItems.Count; ++i)
-			   {
-					FolderListItem item = FolderItems[i];
-					int fileCount = Directory.GetFiles(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
-					int folderCount = Directory.GetDirectories(item.FolderPath, "*.*", SearchOption.TopDirectoryOnly).Length;
-
-
-					item.ContentCount = fileCount + folderCount;
-					
-			   }
-
-			   Log = "Transfering you to backup page...";
 			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDetailsForm;
 		  }
 
@@ -229,9 +188,7 @@ namespace BackupSoftware
 		  {
 			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
 			   SelectButtonCommand = new RelayCommand(Select);
-			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveFolderToBackUp);
-
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(IoC.Kernel.Get<CacheViewModel>().RemoveFolderToBackUp);
 		  }
 
 		  #region Helpers
@@ -251,34 +208,6 @@ namespace BackupSoftware
 
 			   bool result = normlizedSubFolder.Contains(normailzedFolder);
 			   return result;
-		  }
-
-		  /// <summary>
-		  /// Gives us the end of the path whether it's a file or a folder
-		  /// </summary>
-		  /// <param name="fullPath"></param>
-		  /// <returns></returns>
-		  private string ExtractFileFolderNameFromFullPath(string fullPath)
-		  {
-			   var normalizedPath = fullPath.Replace('\\', '/');
-
-			   int lastSlash = normalizedPath.LastIndexOf('/');
-
-			   return normalizedPath.Substring(lastSlash + 1);
-		  }
-
-
-		  public FolderListItem FindFolderItemByString(ObservableCollection<FolderListItem> FolderItems, string folder)
-		  {
-			   for (int i = 0; i < FolderItems.Count; ++i)
-			   {
-					FolderListItem item = FolderItems[i];
-					if (item.FolderPath == folder)
-					{
-						 return item;
-					}
-			   }
-			   return null;
 		  }
 
 		  #endregion
