@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="BackupSoftware.DisplayItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BackupSoftware"
+             mc:Ignorable="d" d:DesignWidth="800" Height="100" 
+             >
+     <Border>
+
+          <StackPanel Orientation="Vertical">
+
+               <Grid>
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="*" />
+                         <ColumnDefinition Width="*" />
+                         <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0" Source="/Images/icon_folder.png" HorizontalAlignment="Left" Width="60" />
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10 0 0 0" HorizontalAlignment="Left">
+                         <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="Name:" FontFamily="Segoe UI Light" />
+                              <TextBlock Text="{Binding FolderInfo.Name}" Margin="5 0" />
+                         </StackPanel>
+                         <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="From:" FontFamily="Segoe UI Light" />
+                              <TextBlock Text="{Binding FolderInfo.FolderPath}" Margin="5 0" />
+                         </StackPanel>
+                         <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="To:" FontFamily="Segoe UI Light"/>
+                              <TextBlock Text="{Binding Destination}" Margin="5 0" />
+                         </StackPanel>
+                         <StackPanel Orientation="Horizontal">
+                              <TextBlock Text="Items remaining:" FontFamily="Segoe UI Light" />
+                              <TextBlock x:Name="ItemsRemainingValue" />
+                         </StackPanel>
+                    </StackPanel>
+                    <ScrollViewer Grid.Column="2">
+                         <TextBlock Text="{Binding Log}" />
+                    </ScrollViewer>
+                    <Image Grid.Column="3" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+               </Grid>
+               <ProgressBar Height="20" Margin="0 10 0 10" Value="{Binding ItemsRemainingCounter}" />
+
+          </StackPanel>
+     </Border>
+     
+</UserControl>

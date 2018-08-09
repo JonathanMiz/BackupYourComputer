@@ -58,26 +58,11 @@ namespace BackupSoftware
 			   string list = "";
 			   foreach (FolderListItem item in IoC.Kernel.Get<CacheViewModel>().FolderItems)
 			   {
-					list += ExtractFileFolderNameFromFullPath(item.FolderPath);
+					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderPath);
 					list += ", ";
 			   }
 			   return list.Substring(0, list.Length - 2);
 		  }
-
-		  //public void SaveSettings()
-		  //{
-			 //  XamlServices.Save(@"settings.xaml", m_folderItems);
-			 //  Debugger.Break();
-		  //}
-
-		  //public void LoadSettings()
-		  //{
-			 //  if (File.Exists("settings.xaml"))
-			 //  {
-				//	m_folderItems = (ObservableCollection<FolderItem>)XamlServices.Load("settings.xaml");
-				//	Debugger.Break();
-			 //  }
-		  //}
 
 		  #endregion
 
@@ -145,40 +130,41 @@ namespace BackupSoftware
 		  {
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
 			   ChooseFoldersToBackup = new RelayCommand(ChooseFolder);
-			   StartBackupCommand = new RelayCommand(() => { IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDisplay; });
+			   StartBackupCommand = new RelayCommand(StartBackup);
 		  }
 
-		  #region Helpers
-		  /// <summary>
-		  /// If subfolder is sub folder of folder
-		  /// </summary>
-		  /// <param name="folder">The folder </param>
-		  /// <param name="subFolder">The folder to check if it is subfolder</param>
-		  /// <returns></returns>
-		  private bool IsSubFolder(string folder, string subFolder)
+		  // Refactor
+		  private void StartBackup()
 		  {
-			   string normailzedFolder = folder.Replace('\\', '/') + '/';
-			   string normlizedSubFolder = subFolder.Replace('\\', '/') + '/';
+			   var FolderItems = IoC.Kernel.Get<CacheViewModel>().FolderItems;
+			   var BackupFolder = IoC.Kernel.Get<CacheViewModel>().BackupFolder;
 
-			   bool result = normlizedSubFolder.Contains(normailzedFolder);
-			   return result;
+			   // Checks to see if there is content in the fields
+			   if (string.IsNullOrEmpty(BackupFolder) || FolderItems.Count == 0)
+			   {
+					MessageBox.Show("Fill in the list of folder and hard drive!");
+					return;
+			   }
+
+			   // Check to see if the folders exists
+			   foreach (FolderListItem item in FolderItems)
+			   {
+					if (!Directory.Exists(item.FolderPath))
+					{
+						 MessageBox.Show(item.FolderPath + " can not be found!");
+						 return;
+					}
+
+			   }
+
+			   if (!Directory.Exists(BackupFolder))
+			   {
+					MessageBox.Show(BackupFolder + " can not be found!");
+					return;
+			   }
+
+			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDisplay;
 		  }
-
-		  /// <summary>
-		  /// Gives us the end of the path whether it's a file or a folder
-		  /// </summary>
-		  /// <param name="fullPath"></param>
-		  /// <returns></returns>
-		  private string ExtractFileFolderNameFromFullPath(string fullPath)
-		  {
-			   var normalizedPath = fullPath.Replace('\\', '/');
-
-			   int lastSlash = normalizedPath.LastIndexOf('/');
-
-			   return normalizedPath.Substring(lastSlash + 1);
-		  }
-
-		  #endregion
 
 	 }
 }

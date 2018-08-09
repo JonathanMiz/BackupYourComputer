@@ -33,28 +33,6 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  private string m_Log { get; set; }
-
-		  #endregion
-
-		  #region Public Members
-
-		  public string Log
-		  {
-			   get
-			   {
-					return m_Log;
-			   }
-			   set
-			   {
-					if (m_Log == value)
-						 return;
-
-					m_Log = value;
-					OnPropertyChanged(nameof(Log));
-			   }
-		  }
-
 		  #endregion
 
 		  #region Commands
@@ -127,14 +105,14 @@ namespace BackupSoftware
 										break;
 								   }
 
-								   if (IsSubFolder(exisitingFolderToBackup, newFolderToBackup))
+								   if (Helpers.IsSubFolder(exisitingFolderToBackup, newFolderToBackup))
 								   {
 										MessageBox.Show(newFolderToBackup + " is a subfolder of " + exisitingFolderToBackup + ".");
 										Added = false;
 										break;
 								   }
 
-								   if (IsSubFolder(newFolderToBackup, exisitingFolderToBackup))
+								   if (Helpers.IsSubFolder(newFolderToBackup, exisitingFolderToBackup))
 								   {
 										foldersToRemoveToListView.Add(exisitingFolderToBackup);
 								   }
@@ -190,27 +168,5 @@ namespace BackupSoftware
 			   SelectButtonCommand = new RelayCommand(Select);
 			   RemoveItemCommand = new RelayParameterizedCommand<string>(IoC.Kernel.Get<CacheViewModel>().RemoveFolderToBackUp);
 		  }
-
-		  #region Helpers
-
-		  /// <summary>
-		  /// If subfolder is sub folder of folder
-		  /// </summary>
-		  /// <param name="folder">The folder </param>
-		  /// <param name="subFolder">The folder to check if it is subfolder</param>
-		  /// <returns></returns>
-		  /// Note(Jonathan): What if there is a folder names documents and a folder name documents-new
-		  /// Bad implementation
-		  private bool IsSubFolder(string folder, string subFolder)
-		  {
-			   string normailzedFolder = folder.Replace('\\', '/') + '/';
-			   string normlizedSubFolder = subFolder.Replace('\\', '/') + '/';
-
-			   bool result = normlizedSubFolder.Contains(normailzedFolder);
-			   return result;
-		  }
-
-		  #endregion
-
 	 }
 }

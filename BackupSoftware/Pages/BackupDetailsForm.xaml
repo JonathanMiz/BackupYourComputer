@@ -135,7 +135,7 @@
                     </Grid.ColumnDefinitions>
                     <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
                     <ProgressBar Height="20" Margin="30 0 0 0" Width="Auto"/>
-                    <Button Grid.Column="1" 
+                    <Button Grid.Column="1"
                        HorizontalAlignment="right"
                        Content="Start Backup" Width="75"
                        Margin="0 0 10 0"

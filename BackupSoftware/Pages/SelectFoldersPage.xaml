@@ -31,7 +31,6 @@
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
                     <ListBox HorizontalAlignment="Left" x:Name="FolderList"
                                             ItemsSource="{Binding FolderItems, Mode=TwoWay}"
-                                            SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
                                             Width="615" Height="250" Background="White">
                          <ListBox.ItemContainerStyle>
                               <Style TargetType="{x:Type ListBoxItem}">
@@ -51,17 +50,17 @@
                                                                            <StackPanel Orientation="Horizontal" Margin="6 0 0 0">
                                                                                 <Image Source="/Images/icon_folder.png" Width="30"/>
                                                                                 <TextBlock
-                                                                       Text="{Binding FolderPath, FallbackValue=C:/Jonathan/Test}"
-                                                                       HorizontalAlignment="Left"
-                                                                       Foreground="Black"
-                                                                       TextTrimming="CharacterEllipsis"
-                                                                       Padding="10">
+                                                                                      Text="{Binding FolderPath, FallbackValue=C:/Jonathan/Test}"
+                                                                                      HorizontalAlignment="Left"
+                                                                                      Foreground="Black"
+                                                                                      TextTrimming="CharacterEllipsis"
+                                                                                      Padding="10">
                                                                                 </TextBlock>
                                                                            </StackPanel>
                                                                            <CheckBox Content="Delete previous files" 
-                                                                 IsChecked="{Binding DeletePrevContent}"
-                                                                 x:Name ="DeletePrevContent"
-                                                                 Margin="10 0"/>
+                                                                           IsChecked="{Binding DeletePrevContent}"
+                                                                           x:Name ="DeletePrevContent"
+                                                                           Margin="10 0"/>
                                                                       </StackPanel>
 
 
@@ -143,7 +142,6 @@
                   Margin="0 0 10 10"/>
 
           <Border Grid.Row="3"  Background="#dcdde1" Height="30">
-               <TextBlock Text="{Binding Log}" FontSize="20" />
           </Border>
      </Grid>
 </Page>

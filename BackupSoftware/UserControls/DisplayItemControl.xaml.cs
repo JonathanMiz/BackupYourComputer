@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +15,14 @@ using System.Windows.Shapes;
 
 namespace BackupSoftware
 {
-	 /// <summary>
-	 /// Interaction logic for BackupDetailsForm.xaml
-	 /// This is the page that the user will fill his backup details
-	 /// </summary>
-	 public partial class BackupDetailsForm : Page
-	 {
-		  private FormViewModel formViewModel;
-		  public BackupDetailsForm()
-		  {
-			   InitializeComponent();
-			   this.DataContext = new FormViewModel();
-
-		  }
-	 }
+    /// <summary>
+    /// Interaction logic for DisplayItemControl.xaml
+    /// </summary>
+    public partial class DisplayItemControl : UserControl
+    {
+        public DisplayItemControl()
+        {
+            InitializeComponent();
+        }
+    }
 }

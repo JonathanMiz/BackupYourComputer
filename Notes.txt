@@ -25,11 +25,13 @@
 	5. Make the backup function work with thread so it won't make the program to stuck
 	7. Implement the effect of selecting button in the menu
 	8. How can I get the data form another usercontrol
+	9. Option to stop backup
 	
 	Bugs/Fixes:
 	
 	1. Fix the case when the user is adding a parent folder and then all the sub-folder are going to be removed, a messagebox is poping up
 	2. Handle the case when a file is been used by another process
+	3. Backup drive needs to be checked for forward slashes for linux compatability
 	
 	Aesthetics:
 	

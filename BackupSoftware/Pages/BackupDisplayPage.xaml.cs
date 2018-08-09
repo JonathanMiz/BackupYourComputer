@@ -12,7 +12,7 @@ namespace BackupSoftware
 		  public BackupDisplayPage()
 		  {
 			   InitializeComponent();
-			   // DataContext = new BackupDisplayPageViewModel();
+			   DataContext = new BackupDisplayPageViewModel();
 
 		  }
 	 }

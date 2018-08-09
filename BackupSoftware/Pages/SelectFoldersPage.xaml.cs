@@ -24,7 +24,7 @@ namespace BackupSoftware
 		  public SelectFoldersPage()
 		  {
 			   InitializeComponent();
-			   DataContext = IoC.Kernel.Get<SelectedFoldersViewModel>();//new SelectedFoldersViewModel();
+			   DataContext = new SelectedFoldersViewModel();
 		  }
 	 }
 }
