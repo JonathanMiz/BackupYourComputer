@@ -22,10 +22,10 @@
 	1. Comment the code
 	2. Refactor the code (move helper functions to separate class?)
 	3. Add log
-	5. Make the backup function work with thread so it won't make the program to stuck
 	7. Implement the effect of selecting button in the menu
 	8. How can I get the data form another usercontrol
 	9. Option to stop backup
+	10. Most of the names are bad
 	
 	Bugs/Fixes:
 	
@@ -35,7 +35,6 @@
 	
 	Aesthetics:
 	
-	1. Custom Window (rounded corners)
 	------2. Edit the style of the window buttons and for the regular buttons
 	------3. Add some basic icon
 	4. Add global fonts to all of the program
@@ -52,7 +51,17 @@
 	Backup page
 	
 		1. Make costum buttons
-		2. Add images for the folders
 		3. add progress bar at the bottom ( take the count of the top directories and decrease the count)
-		4. In the header add the time of the last update
+		4. In the header add the start time and end time
 		5. Figure out how to use tasks so it won't stuck the program
+		6. Make the progress sync with the results from DisplayBackup page
+		7. When the backup is successful display done icon
+		
+	DisplayBackup Page
+	
+		1. Add spinning icon, after the backup is finished show the V icon ( Attached dependencies)
+		2. Make the progress bar at the bottom sync with the backed up folders
+		3. Improve the algorithm? So it would be more responsive when showing the status
+		4. Figure out how to make the delete prev content work
+		5. Change the back to backup page button to some icon in the top left edge
+		6. When going back to the BackupPage,

@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace BackupSoftware
 {
-	 public class ProgressItemModel
-	 {
-		  public int Count { get; set; } = 0;
-	 }
-
 	 public class DisplayItemControlViewModel : ViewModelBase
 	 {
-		  //public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel();
+		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel("c:/test");
 
 		  #region Private Members
 			   private string m_Log { get; set; }
@@ -23,14 +18,34 @@ namespace BackupSoftware
 
 		  #region Public Members
 
+		  /// <summary>
+		  /// The info of the folder: FolderPath, Name, ItemsCount
+		  /// </summary>
 		  public FolderInfo FolderInfo { get; set; }
 
+		  /// <summary>
+		  /// The backup destination
+		  /// </summary>
 		  public string Destination { get; set; }
 
-		  public Progress<ProgressItemModel> ItemsRemainingProgress { get; set; }
+		  /// <summary>
+		  /// Progress object to update <see cref="ItemsRemainingCounter"/> and <see cref="ItemsCompletedCounter"/> while running a task
+		  /// </summary>
+		  public Progress<int> ItemsRemainingProgress { get; set; }
 
+		  /// <summary>
+		  /// Progress object to update <see cref="Log"/> while running a task
+		  /// </summary>
 		  public Progress<string> LogProgress { get; set; }
 
+		  /// <summary>
+		  /// True if the backup for the folder is done
+		  /// </summary>
+		  public bool BackupDone { get; set; } = false;
+
+		  /// <summary>
+		  /// Text to display the user with the current status
+		  /// </summary>
 		  public string Log
 		  {
 			   get
@@ -48,6 +63,26 @@ namespace BackupSoftware
 
 		  /// <summary>
 		  /// The variable to count files and folders that was backed up
+		  /// </summary>
+		  int m_ItemsCompletedCounter { get; set; } = 0;
+		  public int ItemsCompletedCounter
+		  {
+			   get
+			   {
+					return m_ItemsCompletedCounter;
+			   }
+			   set
+			   {
+					if (m_ItemsCompletedCounter == value)
+						 return;
+
+					m_ItemsCompletedCounter = value;
+					OnPropertyChanged(nameof(ItemsCompletedCounter));
+			   }
+		  }
+
+		  /// <summary>
+		  /// The variable to show how many items remains to backup
 		  /// </summary>
 		  int m_ItemsRemainingCounter { get; set; } = 0;
 		  public int ItemsRemainingCounter
@@ -70,11 +105,11 @@ namespace BackupSoftware
 
 		  public DisplayItemControlViewModel(string folderPath)
 		  {
-			   // Refactor
+			   // TODO: Refactor, The consturctiong is not supposed to be in here
 			   FolderInfo = new FolderInfo(folderPath);
 			   FolderInfo.ItemsCount = CalcItemsCount(FolderInfo.FolderPath);
 
-			   ItemsRemainingProgress = new Progress<ProgressItemModel>();
+			   ItemsRemainingProgress = new Progress<int>();
 			   ItemsRemainingProgress.ProgressChanged += ItemsRemainingProgress_ProgressChanged;
 
 			   LogProgress = new Progress<string>();
@@ -91,9 +126,10 @@ namespace BackupSoftware
 			   Log = e;
 		  }
 
-		  private void ItemsRemainingProgress_ProgressChanged(object sender, ProgressItemModel e)
+		  private void ItemsRemainingProgress_ProgressChanged(object sender, int e)
 		  {
-			   ItemsRemainingCounter = e.Count;
+			   ItemsCompletedCounter = (e * 100 / FolderInfo.ItemsCount);
+			   ItemsRemainingCounter = FolderInfo.ItemsCount - e;
 		  }
 
 		  /// <summary>
@@ -111,13 +147,22 @@ namespace BackupSoftware
 			   return result;
 		  }
 
-		  public async Task BackupOneDirAsync(IProgress<ProgressItemModel> progress)
+		  /// <summary>
+		  /// Backing up one folder
+		  /// </summary>
+		  /// <param name="progress"></param>
+		  /// <returns></returns>
+		  private async Task BackupOneDirAsync(IProgress<int> progress)
 		  {
-			   ProgressItemModel report = new ProgressItemModel();
-
 			   string source = FolderInfo.FolderPath;
 			   string dest = Destination;
 			   string folderName = FolderInfo.Name;
+
+			   if (!Directory.Exists(dest))
+			   {
+					Directory.CreateDirectory(dest);
+					Log = $"Created new folder {dest}";
+			   }
 
 			   int count = 0;
 
@@ -129,24 +174,23 @@ namespace BackupSoftware
 					// Refactor slashes
 					string dst = $"{Destination}\\{name}";
 
-					Log = $"Start backing up {src} to { dest} ... {Environment.NewLine}";
+					Log = $"Start backing up {src} to { dst} {Environment.NewLine}";
 
 					Log = await Task<string>.Run(() => { string log = ""; Backup(src, dst, ref log, LogProgress); return log; });
 					//Log = "";
-					Log = $"End backing up {src} to { dest} ... {Environment.NewLine}";
+					Log = $"End backing up {src} to { dst} {Environment.NewLine}";
 
 
 					count++;
 
-					report.Count = (count * 100 / FolderInfo.ItemsCount);
-					progress.Report(report);
+					progress.Report(count);
 
 			   }
 
 			   // Handling the top files
 			   foreach (var file in Directory.GetFiles(source))
 			   {
-					string fullFilePathInDst = System.IO.Path.Combine(source, Helpers.ExtractFileFolderNameFromFullPath(file));
+					string fullFilePathInDst = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(file));
 
 					if (File.Exists(fullFilePathInDst))
 					{
@@ -158,20 +202,23 @@ namespace BackupSoftware
 							  // Repalce
 							  File.Delete(fullFilePathInDst);
 							  File.Copy(file, fullFilePathInDst);
-							  Debug.WriteLine("The file " + file + " has been modified, replacing it with new content in " + fullFilePathInDst + "...");
+							  Log = $"The file {file} has been modified, replacing it with new content in {fullFilePathInDst}{Environment.NewLine}";
 						 }
 					}
 					else
 					{
 						 File.Copy(file, fullFilePathInDst);
-						 Debug.WriteLine("Copying " + file + "...");
+						 Log = $"Copying {file}{Environment.NewLine}";
 					};
 
 					count++;
 
-					report.Count = (count * 100 / FolderInfo.ItemsCount);
-					progress.Report(report);
+					progress.Report(count);
 			   }
+
+			   Log = $"Backing up from {source} to {dest} have been completed successfuly!{Environment.NewLine}";
+
+			   BackupDone = true;
 
 			   //item.ContentCount = (count * 100 / item.ContentTotalCount);
 
@@ -184,6 +231,10 @@ namespace BackupSoftware
 			   //}
 		  }
 
+		  /// <summary>
+		  /// Public function to call <see cref="BackupOneDirAsync(IProgress{ProgressItemModel})"/> from outside of the class while using await
+		  /// </summary>
+		  /// <returns></returns>
 		  public async Task StartBackup()
 		  {
 			   await BackupOneDirAsync(ItemsRemainingProgress);
@@ -217,14 +268,14 @@ namespace BackupSoftware
 							  // Repalce
 							  File.Delete(fullFilePathInDst);
 							  File.Copy(file, fullFilePathInDst);
-							  log = $"The file {file} has been modified, replacing it with new content in  {fullFilePathInDst}...{Environment.NewLine}";
+							  log = $"The file {file} has been modified, replacing it with new content in {fullFilePathInDst}{Environment.NewLine}";
 							  logProgress.Report(log);
 						 }
 					}
 					else
 					{
 						 File.Copy(file, fullFilePathInDst);
-						 log = $"Copying {file}...{Environment.NewLine}";
+						 log = $"Copying {file}{Environment.NewLine}";
 						 logProgress.Report(log);
 					};
 			   }

@@ -15,12 +15,36 @@ namespace BackupSoftware
 	 public class BackupDisplayPageViewModel : ViewModelBase
 	 {
 		  
-		  // TEMP: Instace to check the design live
+		  // TEMP: Instance to check the design live
 		  public static BackupDisplayPageViewModel Instance => new BackupDisplayPageViewModel();
 		  //
 
+		  /// <summary>
+		  /// A list of all the DisplayItemControlViewModel
+		  /// </summary>
 		  public List<DisplayItemControlViewModel> Items { get; set; }
 
+		  /// <summary>
+		  /// How many folders done with the backup
+		  /// </summary>
+		  private int m_DoneFoldersCount { get; set; } = 0;
+		  public int DoneFoldersCount
+		  {
+			   get
+			   {
+					return m_DoneFoldersCount;
+			   }
+			   set
+			   {
+					if (m_DoneFoldersCount == value)
+						 return;
+
+					m_DoneFoldersCount = value;
+					OnPropertyChanged(nameof(DoneFoldersCount));
+			   }
+		  }
+
+		  public Progress<int> CountProgress { get; set; }
 
 		  /// <summary>
 		  /// The command to go back to the backup page
@@ -30,12 +54,28 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
 		  /// </summary>
-		  async void StartBackupAsync()
+		  async void StartBackupAsync(IProgress<int> progress)
 		  {
-			   foreach (DisplayItemControlViewModel item in Items)
+			   
+			   await Task.Run(() =>
 			   {
-					await item.StartBackup();
-			   }
+					int count = 0;
+					Parallel.ForEach<DisplayItemControlViewModel>(Items, async (item) =>
+					{
+						 await item.StartBackup();
+						 if (item.BackupDone)
+						 {
+							  DoneFoldersCount++;
+							  count++;
+							  progress.Report(count);
+
+							  if(count == Items.Count)
+								   Debug.WriteLine("Done!");
+						 }
+					});
+			   });
+
+			   
 		  }
 
 		  private void GetItemsInformation()
@@ -61,9 +101,18 @@ namespace BackupSoftware
 			   // Create command
 			   BackupPageCommand = new RelayCommand(() => { IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDetailsForm; });
 
+			   CountProgress = new Progress<int>();
+			   CountProgress.ProgressChanged += CountProgress_ProgressChanged;
 
 			   // Start the backup
-			   StartBackupAsync();
+			   StartBackupAsync(CountProgress);
+
+			   
+		  }
+
+		  private void CountProgress_ProgressChanged(object sender, int e)
+		  {
+			   DoneFoldersCount = (e * 100) / Items.Count;
 		  }
 	 }
 }

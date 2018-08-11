@@ -20,20 +20,23 @@
                <Button Content="Back to backup page" Command="{Binding BackupPageCommand}" />
           </Border>
 
+          <ScrollViewer Grid.Row="1">
+               <ItemsControl  ItemsSource="{Binding Items}"  d:DataContext="{x:Static local:BackupDisplayPageViewModel.Instance}" Padding="10">
+                    <ItemsControl.ItemTemplate>
+                         <DataTemplate>
 
-          <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}"  d:DataContext="{x:Static local:BackupDisplayPageViewModel.Instance}" Padding="10">
-               <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                         <local:DisplayItemControl />
-                    </DataTemplate>
-               </ItemsControl.ItemTemplate>
+                                   <local:DisplayItemControl />
 
-          </ItemsControl>
+                         </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+               </ItemsControl>
+          </ScrollViewer>
 
           <Border Grid.Row="2"  Background="#dcdde1" Height="50">
 
                <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
-               <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto" />
+               <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto" Value="{Binding DoneFoldersCount}" />
           </Border>
      </Grid>
 </Page>
