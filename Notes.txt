@@ -38,7 +38,7 @@
 	------2. Edit the style of the window buttons and for the regular buttons
 	------3. Add some basic icon
 	4. Add global fonts to all of the program
-	5. when loading page make a fading effect like in ESET
+	5. when loading page make a fading effect like in ESET https://youtu.be/UZSFY8YdSrA?t=359
 	6. Make a page style for all the pages
 	
 	Things to understand better:
@@ -47,21 +47,19 @@
 	3. Templates
 	4. Converters
 	5. UserControls
+	6. Fody weavers
 	
 	Backup page
 	
-		1. Make costum buttons
-		3. add progress bar at the bottom ( take the count of the top directories and decrease the count)
-		4. In the header add the start time and end time
-		5. Figure out how to use tasks so it won't stuck the program
-		6. Make the progress sync with the results from DisplayBackup page
-		7. When the backup is successful display done icon
+		1. Make costum buttons - Low Priority
+		4. In the header add the start time and end time - Medium Priority
+		6. Make the progress sync with the results from DisplayBackup page - Medium Priority
+		7. When the backup is successful display done icon - Low Priority
 		
 	DisplayBackup Page
 	
-		1. Add spinning icon, after the backup is finished show the V icon ( Attached dependencies)
-		2. Make the progress bar at the bottom sync with the backed up folders
-		3. Improve the algorithm? So it would be more responsive when showing the status
-		4. Figure out how to make the delete prev content work
-		5. Change the back to backup page button to some icon in the top left edge
-		6. When going back to the BackupPage,
+		1. Add spinning icon, after the backup is finished show the V icon ( Attached dependencies) - Low Priority
+		3. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
+		4. Figure out how to make the delete prev content work - Medium Priority
+		5. Change the back to backup page button to some icon in the top left edge - Low Priority
+		6. Handle the case when going back to backup page the backup won't run - High Priority

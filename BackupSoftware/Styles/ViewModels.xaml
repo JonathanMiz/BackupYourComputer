@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BackupSoftware">
+
+     <DataTemplate DataType="{x:Type local:WindowViewModel}">
+          <local:MainWindow />
+     </DataTemplate>
+     <DataTemplate DataType="{x:Type local:DetailsViewModel}">
+          <local:DetailsView />
+     </DataTemplate>
+     <DataTemplate DataType="{x:Type local:SelectSourceViewModel}">
+          <local:SelectSourceView />
+     </DataTemplate>
+     <DataTemplate DataType="{x:Type local:DisplayViewModel}">
+          <local:DisplayView />
+     </DataTemplate>
+</ResourceDictionary>

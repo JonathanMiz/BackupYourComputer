@@ -1,22 +1,17 @@
-﻿using Ninject;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace BackupSoftware
 {
-	 // TODO: Move to different class
-	 public class BackupDisplayPageViewModel : ViewModelBase
-	 {
-		  
+    public class DisplayViewModel : ViewModelBase
+    {
 		  // TEMP: Instance to check the design live
-		  public static BackupDisplayPageViewModel Instance => new BackupDisplayPageViewModel();
+		  public static DisplayViewModel Instance => new DisplayViewModel();
 		  //
 
 		  /// <summary>
@@ -49,14 +44,14 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The command to go back to the backup page
 		  /// </summary>
-		  public RelayCommand BackupPageCommand { get; set; }
+		  public RelayCommand BackToDetailsCommand { get; set; }
 
 		  /// <summary>
 		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
 		  /// </summary>
 		  async void StartBackupAsync(IProgress<int> progress)
 		  {
-			   
+			   IoC.Get<CacheViewModel>().IsBackupRunning = true;
 			   await Task.Run(() =>
 			   {
 					int count = 0;
@@ -69,45 +64,54 @@ namespace BackupSoftware
 							  count++;
 							  progress.Report(count);
 
-							  if(count == Items.Count)
+							  if (count == Items.Count)
+							  {
+								   IoC.Get<CacheViewModel>().IsBackupRunning = false;
 								   Debug.WriteLine("Done!");
+							  }
 						 }
 					});
 			   });
 
-			   
+
 		  }
 
 		  private void GetItemsInformation()
 		  {
 			   // Getting all the infomation to Items
-			   foreach (var item in IoC.Kernel.Get<CacheViewModel>().FolderItems)
+			   foreach (var item in IoC.Get<CacheViewModel>().FolderItems)
 			   {
 					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(item.FolderPath);
-					displayItemControlViewModel.Destination = $"{IoC.Kernel.Get<CacheViewModel>().BackupFolder}{displayItemControlViewModel.FolderInfo.Name}";
+					displayItemControlViewModel.Destination = $"{IoC.Get<CacheViewModel>().BackupFolder}{displayItemControlViewModel.FolderInfo.Name}";
 
 					Items.Add(displayItemControlViewModel);
 			   }
 
 		  }
 
-		  public BackupDisplayPageViewModel()
+		  public void RunBackup()
 		  {
-			   Items = new List<DisplayItemControlViewModel>();
+			   if (!IoC.Get<CacheViewModel>().IsBackupRunning)
+			   {
+					Items = new List<DisplayItemControlViewModel>();
 
-			   // Getting all the infomation to Items
-			   GetItemsInformation();
+					// Getting all the infomation to Items
+					GetItemsInformation();
 
-			   // Create command
-			   BackupPageCommand = new RelayCommand(() => { IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDetailsForm; });
+					// Create command
+					BackToDetailsCommand = new RelayCommand(() => { IoC.Get<ApplicationViewModel>().CurrentViewModel = ViewModelLocator.DetailsViewModel; });
 
-			   CountProgress = new Progress<int>();
-			   CountProgress.ProgressChanged += CountProgress_ProgressChanged;
+					CountProgress = new Progress<int>();
+					CountProgress.ProgressChanged += CountProgress_ProgressChanged;
 
-			   // Start the backup
-			   StartBackupAsync(CountProgress);
+					// Start the backup
+					StartBackupAsync(CountProgress);
+			   }
+		  }
 
-			   
+		  public DisplayViewModel()
+		  {
+
 		  }
 
 		  private void CountProgress_ProgressChanged(object sender, int e)

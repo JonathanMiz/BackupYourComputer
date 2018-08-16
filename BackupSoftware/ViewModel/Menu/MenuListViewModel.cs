@@ -34,19 +34,19 @@ namespace BackupSoftware
 					{
 						 IconCode = "\uf574",
 						 Title = "Backup",
-						 Page = ApplicationPage.BackupDetailsForm,
+						 CurrentViewModel = ViewModelLocator.DetailsViewModel,
 					},
 					new MenuItemViewModel
 					{
 						 IconCode = "\uf108",
 						 Title = "Screenshots",
-						 Page = ApplicationPage.ScreenshotsDetailsForm
+						 CurrentViewModel = null
 					},
 					new MenuItemViewModel
 					{
 						 IconCode = "\uf013",
 						 Title = "Settings",
-						 Page = ApplicationPage.BackupDisplay
+						 CurrentViewModel = null
 					}
 			   };
 		  }

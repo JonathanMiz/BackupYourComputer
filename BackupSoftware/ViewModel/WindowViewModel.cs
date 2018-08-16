@@ -29,7 +29,7 @@ namespace BackupSoftware
 		  BackupDisplay = 3,
 	 }
 
-	 class WindowViewModel : ViewModelBase
+	 public class WindowViewModel : ViewModelBase
 	 {
 		  /// <summary>
 		  /// The window handler

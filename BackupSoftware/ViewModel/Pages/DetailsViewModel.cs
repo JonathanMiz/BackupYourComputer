@@ -1,23 +1,18 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Collections;
-using System.Collections.ObjectModel;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows;
-using System.IO;
-using System.Diagnostics;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
-using System.Xaml;
-using System.Configuration;
-using Ninject;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace BackupSoftware
 {
-	 /// <summary>
-	 /// The model class that represents the UI form
-	 /// </summary>
-	 public class FormViewModel : ViewModelBase
+	 public class DetailsViewModel : ViewModelBase
 	 {
+
 		  #region Private Members
 
 		  private string m_Folders { get; set; }
@@ -45,24 +40,35 @@ namespace BackupSoftware
 		  {
 			   get
 			   {
-					return IoC.Kernel.Get<CacheViewModel>().BackupFolder;
+					return IoC.Get<CacheViewModel>().BackupFolder;
 			   }
 			   set
 			   {
-					IoC.Kernel.Get<CacheViewModel>().BackupFolder = value;
+					IoC.Get<CacheViewModel>().BackupFolder = value;
 			   }
 		  }
 
-		  string Test()
+		  string ExtractFolderNames()
 		  {
 			   string list = "";
-			   foreach (FolderListItem item in IoC.Kernel.Get<CacheViewModel>().FolderItems)
+			   foreach (FolderListItem item in IoC.Get<CacheViewModel>().FolderItems)
 			   {
 					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderPath);
 					list += ", ";
 			   }
-			   return list.Substring(0, list.Length - 2);
+			   if(list != "")
+					return list.Substring(0, list.Length - 2);
+			   return list;
 		  }
+
+		  private DisplayViewModel _DisplayViewModel;
+
+		  public DisplayViewModel DisplayViewModel
+		  {
+			   get { return _DisplayViewModel; }
+			   set { if (_DisplayViewModel == value) return;  _DisplayViewModel = value; OnPropertyChanged(nameof(DisplayViewModel)); }
+		  }
+
 
 		  #endregion
 
@@ -80,8 +86,9 @@ namespace BackupSoftware
 		  /// The command to open the page of selecting folders to backup
 		  /// </summary>
 		  public RelayCommand ChooseFoldersToBackup { get; set; }
-		  #endregion
 
+		  public RelayCommand ShowProgressCommand { get; set; }
+		  #endregion
 
 
 		  #region Command Functions
@@ -117,7 +124,7 @@ namespace BackupSoftware
 
 		  void ChooseFolder()
 		  {
-			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.SelectFolders;
+			   IoC.Get<ApplicationViewModel>().CurrentViewModel = new SelectSourceViewModel();
 		  }
 
 
@@ -126,45 +133,65 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
-		  public FormViewModel()
+		  public DetailsViewModel()
 		  {
 			   ChooseBackupFolderCommand = new RelayCommand(ChooseBackupFolder);
 			   ChooseFoldersToBackup = new RelayCommand(ChooseFolder);
 			   StartBackupCommand = new RelayCommand(StartBackup);
+			   ShowProgressCommand = new RelayCommand(ShowProgress);
+
+			   Folders = ExtractFolderNames();
+
+			   DisplayViewModel = new DisplayViewModel();
+		  }
+
+		  private void ShowProgress()
+		  {
+			   if (IoC.Get<CacheViewModel>().IsBackupRunning)
+			   {
+					IoC.Get<ApplicationViewModel>().CurrentViewModel = DisplayViewModel;
+			   }
 		  }
 
 		  // Refactor
 		  private void StartBackup()
 		  {
-			   var FolderItems = IoC.Kernel.Get<CacheViewModel>().FolderItems;
-			   var BackupFolder = IoC.Kernel.Get<CacheViewModel>().BackupFolder;
-
-			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(BackupFolder) || FolderItems.Count == 0)
+			   if (!IoC.Get<CacheViewModel>().IsBackupRunning)
 			   {
-					MessageBox.Show("Fill in the list of folder and hard drive!");
-					return;
-			   }
+					var FolderItems = IoC.Get<CacheViewModel>().FolderItems;
+					var BackupFolder = IoC.Get<CacheViewModel>().BackupFolder;
 
-			   // Check to see if the folders exists
-			   foreach (FolderListItem item in FolderItems)
-			   {
-					if (!Directory.Exists(item.FolderPath))
+					// Checks to see if there is content in the fields
+					if (string.IsNullOrEmpty(BackupFolder) || FolderItems.Count == 0)
 					{
-						 MessageBox.Show(item.FolderPath + " can not be found!");
+						 MessageBox.Show("Fill in the list of folder and hard drive!");
 						 return;
 					}
 
-			   }
+					// Check to see if the folders exists
+					foreach (FolderListItem item in FolderItems)
+					{
+						 if (!Directory.Exists(item.FolderPath))
+						 {
+							  MessageBox.Show(item.FolderPath + " can not be found!");
+							  return;
+						 }
 
-			   if (!Directory.Exists(BackupFolder))
+					}
+
+					if (!Directory.Exists(BackupFolder))
+					{
+						 MessageBox.Show(BackupFolder + " can not be found!");
+						 return;
+					}
+
+					DisplayViewModel.RunBackup();
+					IoC.Get<ApplicationViewModel>().CurrentViewModel = DisplayViewModel;
+			   }
+			   else
 			   {
-					MessageBox.Show(BackupFolder + " can not be found!");
-					return;
+					MessageBox.Show("The buckup is already running!");
 			   }
-
-			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDisplay;
 		  }
-
 	 }
 }

@@ -5,37 +5,25 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace BackupSoftware
 {
-	 public class ApplicationPageValueConverter : MarkupExtension, IValueConverter
+	 class BooleanToVisibleConverter : MarkupExtension, IValueConverter
 	 {
 		  public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		  {
-			   switch((ApplicationPage)value)
+			   if((bool)value)
 			   {
-					case ApplicationPage.BackupDetailsForm:
-						 {
-							  return new BackupDetailsForm();
-						 }
-					case ApplicationPage.ScreenshotsDetailsForm:
-						 {
-							  return new ScreenshotsDetails();
-						 }
-					case ApplicationPage.SelectFolders:
-						 {
-							  return new SelectFoldersPage();
-						 }
-					case ApplicationPage.BackupDisplay:
-						 {
-							  return new BackupDisplayPage();
-						 }
-					default:
-						 Debugger.Break();
-						 return null;
+					return Visibility.Visible;
 			   }
+			   else
+			   {
+					return Visibility.Hidden;
+			   }
+			   Debugger.Break();
 		  }
 
 		  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -30,5 +30,10 @@ namespace BackupSoftware
 			   Kernel.Bind<CacheViewModel>().ToConstant(new CacheViewModel());
 
 		  }
+
+		  public static T Get<T>()
+		  {
+			   return Kernel.Get<T>();
+		  }
     }
 }

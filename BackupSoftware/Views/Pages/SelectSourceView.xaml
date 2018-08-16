@@ -1,13 +1,11 @@
-﻿<Page x:Class="BackupSoftware.SelectFoldersPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:BackupSoftware"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SelectFoldersPage">
-
+﻿<UserControl x:Class="BackupSoftware.SelectSourceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BackupSoftware"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
      <Grid Background="#f5f6fa">
           <Grid.RowDefinitions>
                <RowDefinition Height="Auto"/>
@@ -27,7 +25,7 @@
 
           <StackPanel Grid.Row="1"  Orientation="Horizontal">
                <StackPanel  Margin="20">
-                
+
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
                     <ListBox HorizontalAlignment="Left" x:Name="FolderList"
                                             ItemsSource="{Binding FolderItems, Mode=TwoWay}"
@@ -92,7 +90,7 @@
                                                                                       To="{StaticResource VeryLightBlue}"
                                                                                       />
                                                                  </Storyboard>
-                                                                 
+
                                                             </BeginStoryboard>
                                                        </EventTrigger>
                                                        <EventTrigger RoutedEvent="MouseLeave">
@@ -109,7 +107,7 @@
                                                        </EventTrigger>
                                                   </ControlTemplate.Triggers>
                                              </ControlTemplate>
-                                             
+
                                         </Setter.Value>
                                    </Setter>
                               </Style>
@@ -117,7 +115,7 @@
                     </ListBox>
 
                </StackPanel>
-          
+
                <!-- Browse button -->
                <Button
                                  Command="{Binding ChooseFolderCommand}"
@@ -144,4 +142,4 @@
           <Border Grid.Row="3"  Background="#dcdde1" Height="30">
           </Border>
      </Grid>
-</Page>
+</UserControl>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace BackupSoftware
 {
@@ -12,21 +13,22 @@ namespace BackupSoftware
 	 /// </summary>
     public class ApplicationViewModel : ViewModelBase
     {
-		  private ApplicationPage m_CurrentPage { get; set; } = ApplicationPage.BackupDetailsForm;
-		  public ApplicationPage CurrentPage
+		  private ViewModelBase m_CurrentViewModel { get; set; } = ViewModelLocator.DetailsViewModel;
+		  public ViewModelBase CurrentViewModel
 		  {
 			   get
 			   {
-					return m_CurrentPage;
+					return m_CurrentViewModel;
 			   }
 			   set
 			   {
-					if (m_CurrentPage == value)
+					if (m_CurrentViewModel == value)
 						 return;
 
-					m_CurrentPage = value;
-					OnPropertyChanged(nameof(CurrentPage));
+					m_CurrentViewModel = value;
+					OnPropertyChanged(nameof(CurrentViewModel));
 			   }
 		  }
-	}
+
+	 }
 }

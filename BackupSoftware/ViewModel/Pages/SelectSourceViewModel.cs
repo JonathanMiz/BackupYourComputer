@@ -1,23 +1,15 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Collections;
-using System.Collections.ObjectModel;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows;
-using System.IO;
-using System.Diagnostics;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
-using System.Xaml;
-using System.Configuration;
-using Ninject;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BackupSoftware
 {
-	 /// <summary>
-	 /// The model class that represents the UI form
-	 /// </summary>
-	 public class SelectedFoldersViewModel : ViewModelBase
+	 public class SelectSourceViewModel : ViewModelBase
 	 {
 		  #region Private Members
 
@@ -25,11 +17,11 @@ namespace BackupSoftware
 		  {
 			   get
 			   {
-					return IoC.Kernel.Get<CacheViewModel>().FolderItems;
+					return IoC.Get<CacheViewModel>().FolderItems;
 			   }
 			   set
 			   {
-					IoC.Kernel.Get<CacheViewModel>().FolderItems = value;
+					IoC.Get<CacheViewModel>().FolderItems = value;
 			   }
 		  }
 
@@ -38,7 +30,7 @@ namespace BackupSoftware
 		  #region Commands
 
 		  /// <summary>
-		  /// The command to choose folder to backup
+		  /// The command to choose folder to backup   
 		  /// </summary>
 		  public RelayCommand ChooseFolderCommand { get; set; }
 		  /// <summary>
@@ -65,7 +57,7 @@ namespace BackupSoftware
 			   dlg.ResetUserSelections();
 			   dlg.Title = "Choose folder";
 			   dlg.IsFolderPicker = true;
-			   dlg.InitialDirectory = null;
+			   dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
 
 			   dlg.AddToMostRecentlyUsedList = false;
 			   dlg.AllowNonFileSystemItems = false;
@@ -98,7 +90,7 @@ namespace BackupSoftware
 							  for (int i = 0; i < FolderItems.Count; ++i)
 							  {
 								   var exisitingFolderToBackup = FolderItems[i].FolderPath.ToString();
-								   if (IoC.Kernel.Get<CacheViewModel>().FindFolderItemByString(FolderItems, newFolderToBackup) != null)
+								   if (IoC.Get<CacheViewModel>().FindFolderItemByString(FolderItems, newFolderToBackup) != null)
 								   {
 										MessageBox.Show(newFolderToBackup + " already exists in the list!");
 										Added = false;
@@ -137,7 +129,7 @@ namespace BackupSoftware
 
 					foreach (var folder in foldersToAddToListView)
 					{
-						 IoC.Kernel.Get<CacheViewModel>().AddFolderToBackUp(folder);
+						 IoC.Get<CacheViewModel>().AddFolderToBackUp(folder);
 					}
 
 					if (foldersToRemoveToListView.Count > 0)
@@ -146,15 +138,15 @@ namespace BackupSoftware
 
 						 foreach (var folder in foldersToRemoveToListView)
 						 {
-							  IoC.Kernel.Get<CacheViewModel>().RemoveFolderToBackUp(folder);
+							  IoC.Get<CacheViewModel>().RemoveFolderToBackUp(folder);
 						 }
 					}
 			   }
 		  }
 
-		 void Select()
+		  void Select()
 		  {
-			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.BackupDetailsForm;
+			   IoC.Get<ApplicationViewModel>().CurrentViewModel = ViewModelLocator.DetailsViewModel;
 		  }
 
 		  #endregion
@@ -162,11 +154,11 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
-		  public SelectedFoldersViewModel()
+		  public SelectSourceViewModel()
 		  {
 			   ChooseFolderCommand = new RelayCommand(ChooseFolder);
 			   SelectButtonCommand = new RelayCommand(Select);
-			   RemoveItemCommand = new RelayParameterizedCommand<string>(IoC.Kernel.Get<CacheViewModel>().RemoveFolderToBackUp);
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(IoC.Get<CacheViewModel>().RemoveFolderToBackUp);
 		  }
 	 }
 }

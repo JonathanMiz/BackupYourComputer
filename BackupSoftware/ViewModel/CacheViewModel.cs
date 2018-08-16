@@ -104,6 +104,8 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  public bool IsBackupRunning { get; set; } = false;
+
 		  public CacheViewModel()
 		  {
 			   // TEMP: Default values for tests

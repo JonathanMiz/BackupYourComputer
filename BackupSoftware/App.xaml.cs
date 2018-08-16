@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace BackupSoftware
 {
@@ -27,6 +28,13 @@ namespace BackupSoftware
 
 			   Current.MainWindow = new MainWindow();
 			   Current.MainWindow.Show();
+
+
+		  }
+
+		  protected override void OnNavigated(NavigationEventArgs e)
+		  {
+			   base.OnNavigated(e);
 		  }
 	 }
 }

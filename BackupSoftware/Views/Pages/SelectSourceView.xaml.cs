@@ -1,5 +1,4 @@
-﻿using Ninject;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,15 +15,14 @@ using System.Windows.Shapes;
 
 namespace BackupSoftware
 {
-	 /// <summary>
-	 /// Interaction logic for SelectFoldersPage.xaml
-	 /// </summary>
-	 public partial class SelectFoldersPage : Page
-	 {
-		  public SelectFoldersPage()
-		  {
-			   InitializeComponent();
-			   DataContext = new SelectedFoldersViewModel();
-		  }
-	 }
+    /// <summary>
+    /// Interaction logic for SelectSourceView.xaml
+    /// </summary>
+    public partial class SelectSourceView : UserControl
+    {
+        public SelectSourceView()
+        {
+            InitializeComponent();
+        }
+    }
 }

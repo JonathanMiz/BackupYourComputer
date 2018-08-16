@@ -31,7 +31,7 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The page of this menu item
 		  /// </summary>
-		  public ApplicationPage Page { get; set; }
+		  public ViewModelBase CurrentViewModel { get; set; }
 
 		  public RelayCommand OpenPageCommand { get; set; }
 
@@ -49,7 +49,7 @@ namespace BackupSoftware
 		  void OpenPage()
 		  {
 			   // Change the current page to the page of the menu item
-			   IoC.Kernel.Get<ApplicationViewModel>().CurrentPage = Page;
+			   IoC.Kernel.Get<ApplicationViewModel>().CurrentViewModel = CurrentViewModel;
 		  }
 	 }
 }

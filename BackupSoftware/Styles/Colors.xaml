@@ -15,4 +15,10 @@
      <Color x:Key="VeryLightBlue">#6a89cc</Color>
      <SolidColorBrush x:Key="VeryLightBlueBursh" Color="{StaticResource VeryLightBlue}" />
 
+     <Color x:Key="WhiteGray">#f5f6fa</Color>
+     <SolidColorBrush x:Key="WhiteGrayBrush" Color="{StaticResource WhiteGray}" />
+
+     <Color x:Key="DarkLightGray">#dcdde1</Color>
+     <SolidColorBrush x:Key="DarkLightGrayBrush" Color="{StaticResource DarkLightGray}" />
+     
 </ResourceDictionary>

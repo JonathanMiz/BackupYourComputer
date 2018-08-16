@@ -17,6 +17,7 @@
         MinWidth="{Binding WindowMinWidth}"
         x:Name="Window"
         >
+
      <Window.Resources>
           <Style TargetType="{x:Type local:MainWindow}">
                <Setter Property="Template">
@@ -115,12 +116,15 @@
                </local:MenuList>
           </local:SideMenuControl>
 
-          <Frame Grid.Column="1"
+          <!--<Frame Grid.Column="1"
                NavigationUIVisibility="Hidden"
                Content="{Binding ApplicationViewModel.CurrentPage,
                          Source={x:Static local:ViewModelLocator.Instance},
                          Converter={local:ApplicationPageValueConverter}}"
-               Background="Transparent"/>
+               Background="Transparent"/>-->
+
+          <ContentControl Grid.Column="1" Content="{Binding ApplicationViewModel.CurrentViewModel,
+                                   Source={x:Static local:ViewModelLocator.Instance}}" />
      </Grid>
 
 </Window>
