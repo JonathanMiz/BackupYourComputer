@@ -11,6 +11,7 @@ namespace BackupSoftware
 		  public static CacheViewModel CacheViewModel => IoC.Kernel.Get<CacheViewModel>();
 
 		  // Pages
-		  public static DetailsViewModel DetailsViewModel => new DetailsViewModel();
+		  public static DetailsViewModel DetailsViewModel { get; private set; } = new DetailsViewModel();
+		  
 	 }
 }

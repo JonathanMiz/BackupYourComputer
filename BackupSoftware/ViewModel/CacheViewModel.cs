@@ -115,6 +115,7 @@ namespace BackupSoftware
 			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Army");
 			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Blender");
 			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Books");
+			   //AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
 
 			   // Set default values
 			   //formViewModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");

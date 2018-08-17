@@ -26,6 +26,7 @@
 	8. How can I get the data form another usercontrol
 	9. Option to stop backup
 	10. Most of the names are bad
+	11. Add error checks, when the backup is running disable choosing source and dest
 	
 	Bugs/Fixes:
 	
