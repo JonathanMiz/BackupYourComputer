@@ -54,20 +54,10 @@ namespace BackupSoftware
 		  void ChooseFolder()
 		  {
 			   var dlg = new CommonOpenFileDialog();
-			   dlg.ResetUserSelections();
 			   dlg.Title = "Choose folder";
 			   dlg.IsFolderPicker = true;
-			   dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+			   dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-			   dlg.AddToMostRecentlyUsedList = false;
-			   dlg.AllowNonFileSystemItems = false;
-			   dlg.DefaultDirectory = null;
-			   dlg.EnsureFileExists = true;
-			   dlg.EnsurePathExists = true;
-			   dlg.EnsureReadOnly = false;
-			   dlg.EnsureValidNames = true;
-			   dlg.Multiselect = true;
-			   dlg.ShowPlacesList = true;
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
 			   {

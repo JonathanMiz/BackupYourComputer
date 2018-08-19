@@ -23,10 +23,9 @@
 	2. Refactor the code (move helper functions to separate class?)
 	3. Add log
 	7. Implement the effect of selecting button in the menu
-	8. How can I get the data form another usercontrol
 	9. Option to stop backup
 	10. Most of the names are bad
-	11. Add error checks, when the backup is running disable choosing source and dest
+	11. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
 	
 	Bugs/Fixes:
 	
@@ -54,13 +53,10 @@
 	
 		1. Make costum buttons - Low Priority
 		4. In the header add the start time and end time - Medium Priority
-		6. Make the progress sync with the results from DisplayBackup page - Medium Priority
 		7. When the backup is successful display done icon - Low Priority
 		
 	DisplayBackup Page
 	
-		1. Add spinning icon, after the backup is finished show the V icon ( Attached dependencies) - Low Priority
 		3. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		4. Figure out how to make the delete prev content work - Medium Priority
 		5. Change the back to backup page button to some icon in the top left edge - Low Priority
-		6. Handle the case when going back to backup page the backup won't run - High Priority

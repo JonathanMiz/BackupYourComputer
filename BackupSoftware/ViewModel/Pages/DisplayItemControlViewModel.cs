@@ -41,7 +41,14 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// True if the backup for the folder is done
 		  /// </summary>
-		  public bool BackupDone { get; set; } = false;
+		  private bool _BackupDone;
+
+		  public bool BackupDone
+		  {
+			   get { return _BackupDone; }
+			   set { if (_BackupDone == value) return; _BackupDone = value; OnPropertyChanged(nameof(BackupDone));  }
+		  }
+
 
 		  /// <summary>
 		  /// Text to display the user with the current status
@@ -220,7 +227,6 @@ namespace BackupSoftware
 
 			   BackupDone = true;
 
-			   //item.ContentCount = (count * 100 / item.ContentTotalCount);
 
 
 			   //if (item.DeletePrevContent)

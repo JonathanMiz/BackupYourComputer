@@ -49,7 +49,23 @@
                     <!--<ScrollViewer Grid.Column="2">
                          <TextBlock Text="{Binding Log}" />
                     </ScrollViewer>-->
-                    <Image Grid.Column="3" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                    <Image Grid.Column="3" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top"
+                           Visibility="{Binding BackupDone,
+                                        Converter={local:BooleanToVisibleConverter}}"
+                           />
+                    <TextBlock Grid.Column="3"
+                               Style="{StaticResource LoadingText}"
+                               FontFamily="{StaticResource FontAwesome}"
+                               Text="&#xf110;"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Visibility="{Binding BackupDone, Converter={local:BooleanToVisibleConverter2}, UpdateSourceTrigger=PropertyChanged}"
+                               FontSize="20"
+                               >
+                         <TextBlock.RenderTransform>
+                              <RotateTransform />
+                         </TextBlock.RenderTransform>
+                    </TextBlock>
                </Grid>
                <ProgressBar Grid.Row="1" 
                             Height="20"
@@ -59,5 +75,4 @@
 
           </Grid>
      </Border>
-     
 </UserControl>
