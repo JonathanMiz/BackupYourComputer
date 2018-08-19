@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace BackupSoftware
 {
-	 public class RelayParameterizedCommand<T> : ICommand
+	 public class RelayParameterizedCommand<T> : System.Windows.Input.ICommand
 	 {
 		  private Action<T> m_action;
 

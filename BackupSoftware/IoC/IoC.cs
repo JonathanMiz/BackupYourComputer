@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using BackupSoftware.Services;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,19 @@ namespace BackupSoftware
 		  /// </summary>
 		  public static void Setup()
 		  {
-			   // Bind all required singleton view models
+			   
+			   // Binding IDialogService to WindowDialogService, so ninject could instantiate WindowDialogService whenever
+			   // IDialogService is a dependency of some class constructor
+			   Kernel.Bind<IDialogService>().To<WindowDialogService>();
 
 			   // Bind to a single instance of Application view model
 			   Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-			   Kernel.Bind<CacheViewModel>().ToConstant(new CacheViewModel());
+
+			   // Injecting CacheViewModel class
+			   var cacheViewModel = Kernel.Get<CacheViewModel>();
+
+			   // Bind CacheViewModel so it would act like a singleton read more about this!!!
+			   Kernel.Bind<CacheViewModel>().ToConstant(cacheViewModel);
 
 		  }
 

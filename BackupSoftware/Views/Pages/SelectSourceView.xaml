@@ -28,7 +28,7 @@
 
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
                     <ListBox HorizontalAlignment="Left" x:Name="FolderList"
-                                            ItemsSource="{Binding FolderItems, Mode=TwoWay}"
+                                            ItemsSource="{Binding SourceFolders, Mode=TwoWay}"
                                             Width="615" Height="250" Background="White">
                          <ListBox.ItemContainerStyle>
                               <Style TargetType="{x:Type ListBoxItem}">
@@ -118,7 +118,7 @@
 
                <!-- Browse button -->
                <Button
-                                 Command="{Binding ChooseFolderCommand}"
+                                 Command="{Binding SelectFoldersCommand}"
                                  Width="100"
                                  Height="30"
                     VerticalAlignment="Center"
@@ -130,7 +130,7 @@
 
           <!-- Select button -->
           <Button Grid.Row="2"
-                            Command="{Binding SelectButtonCommand}"
+                            Command="{Binding GoToDetailsViewCommand}"
                             Width="150"
                             Height="35"
                               Padding="5"

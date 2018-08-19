@@ -18,18 +18,9 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// A check to see if the user whats to delete the prev content in the backup drive
 		  /// </summary>
-		  public bool DeletePrevContent { get; set; }
+		  public bool DeletePrevContent { get; set; } = false;
 
-		  /// <summary>
-		  /// Default Constructor
-		  /// </summary>
-		  public FolderListItem()
-		  {
-			   FolderPath = string.Empty;
-			   DeletePrevContent = false;
-		  }
-
-		  public FolderListItem(string folderPath, bool deletePrevContent)
+		  public FolderListItem(string folderPath, bool deletePrevContent = false)
 		  {
 			   FolderPath = folderPath;
 			   DeletePrevContent = deletePrevContent;

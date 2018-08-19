@@ -33,7 +33,7 @@
                                                    FontSize="20"
                                                    Margin="0 5 0 3" FontWeight="Bold"
                                                    />
-                                        <TextBlock Text="{Binding CacheViewModel.BackupFolder,
+                                        <TextBlock Text="{Binding CacheViewModel.DestFolder,
                                                        Source={x:Static local:ViewModelLocator.Instance},
                                                        Mode=TwoWay}"
                                                    HorizontalAlignment="Center"
@@ -71,7 +71,7 @@
                                                    FontSize="20"
                                                    Margin="0 5 0 3" FontWeight="Bold"
                                                    />
-                                        <TextBlock Text="{Binding Folders, FallbackValue=Select folder}"
+                                        <TextBlock Text="{Binding SourceFoldersText, FallbackValue=Select folder}"
                                                    HorizontalAlignment="Center"
                                                    FontFamily="Segoe UI Light"
                                                    Margin="0 10 0 0"
@@ -108,7 +108,7 @@
 
 
                <Button Style="{StaticResource ChooseFolderButton}"
-                       Command="{Binding ChooseFoldersToBackup}"
+                       Command="{Binding GoToSelectSourceCommand}"
                        Content="Files and Folders" />
 
 
@@ -119,9 +119,9 @@
                           VerticalAlignment="Center"
                           Padding="10"/>
 
-               <Button  Grid.Column="2" Content="Backup Folder"
+               <Button  Grid.Column="2" Content="Destination Folder"
                         Style="{StaticResource BackupFolderButton}"
-                        Command="{Binding ChooseBackupFolderCommand}"/>
+                        Command="{Binding SelectDestFolderCommand}"/>
 
           </Grid>
 
@@ -145,7 +145,7 @@
                                                       Source={x:Static local:ViewModelLocator.Instance},
                                                       Converter={local:BooleanToVisibleConverter}}"
                                  Style="{StaticResource MouseHoverHoverlessButton}"
-                                 Command="{Binding ShowProgressCommand}"/>
+                                 Command="{Binding GoToDisplayCommand}"/>
                     </StackPanel>
                </Grid>
           </Border>

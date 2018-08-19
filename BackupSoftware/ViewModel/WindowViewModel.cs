@@ -94,9 +94,9 @@ namespace BackupSoftware
 
 		  #region Commands
 
-		  public RelayCommand MinimizeCommand { get; set; }
-		  public RelayCommand CloseCommand { get; set; }
-		  public RelayCommand MenuCommand { get; set; }
+		  public ICommand MinimizeCommand { get; set; }
+		  public ICommand CloseCommand { get; set; }
+		  public ICommand MenuCommand { get; set; }
 
 		  public void MinimizeWindow()
 		  {

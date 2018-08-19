@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackupSoftware.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,62 +17,102 @@ namespace BackupSoftware
 		  #region Private Members
 		  /// <summary>
 		  /// The list of the folders the user want to backup
-		  /// In order for the view to update the changes that occured in <see cref="m_folderItems"/> we need <see cref="ObservableCollection{T}"/>
 		  /// </summary>
-		  private ObservableCollection<FolderListItem> m_folderItems = new ObservableCollection<FolderListItem>();
+		  private ObservableCollection<FolderListItem> _SourceFolders = new ObservableCollection<FolderListItem>();
 
+		  /// <summary>
+		  /// Dialog service to display messages to the screen
+		  /// </summary>
+		  private IDialogService _DialogService;
 
 		  /// <summary>
 		  /// The dest folder to backup the folders
 		  /// </summary>
-		  private string m_backupFolder { get; set; }
+		  private string _DestFolder { get; set; }
 
 		  #endregion
 
 		  #region Public Members
-		  /// <summary>
-		  /// A refrence for <see cref="m_folderItems"/> in order for the binding to work
-		  /// </summary>
-		  public ObservableCollection<FolderListItem> FolderItems
+
+		  #region Variables
+		  
+		  public ObservableCollection<FolderListItem> SourceFolders
 		  {
 			   get
 			   {
-					return m_folderItems;
+					return _SourceFolders;
 			   }
 			   set
 			   {
-					m_folderItems = value;
-					OnPropertyChanged(nameof(FolderItems));
+					if (_SourceFolders == value)
+						 return;
+
+					_SourceFolders = value;
+					OnPropertyChanged(nameof(SourceFolders));
+			   }
+		  }
+
+		  public string DestFolder
+		  {
+			   get
+			   {
+					return _DestFolder;
+			   }
+			   set
+			   {
+					if (_DestFolder == value)
+						 return;
+
+					_DestFolder = value;
+					OnPropertyChanged(nameof(DestFolder));
 			   }
 		  }
 
 		  /// <summary>
-		  /// Add new folder to backup to <see cref="FolderPathsToBackup"/>
+		  /// True if the backup is running
+		  /// </summary>
+		  public bool IsBackupRunning { get; set; } = false;
+
+		  #endregion
+
+		  #region Functions
+
+		  /// <summary>
+		  /// Add new folder to <see cref="SourceFolders"/>
 		  /// </summary>
 		  /// <param name="folder"></param>
-		  public void AddFolderToBackUp(string folder)
+		  public void AddFolder(string folder)
 		  {
-			   FolderItems.Add(new FolderListItem(folder, false));
-			   OnPropertyChanged(nameof(FolderItems));
+			   SourceFolders.Add(new FolderListItem(folder));
 		  }
 
 		  /// <summary>
-		  /// Remove folder to backup to <see cref="FolderPathsToBackup"/>
+		  /// Remove folder from <see cref="SourceFolders"/>
 		  /// </summary>
 		  /// <param name="folder"></param>
-		  public void RemoveFolderToBackUp(string folder)
+		  /// TODO: Use dictionary instead?
+		  public void RemoveFolder(string folder)
 		  {
-			   if (MessageBox.Show("Are you sure you want to remove this folder?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+			   if(_DialogService.ShowYesNoMessageBox("Are you sure you want to remove this folder?", "Question"))
 			   {
-					FolderListItem item = FindFolderItemByString(FolderItems, folder);
+					// Find the item by the name of the folder
+					FolderListItem item = FindFolderItemByString(SourceFolders, folder);
+
+					// Check if the item was found
 					if (item != null)
 					{
-						 FolderItems.Remove(item);
-						 OnPropertyChanged(nameof(FolderItems));
+						 // Remove the item from the list
+						 SourceFolders.Remove(item);
 					}
 			   }
 		  }
 
+		  /// <summary>
+		  /// Finds FolderListItem by folder name
+		  /// </summary>
+		  /// <param name="FolderItems"></param>
+		  /// <param name="folder"></param>
+		  /// <returns></returns>
 		  public FolderListItem FindFolderItemByString(ObservableCollection<FolderListItem> FolderItems, string folder)
 		  {
 			   for (int i = 0; i < FolderItems.Count; ++i)
@@ -85,49 +126,22 @@ namespace BackupSoftware
 			   return null;
 		  }
 
-		  /// <summary>
-		  /// A refrence for <see cref="m_backupFolder"/> in order for the binding to work
-		  /// </summary>
-		  public string BackupFolder
-		  {
-			   get
-			   {
-					return m_backupFolder;
-			   }
-			   set
-			   {
-					if (m_backupFolder == value)
-						 return;
-
-					m_backupFolder = value;
-					OnPropertyChanged(nameof(BackupFolder));
-			   }
-		  }
-
-		  public bool IsBackupRunning { get; set; } = false;
-
-		  public CacheViewModel()
-		  {
-			   // TEMP: Default values for tests
-			   BackupFolder = "H:\\";
-
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Army");
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Blender");
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\Books");
-			   AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
-
-			   // Set default values
-			   //formViewModel.AddFolderToBackUp("C:\\Users\\Jonathan\\Documents\\BackupTest");
-
-			   // Setting some default folders to save me some time
-			   // TODO: save all the added folders in database or something similar
-			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Documents");
-			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Downloads");
-			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Music");
-			   //this.FolderList.Items.Add("C:\\Users\\Jonathan\\Pictures");
-		  }
+		  #endregion
 
 		  #endregion
+
+		  public CacheViewModel(IDialogService dialogService)
+		  {
+			   _DialogService = dialogService;
+
+			   // TEMP: Default values for tests
+			   DestFolder = "H:\\";
+
+			   AddFolder("C:\\Users\\Jonathan\\Documents\\BackupTest");
+			   AddFolder("C:\\Users\\Jonathan\\Documents\\Army");
+			   AddFolder("C:\\Users\\Jonathan\\Documents\\Blender");
+			   AddFolder("C:\\Users\\Jonathan\\Documents\\Books");
+			   AddFolder("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
+		  }
 	 }
 }

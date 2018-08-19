@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,15 +27,27 @@ namespace BackupSoftware
 		  /// </summary>
 		  public int ItemsCount { get; set; }
 
-		  public FolderInfo()
-		  {
-
-		  }
 
 		  public FolderInfo(string folderPath)
 		  {
 			   FolderPath = folderPath;
 			   Name = Helpers.ExtractFileFolderNameFromFullPath(FolderPath);
+			   ItemsCount = CalcItemsCount(FolderPath);
+		  }
+
+		  /// <summary>
+		  /// Returns the amount of files and folders in the program
+		  /// </summary>
+		  /// <param name="path"></param>
+		  /// <returns></returns>
+		  private int CalcItemsCount(string path)
+		  {
+			   int fileCount = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Length;
+			   int folderCount = Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly).Length;
+
+			   int result = (fileCount + folderCount);
+
+			   return result;
 		  }
 
 	 }

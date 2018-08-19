@@ -10,6 +10,7 @@ using System;
 using System.Xaml;
 using System.Configuration;
 using Ninject;
+using System.Windows.Input;
 
 namespace BackupSoftware
 {
@@ -33,7 +34,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  public ViewModelBase CurrentViewModel { get; set; }
 
-		  public RelayCommand OpenPageCommand { get; set; }
+		  public ICommand OpenPageCommand { get; set; }
 
 		  /// <summary>
 		  /// Default constructor

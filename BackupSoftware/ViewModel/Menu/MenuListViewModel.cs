@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BackupSoftware
 {
@@ -21,7 +22,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  public List<MenuItemViewModel> Items { get; set; }
 
-		  public RelayCommand OpenPageCommand;
+		  public System.Windows.Input.ICommand OpenPageCommand;
 
 		  /// <summary>
 		  /// Default Constructor

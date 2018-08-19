@@ -22,10 +22,12 @@
 	1. Comment the code
 	2. Refactor the code (move helper functions to separate class?)
 	3. Add log
-	7. Implement the effect of selecting button in the menu
-	9. Option to stop backup
-	10. Most of the names are bad
-	11. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
+	4. Implement the effect of selecting button in the menu
+	5. Option to stop backup
+	6. Most of the names are bad
+	7. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
+	8. Use Fody Weavers
+	9. Save the last info to a json file?
 	
 	Bugs/Fixes:
 	
@@ -35,14 +37,12 @@
 	
 	Aesthetics:
 	
-	------2. Edit the style of the window buttons and for the regular buttons
-	------3. Add some basic icon
-	4. Add global fonts to all of the program
-	5. when loading page make a fading effect like in ESET https://youtu.be/UZSFY8YdSrA?t=359
-	6. Make a page style for all the pages
+	1. Add global fonts to all of the program
+	2. when loading page make a fading effect like in ESET https://youtu.be/UZSFY8YdSrA?t=359
+	3. Make a page style for all the pages
 	
 	Things to understand better:
-	1. Ninject
+	1. Ninject -> Service locator, NinjectModule
 	2. StoryBoard
 	3. Templates
 	4. Converters
@@ -52,11 +52,12 @@
 	Backup page
 	
 		1. Make costum buttons - Low Priority
-		4. In the header add the start time and end time - Medium Priority
-		7. When the backup is successful display done icon - Low Priority
+		2. In the header add the start time and end time - Medium Priority
+		3. When the backup is successful display done icon - Low Priority
 		
 	DisplayBackup Page
 	
-		3. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
-		4. Figure out how to make the delete prev content work - Medium Priority
-		5. Change the back to backup page button to some icon in the top left edge - Low Priority
+		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
+		2. Figure out how to make the delete prev content work - Medium Priority
+		3. Change the back to backup page button to some icon in the top left edge - Low Priority
+		

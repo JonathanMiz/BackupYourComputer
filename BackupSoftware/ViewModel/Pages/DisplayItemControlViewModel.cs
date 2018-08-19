@@ -112,20 +112,13 @@ namespace BackupSoftware
 
 		  public DisplayItemControlViewModel(string folderPath)
 		  {
-			   // TODO: Refactor, The consturctiong is not supposed to be in here
 			   FolderInfo = new FolderInfo(folderPath);
-			   FolderInfo.ItemsCount = CalcItemsCount(FolderInfo.FolderPath);
 
 			   ItemsRemainingProgress = new Progress<int>();
 			   ItemsRemainingProgress.ProgressChanged += ItemsRemainingProgress_ProgressChanged;
 
 			   LogProgress = new Progress<string>();
 			   LogProgress.ProgressChanged += LogProgress_ProgressChanged;
-
-			   //item.Log += $"Calculating {Environment.NewLine}";
-			   //item.ContentTotalCount = await Task.Run<int>(() => { return GetDirCount(item.FolderPath); });
-			   //item.Log += $"{item.ContentTotalCount} {Environment.NewLine}";
-			   //item.Log += $"End Calculating {Environment.NewLine}";
 		  }
 
 		  private void LogProgress_ProgressChanged(object sender, string e)
@@ -137,21 +130,6 @@ namespace BackupSoftware
 		  {
 			   ItemsCompletedCounter = (e * 100 / FolderInfo.ItemsCount);
 			   ItemsRemainingCounter = FolderInfo.ItemsCount - e;
-		  }
-
-		  /// <summary>
-		  /// Returns the amount of files and folders in the program
-		  /// </summary>
-		  /// <param name="path"></param>
-		  /// <returns></returns>
-		  private int CalcItemsCount(string path)
-		  {
-			   int fileCount = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Length;
-			   int folderCount = Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly).Length;
-
-			   int result = (fileCount + folderCount);
-
-			   return result;
 		  }
 
 		  /// <summary>
@@ -178,13 +156,12 @@ namespace BackupSoftware
 			   {
 					string src = dir;
 					string name = Helpers.ExtractFileFolderNameFromFullPath(src);
+
 					// Refactor slashes
 					string dst = $"{Destination}\\{name}";
 
 					Log = $"Start backing up {src} to { dst} {Environment.NewLine}";
-
 					Log = await Task<string>.Run(() => { string log = ""; Backup(src, dst, ref log, LogProgress); return log; });
-					//Log = "";
 					Log = $"End backing up {src} to { dst} {Environment.NewLine}";
 
 
@@ -226,15 +203,6 @@ namespace BackupSoftware
 			   Log = $"Backing up from {source} to {dest} have been completed successfuly!{Environment.NewLine}";
 
 			   BackupDone = true;
-
-
-
-			   //if (item.DeletePrevContent)
-			   //{
-			   //	 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
-			   //	 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-			   //	 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
-			   //}
 		  }
 
 		  /// <summary>
@@ -243,6 +211,13 @@ namespace BackupSoftware
 		  /// <returns></returns>
 		  public async Task StartBackup()
 		  {
+			   //if (item.DeletePrevContent)
+			   //{
+			   //	 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
+			   //	 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
+			   //	 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
+			   //}
+
 			   await BackupOneDirAsync(ItemsRemainingProgress);
 		  }
 
