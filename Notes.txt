@@ -54,10 +54,10 @@
 		1. Make costum buttons - Low Priority
 		2. In the header add the start time and end time - Medium Priority
 		3. When the backup is successful display done icon - Low Priority
+		4. Handle the case when the user wants to do a backup again
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		2. Figure out how to make the delete prev content work - Medium Priority
 		3. Change the back to backup page button to some icon in the top left edge - Low Priority
-		

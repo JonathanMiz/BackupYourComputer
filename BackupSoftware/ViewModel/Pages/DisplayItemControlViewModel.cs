@@ -10,10 +10,10 @@ namespace BackupSoftware
 {
 	 public class DisplayItemControlViewModel : ViewModelBase
 	 {
-		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel("c:/test");
+		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new FolderListItem("c:/jonathan/test"));
 
 		  #region Private Members
-			   private string m_Log { get; set; }
+			   private string _Log { get; set; }
 		  #endregion
 
 		  #region Public Members
@@ -21,7 +21,13 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The info of the folder: FolderPath, Name, ItemsCount
 		  /// </summary>
-		  public FolderInfo FolderInfo { get; set; }
+		  private FolderListItem _FolderListItem;
+
+		  public FolderListItem FolderListItem
+		  {
+			   get { return _FolderListItem; }
+			   set { _FolderListItem = value; }
+		  }
 
 		  /// <summary>
 		  /// The backup destination
@@ -57,13 +63,13 @@ namespace BackupSoftware
 		  {
 			   get
 			   {
-					return m_Log;
+					return _Log;
 			   }
 			   set
 			   {
-					if (m_Log == value)
+					if (_Log == value)
 						 return;
-					m_Log = value;
+					_Log = value;
 					OnPropertyChanged(nameof(Log));
 			   }
 		  }
@@ -71,19 +77,19 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The variable to count files and folders that was backed up
 		  /// </summary>
-		  int m_ItemsCompletedCounter { get; set; } = 0;
+		  int _ItemsCompletedCounter { get; set; } = 0;
 		  public int ItemsCompletedCounter
 		  {
 			   get
 			   {
-					return m_ItemsCompletedCounter;
+					return _ItemsCompletedCounter;
 			   }
 			   set
 			   {
-					if (m_ItemsCompletedCounter == value)
+					if (_ItemsCompletedCounter == value)
 						 return;
 
-					m_ItemsCompletedCounter = value;
+					_ItemsCompletedCounter = value;
 					OnPropertyChanged(nameof(ItemsCompletedCounter));
 			   }
 		  }
@@ -91,34 +97,36 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The variable to show how many items remains to backup
 		  /// </summary>
-		  int m_ItemsRemainingCounter { get; set; } = 0;
+		  int _ItemsRemainingCounter { get; set; } = 0;
 		  public int ItemsRemainingCounter
 		  {
 			   get
 			   {
-					return m_ItemsRemainingCounter;
+					return _ItemsRemainingCounter;
 			   }
 			   set
 			   {
-					if (m_ItemsRemainingCounter == value)
+					if (_ItemsRemainingCounter == value)
 						 return;
 
-					m_ItemsRemainingCounter = value;
+					_ItemsRemainingCounter = value;
 					OnPropertyChanged(nameof(ItemsRemainingCounter));
 			   }
 		  }
 
 		  #endregion
 
-		  public DisplayItemControlViewModel(string folderPath)
+		  public DisplayItemControlViewModel(FolderListItem item)
 		  {
-			   FolderInfo = new FolderInfo(folderPath);
+			   FolderListItem = item;
 
 			   ItemsRemainingProgress = new Progress<int>();
 			   ItemsRemainingProgress.ProgressChanged += ItemsRemainingProgress_ProgressChanged;
 
 			   LogProgress = new Progress<string>();
 			   LogProgress.ProgressChanged += LogProgress_ProgressChanged;
+
+			   ItemsRemainingCounter = FolderListItem.FolderInfo.ItemsCount;
 		  }
 
 		  private void LogProgress_ProgressChanged(object sender, string e)
@@ -128,8 +136,8 @@ namespace BackupSoftware
 
 		  private void ItemsRemainingProgress_ProgressChanged(object sender, int e)
 		  {
-			   ItemsCompletedCounter = (e * 100 / FolderInfo.ItemsCount);
-			   ItemsRemainingCounter = FolderInfo.ItemsCount - e;
+			   ItemsCompletedCounter = (e * 100 / FolderListItem.FolderInfo.ItemsCount);
+			   ItemsRemainingCounter = FolderListItem.FolderInfo.ItemsCount - e;
 		  }
 
 		  /// <summary>
@@ -139,9 +147,9 @@ namespace BackupSoftware
 		  /// <returns></returns>
 		  private async Task BackupOneDirAsync(IProgress<int> progress)
 		  {
-			   string source = FolderInfo.FolderPath;
+			   string source = FolderListItem.FolderInfo.FullPath;
 			   string dest = Destination;
-			   string folderName = FolderInfo.Name;
+			   string folderName = FolderListItem.FolderInfo.Name;
 
 			   if (!Directory.Exists(dest))
 			   {
@@ -161,7 +169,7 @@ namespace BackupSoftware
 					string dst = $"{Destination}\\{name}";
 
 					Log = $"Start backing up {src} to { dst} {Environment.NewLine}";
-					Log = await Task<string>.Run(() => { string log = ""; Backup(src, dst, ref log, LogProgress); return log; });
+					await Task.Run(() => { Backup(src, dst, LogProgress);});
 					Log = $"End backing up {src} to { dst} {Environment.NewLine}";
 
 
@@ -206,17 +214,18 @@ namespace BackupSoftware
 		  }
 
 		  /// <summary>
-		  /// Public function to call <see cref="BackupOneDirAsync(IProgress{ProgressItemModel})"/> from outside of the class while using await
+		  /// Starts the backup
 		  /// </summary>
 		  /// <returns></returns>
 		  public async Task StartBackup()
 		  {
-			   //if (item.DeletePrevContent)
-			   //{
-			   //	 Debug.WriteLine("Start deleting previous content of " + folderInBackupDrive + "...");
-			   //	 DeleteFilesFromBackup(folderInBackupDrive, folderFullPathToBackup);
-			   //	 Debug.WriteLine("End deleting previous content of " + folderInBackupDrive + "...");
-			   //}
+
+			   // First check if the user wants to delete pervious content
+			   if (FolderListItem.DeletePrevContent)
+			   {
+					Log = $"Deleting previous content from {Destination}...{Environment.NewLine}";
+					await Task.Run(() => { DeleteFilesFromBackup(Destination, FolderListItem.FolderInfo.FullPath, LogProgress); });
+			   }
 
 			   await BackupOneDirAsync(ItemsRemainingProgress);
 		  }
@@ -226,8 +235,10 @@ namespace BackupSoftware
 		  /// </summary>
 		  /// <param name="source"></param>
 		  /// <param name="dest"></param>
-		  private void Backup(string source, string dest, ref string log, IProgress<string> logProgress)
+		  private void Backup(string source, string dest, IProgress<string> logProgress)
 		  {
+			   string log = "";
+
 			   if (!Directory.Exists(dest))
 			   {
 					Directory.CreateDirectory(dest);
@@ -266,9 +277,56 @@ namespace BackupSoftware
 					string fullDirPathInDst = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
 					log = $"Backing up {dir} to {fullDirPathInDst}{Environment.NewLine}";
 					logProgress.Report(log);
-					Backup(dir, fullDirPathInDst, ref log, logProgress);
+					Backup(dir, fullDirPathInDst, logProgress);
 					log = $"Ended backing up {dir} to {fullDirPathInDst}{Environment.NewLine}";
 					logProgress.Report(log);
+
+			   }
+
+			   if (Directory.GetDirectories(source).Length == 0)
+					return;
+		  }
+
+		  /// <summary>
+		  /// Deletes the files that doesn't exist in dest
+		  /// </summary>
+		  /// <param name="source">The backup folder</param>
+		  /// <param name="dest">The folder to backup</param>
+		  /// TODO: Change the dest to be source in the parameters
+		  private void DeleteFilesFromBackup(string source, string dest, IProgress<string> logProgress)
+		  {
+			   string log = "";
+
+			   foreach (var file in Directory.GetFiles(source))
+			   {
+					string fullFilePathInDest = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(file));
+
+
+					if (!File.Exists(fullFilePathInDest))
+					{
+
+						 log = $"Deleted {file}...";
+						 logProgress.Report(log);
+						 // Delete the file
+						 File.Delete(file);
+
+					}
+			   }
+
+			   foreach (var dir in Directory.GetDirectories(source))
+			   {
+					string fullFilePathInDest = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
+
+					if (!Directory.Exists(fullFilePathInDest))
+					{
+						 log = $"Deleted folder {dir} and all its subfolders and subfiles!";
+						 logProgress.Report(log);
+						 Directory.Delete(dir, true);
+					}
+					else
+					{
+						 DeleteFilesFromBackup(dir, fullFilePathInDest, logProgress);
+					}
 
 			   }
 

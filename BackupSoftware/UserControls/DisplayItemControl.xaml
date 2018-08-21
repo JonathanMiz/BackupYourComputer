@@ -23,11 +23,11 @@
                     <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10 10 0 0" HorizontalAlignment="Left">
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="Name:" FontFamily="Segoe UI Light" />
-                              <TextBlock Text="{Binding FolderInfo.Name}" Margin="5 0" />
+                              <TextBlock Text="{Binding FolderListItem.FolderInfo.Name}" Margin="5 0" />
                          </StackPanel>
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="From:" FontFamily="Segoe UI Light" />
-                              <TextBlock Text="{Binding FolderInfo.FolderPath}" Margin="5 0" />
+                              <TextBlock Text="{Binding FolderListItem.FolderInfo.FullPath}" Margin="5 0" />
                          </StackPanel>
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="To:" FontFamily="Segoe UI Light"/>
@@ -59,7 +59,7 @@
                                Text="&#xf110;"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Top"
-                               Visibility="{Binding BackupDone, Converter={local:BooleanToVisibleConverter2}, UpdateSourceTrigger=PropertyChanged}"
+                               Visibility="{Binding BackupDone, Converter={local:BooleanToVisibleConverter2}}"
                                FontSize="20"
                                >
                          <TextBlock.RenderTransform>
@@ -69,7 +69,6 @@
                </Grid>
                <ProgressBar Grid.Row="1" 
                             Height="20"
-                            
                             Value="{Binding ItemsCompletedCounter}"
                             VerticalAlignment="Center"/>
 

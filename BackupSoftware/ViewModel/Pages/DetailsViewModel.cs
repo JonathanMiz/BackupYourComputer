@@ -108,7 +108,7 @@ namespace BackupSoftware
 			   string list = "";
 			   foreach (FolderListItem item in IoC.Get<CacheViewModel>().SourceFolders)
 			   {
-					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderPath);
+					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderInfo.FullPath);
 					list += ", ";
 			   }
 			   if(list != "")
@@ -187,9 +187,9 @@ namespace BackupSoftware
 			   // Check to see if the folders exists
 			   foreach (FolderListItem item in SourceFolders)
 			   {
-					if (!Directory.Exists(item.FolderPath))
+					if (!Directory.Exists(item.FolderInfo.FullPath))
 					{
-						 _DialogService.ShowMessageBox(item.FolderPath + " can not be found!");
+						 _DialogService.ShowMessageBox(item.FolderInfo.FullPath + " can not be found!");
 						 return;
 					}
 

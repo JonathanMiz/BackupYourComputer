@@ -118,7 +118,7 @@ namespace BackupSoftware
 			   for (int i = 0; i < FolderItems.Count; ++i)
 			   {
 					FolderListItem item = FolderItems[i];
-					if (item.FolderPath == folder)
+					if (item.FolderInfo.FullPath == folder)
 					{
 						 return item;
 					}
@@ -138,10 +138,10 @@ namespace BackupSoftware
 			   DestFolder = "H:\\";
 
 			   AddFolder("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   AddFolder("C:\\Users\\Jonathan\\Documents\\Army");
-			   AddFolder("C:\\Users\\Jonathan\\Documents\\Blender");
-			   AddFolder("C:\\Users\\Jonathan\\Documents\\Books");
-			   AddFolder("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
+			   //AddFolder("C:\\Users\\Jonathan\\Documents\\Army");
+			   //AddFolder("C:\\Users\\Jonathan\\Documents\\Blender");
+			   //AddFolder("C:\\Users\\Jonathan\\Documents\\Books");
+			   //AddFolder("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
 		  }
 	 }
 }

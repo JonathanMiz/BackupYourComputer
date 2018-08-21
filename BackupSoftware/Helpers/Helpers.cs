@@ -41,48 +41,5 @@ namespace BackupSoftware
 
 			   return normalizedPath.Substring(lastSlash + 1);
 		  }
-
-		  /// <summary>
-		  /// Deletes the files that doesn't exist in dest
-		  /// </summary>
-		  /// <param name="source">The backup folder</param>
-		  /// <param name="dest">The folder to backup</param>
-		  /// TODO: Change the dest to be source in the parameters
-		  public void DeleteFilesFromBackup(string source, string dest)
-		  {
-
-			   foreach (var file in Directory.GetFiles(source))
-			   {
-					string fullFilePathInDest = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(file));
-
-
-					if (!File.Exists(fullFilePathInDest))
-					{
-						 Debug.WriteLine("Deleted " + file + "....");
-						 // Delete the file
-						 File.Delete(file);
-
-					}
-			   }
-
-			   foreach (var dir in Directory.GetDirectories(source))
-			   {
-					string fullFilePathInDest = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
-
-					if (!Directory.Exists(fullFilePathInDest))
-					{
-						 Debug.WriteLine("Deleted folder " + dir + " and all its subfolders and subfiles!");
-						 Directory.Delete(dir, true);
-					}
-					else
-					{
-						 DeleteFilesFromBackup(dir, fullFilePathInDest);
-					}
-
-			   }
-
-			   if (Directory.GetDirectories(source).Length == 0)
-					return;
-		  }
 	 }
 }

@@ -45,7 +45,7 @@ namespace BackupSoftware
 			   // Iterate through all of the folders that are already in our data
 			   for (int i = 0; i < SourceFolders.Count; ++i)
 			   {
-					var exisitingFolderToBackup = SourceFolders[i].FolderPath.ToString();
+					var exisitingFolderToBackup = SourceFolders[i].FolderInfo.FullPath.ToString();
 					if (IoC.Get<CacheViewModel>().FindFolderItemByString(SourceFolders, newFolder) != null)
 					{
 						 _DialogService.ShowMessageBox(newFolder + " already exists in the list!");

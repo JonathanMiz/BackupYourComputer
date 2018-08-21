@@ -32,10 +32,5 @@ namespace BackupSoftware
 
 
 		  }
-
-		  protected override void OnNavigated(NavigationEventArgs e)
-		  {
-			   base.OnNavigated(e);
-		  }
 	 }
 }

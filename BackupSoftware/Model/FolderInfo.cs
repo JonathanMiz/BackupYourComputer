@@ -15,7 +15,7 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The source of the folder
 		  /// </summary>
-		  public string FolderPath { get; set; }
+		  public string FullPath { get; set; }
 
 		  /// <summary>
 		  /// The name of the folder
@@ -30,9 +30,9 @@ namespace BackupSoftware
 
 		  public FolderInfo(string folderPath)
 		  {
-			   FolderPath = folderPath;
-			   Name = Helpers.ExtractFileFolderNameFromFullPath(FolderPath);
-			   ItemsCount = CalcItemsCount(FolderPath);
+			   FullPath = folderPath;
+			   Name = Helpers.ExtractFileFolderNameFromFullPath(FullPath);
+			   ItemsCount = CalcItemsCount(FullPath);
 		  }
 
 		  /// <summary>

@@ -13,7 +13,7 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The source of the folder
 		  /// </summary>
-		  public string FolderPath { get; set; }
+		  public FolderInfo FolderInfo { get; set; }
 
 		  /// <summary>
 		  /// A check to see if the user whats to delete the prev content in the backup drive
@@ -22,7 +22,7 @@ namespace BackupSoftware
 
 		  public FolderListItem(string folderPath, bool deletePrevContent = false)
 		  {
-			   FolderPath = folderPath;
+			   FolderInfo = new FolderInfo(folderPath);
 			   DeletePrevContent = deletePrevContent;
 		  }
 	 }

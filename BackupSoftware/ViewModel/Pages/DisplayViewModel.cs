@@ -92,8 +92,10 @@ namespace BackupSoftware
 			   // Getting all the infomation to Items
 			   foreach (var item in IoC.Get<CacheViewModel>().SourceFolders)
 			   {
-					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(item.FolderPath);
-					displayItemControlViewModel.Destination = $"{IoC.Get<CacheViewModel>().DestFolder}{displayItemControlViewModel.FolderInfo.Name}";
+					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(item)
+					{
+						 Destination = $"{IoC.Get<CacheViewModel>().DestFolder}{item.FolderInfo.Name}"
+					};
 
 					Items.Add(displayItemControlViewModel);
 			   }

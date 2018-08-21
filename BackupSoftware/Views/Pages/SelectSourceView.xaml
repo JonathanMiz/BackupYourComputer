@@ -48,7 +48,7 @@
                                                                            <StackPanel Orientation="Horizontal" Margin="6 0 0 0">
                                                                                 <Image Source="/Images/icon_folder.png" Width="30"/>
                                                                                 <TextBlock
-                                                                                      Text="{Binding FolderPath, FallbackValue=C:/Jonathan/Test}"
+                                                                                      Text="{Binding FolderInfo.FullPath, FallbackValue=C:/Jonathan/Test}"
                                                                                       HorizontalAlignment="Left"
                                                                                       Foreground="Black"
                                                                                       TextTrimming="CharacterEllipsis"
