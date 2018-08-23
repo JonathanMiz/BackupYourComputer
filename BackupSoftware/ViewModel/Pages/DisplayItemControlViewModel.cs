@@ -10,7 +10,7 @@ namespace BackupSoftware
 {
 	 public class DisplayItemControlViewModel : ViewModelBase
 	 {
-		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new FolderListItem("c:/jonathan/test"));
+		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new SourceFolder("c:/jonathan/test"));
 
 		  #region Private Members
 			   private string _Log { get; set; }
@@ -21,12 +21,12 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The info of the folder: FolderPath, Name, ItemsCount
 		  /// </summary>
-		  private FolderListItem _FolderListItem;
+		  private SourceFolder _SourceFolder;
 
-		  public FolderListItem FolderListItem
+		  public SourceFolder SourceFolder
 		  {
-			   get { return _FolderListItem; }
-			   set { _FolderListItem = value; }
+			   get { return _SourceFolder; }
+			   set { _SourceFolder = value; }
 		  }
 
 		  /// <summary>
@@ -116,9 +116,9 @@ namespace BackupSoftware
 
 		  #endregion
 
-		  public DisplayItemControlViewModel(FolderListItem item)
+		  public DisplayItemControlViewModel(SourceFolder sourceFolder)
 		  {
-			   FolderListItem = item;
+			   SourceFolder = sourceFolder;
 
 			   ItemsRemainingProgress = new Progress<int>();
 			   ItemsRemainingProgress.ProgressChanged += ItemsRemainingProgress_ProgressChanged;
@@ -126,7 +126,7 @@ namespace BackupSoftware
 			   LogProgress = new Progress<string>();
 			   LogProgress.ProgressChanged += LogProgress_ProgressChanged;
 
-			   ItemsRemainingCounter = FolderListItem.FolderInfo.ItemsCount;
+			   ItemsRemainingCounter = SourceFolder.FolderInfo.ItemsCount;
 		  }
 
 		  private void LogProgress_ProgressChanged(object sender, string e)
@@ -136,8 +136,8 @@ namespace BackupSoftware
 
 		  private void ItemsRemainingProgress_ProgressChanged(object sender, int e)
 		  {
-			   ItemsCompletedCounter = (e * 100 / FolderListItem.FolderInfo.ItemsCount);
-			   ItemsRemainingCounter = FolderListItem.FolderInfo.ItemsCount - e;
+			   ItemsCompletedCounter = (e * 100 / SourceFolder.FolderInfo.ItemsCount);
+			   ItemsRemainingCounter = SourceFolder.FolderInfo.ItemsCount - e;
 		  }
 
 		  /// <summary>
@@ -147,9 +147,9 @@ namespace BackupSoftware
 		  /// <returns></returns>
 		  private async Task BackupOneDirAsync(IProgress<int> progress)
 		  {
-			   string source = FolderListItem.FolderInfo.FullPath;
+			   string source = SourceFolder.FolderInfo.FullPath;
 			   string dest = Destination;
-			   string folderName = FolderListItem.FolderInfo.Name;
+			   string folderName = SourceFolder.FolderInfo.Name;
 
 			   if (!Directory.Exists(dest))
 			   {
@@ -221,10 +221,10 @@ namespace BackupSoftware
 		  {
 
 			   // First check if the user wants to delete pervious content
-			   if (FolderListItem.DeletePrevContent)
+			   if (SourceFolder.DeletePrevContent)
 			   {
 					Log = $"Deleting previous content from {Destination}...{Environment.NewLine}";
-					await Task.Run(() => { DeleteFilesFromBackup(Destination, FolderListItem.FolderInfo.FullPath, LogProgress); });
+					await Task.Run(() => { DeleteFilesFromBackup(Destination, SourceFolder.FolderInfo.FullPath, LogProgress); });
 			   }
 
 			   await BackupOneDirAsync(ItemsRemainingProgress);

@@ -16,7 +16,7 @@ namespace BackupSoftware.Services
 			   {
 					Title = title,
 					IsFolderPicker = true,
-					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
+					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
 			   };
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
@@ -33,7 +33,7 @@ namespace BackupSoftware.Services
 			   {
 					Title = title,
 					IsFolderPicker = true,
-					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
+					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
 			   };
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)

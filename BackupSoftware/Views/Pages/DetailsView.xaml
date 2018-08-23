@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BackupSoftware"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800">
      
      
      <UserControl.Resources>
@@ -22,7 +22,7 @@
                                       Height="300" Width="250"
                                       CornerRadius="3">
                                    <StackPanel Orientation="Vertical" >
-                                        <Image Source="/BackupSoftware;component/Images/backup.png"
+                                        <Image Source="/BackupSoftware;component/Images/hdd.png"
                                                Width="100"
                                                Margin="0 50 0 4"
                                                HorizontalAlignment="Center"
@@ -33,8 +33,7 @@
                                                    FontSize="20"
                                                    Margin="0 5 0 3" FontWeight="Bold"
                                                    />
-                                        <TextBlock Text="{Binding CacheViewModel.DestFolder,
-                                                       Source={x:Static local:ViewModelLocator.Instance},
+                                        <TextBlock Text="{Binding Details.DestFolder, FallbackValue=Select Destination,
                                                        Mode=TwoWay}"
                                                    HorizontalAlignment="Center"
                                                    FontFamily="Segoe UI Light"
@@ -95,7 +94,30 @@
                <!--<RowDefinition Height="Auto"/>-->
           </Grid.RowDefinitions>
 
-          <Border Grid.Row="0"  Background="{StaticResource DarkLightGrayBrush}" Height="30"/>
+          <Border Grid.Row="0"  Background="{StaticResource DarkLightGrayBrush}" Height="30"  Margin="0 0 0 40"/>
+
+          <Grid Grid.Row="1">
+               <!-- Spining Icon -->
+               <StackPanel>
+                    <TextBlock Style="{StaticResource LoadingText}"
+                               FontFamily="{StaticResource FontAwesome}"
+                               Text="&#xf110;"
+                               FontSize="40"
+                               HorizontalAlignment="Center"
+                               Visibility="{Binding DisplayViewModel.IsBackupRunning, Converter={local:BooleanToVisibleConverter}}"
+                              >
+                         <TextBlock.RenderTransform>
+                              <RotateTransform />
+                         </TextBlock.RenderTransform>
+                    </TextBlock>
+               </StackPanel>
+               <!-- Done Icon -->
+                    <Image Source="/Images/done.png" Width="40" HorizontalAlignment="Center"
+                         VerticalAlignment="Top"
+                         Visibility="{Binding DisplayViewModel.IsBackupDone,
+                                   Converter={local:BooleanToVisibleConverter}}"
+/>
+          </Grid>
 
           <Grid Grid.Row="1" HorizontalAlignment="Center"
                  VerticalAlignment="Center">
@@ -112,12 +134,8 @@
                        Content="Files and Folders" />
 
 
-               <TextBlock Grid.Column="1" Text="&#xF061;"
-                          FontFamily="{StaticResource FontAwesome}"
-                          FontSize="30"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Padding="10"/>
+               <Image Grid.Column="1" Source="/BackupSoftware;component/Images/right_arrow.png" Width="60" />
+
 
                <Button  Grid.Column="2" Content="Destination Folder"
                         Style="{StaticResource BackupFolderButton}"
@@ -125,7 +143,7 @@
 
           </Grid>
 
-          <Border Grid.Row="2"  Background="#dcdde1" Height="70">
+          <Border Grid.Row="3"  Background="#dcdde1" Height="70">
                <Grid>
                     <Grid.ColumnDefinitions>
                          <ColumnDefinition Width="4*" />
@@ -141,8 +159,7 @@
                             Command="{Binding StartBackupCommand}" />
 
                          <Button Content="Show progress... " HorizontalAlignment="Center"
-                                 Visibility="{Binding CacheViewModel.IsBackupRunning,
-                                                      Source={x:Static local:ViewModelLocator.Instance},
+                                 Visibility="{Binding DisplayViewModel.IsBackupRunning,
                                                       Converter={local:BooleanToVisibleConverter}}"
                                  Style="{StaticResource MouseHoverHoverlessButton}"
                                  Command="{Binding GoToDisplayCommand}"/>

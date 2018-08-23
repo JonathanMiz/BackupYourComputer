@@ -22,7 +22,7 @@ namespace BackupSoftware
 			   {
 					case nameof(ApplicationViewModel):
 						 {
-							  return IoC.Kernel.Get<ApplicationViewModel>();
+							  return ViewModelLocator.ApplicationViewModel;
 						 }
 					default:
 						 Debugger.Break();

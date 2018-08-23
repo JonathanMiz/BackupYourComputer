@@ -8,7 +8,7 @@ namespace BackupSoftware
 	 /// <summary>
 	 /// This class represents each item in the list box 
 	 /// </summary>
-	 public class FolderListItem
+	 public class SourceFolder
 	 {
 		  /// <summary>
 		  /// The source of the folder
@@ -20,7 +20,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  public bool DeletePrevContent { get; set; } = false;
 
-		  public FolderListItem(string folderPath, bool deletePrevContent = false)
+		  public SourceFolder(string folderPath, bool deletePrevContent = false)
 		  {
 			   FolderInfo = new FolderInfo(folderPath);
 			   DeletePrevContent = deletePrevContent;

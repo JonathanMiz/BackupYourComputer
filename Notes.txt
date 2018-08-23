@@ -20,26 +20,24 @@
 	Todo:
 
 	1. Comment the code
-	2. Refactor the code (move helper functions to separate class?)
-	3. Add log
+	2. Refactor the code
 	4. Implement the effect of selecting button in the menu
-	5. Option to stop backup
-	6. Most of the names are bad
-	7. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
+	5. Option to stop backup ?
 	8. Use Fody Weavers
 	9. Save the last info to a json file?
 	
 	Bugs/Fixes:
 	
-	1. Fix the case when the user is adding a parent folder and then all the sub-folder are going to be removed, a messagebox is poping up
-	2. Handle the case when a file is been used by another process
-	3. Backup drive needs to be checked for forward slashes for linux compatability
+	1. Handle the case when a file is been used by another process
+	2. Backup drive needs to be checked for forward slashes for linux compatability
+	3. When adding new folders the SourceFoldersText in DetailsViewModel is not changing
 	
 	Aesthetics:
 	
 	1. Add global fonts to all of the program
 	2. when loading page make a fading effect like in ESET https://youtu.be/UZSFY8YdSrA?t=359
 	3. Make a page style for all the pages
+	4. Make custom progress bar
 	
 	Things to understand better:
 	1. Ninject -> Service locator, NinjectModule
@@ -53,11 +51,14 @@
 	
 		1. Make costum buttons - Low Priority
 		2. In the header add the start time and end time - Medium Priority
-		3. When the backup is successful display done icon - Low Priority
-		4. Handle the case when the user wants to do a backup again
+		3. Handle the case when the user wants to do a backup again - Medium Priority
+		4. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
+		5. Make the area of the start up button look good
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
-		2. Figure out how to make the delete prev content work - Medium Priority
-		3. Change the back to backup page button to some icon in the top left edge - Low Priority
+		
+	Working right now: 
+	1. Saving the data to json file, figure out how to save the data
+	

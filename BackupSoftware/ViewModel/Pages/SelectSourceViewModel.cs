@@ -16,15 +16,15 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The list of the folders, getting that from <see cref="CacheViewModel.SourceFolders"/>
 		  /// </summary>
-		  public ObservableCollection<FolderListItem> SourceFolders
+		  public ObservableCollection<SourceFolder> SourceFolders
 		  {
 			   get
 			   {
-					return IoC.Get<CacheViewModel>().SourceFolders;
+					return ViewModelLocator.CacheViewModel.Details.SourceFolders;
 			   }
 			   set
 			   {
-					IoC.Get<CacheViewModel>().SourceFolders = value;
+					ViewModelLocator.CacheViewModel.Details.SourceFolders = value;
 			   }
 		  }
 
@@ -46,7 +46,7 @@ namespace BackupSoftware
 			   for (int i = 0; i < SourceFolders.Count; ++i)
 			   {
 					var exisitingFolderToBackup = SourceFolders[i].FolderInfo.FullPath.ToString();
-					if (IoC.Get<CacheViewModel>().FindFolderItemByString(SourceFolders, newFolder) != null)
+					if (ViewModelLocator.CacheViewModel.Details.FindFolderItemByString(SourceFolders, newFolder) != null)
 					{
 						 _DialogService.ShowMessageBox(newFolder + " already exists in the list!");
 						 return false;
@@ -88,7 +88,7 @@ namespace BackupSoftware
 						 if (CanAdd)
 						 {
 							  // Add to the list
-							  IoC.Get<CacheViewModel>().AddFolder(newFolder);
+							  ViewModelLocator.CacheViewModel.Details.AddFolder(newFolder);
 						 }
 					}
 
@@ -97,7 +97,7 @@ namespace BackupSoftware
 			   {
 					foreach (var newFolder in newFoldersToBackup)
 					{
-						 IoC.Get<CacheViewModel>().AddFolder(newFolder);
+						 ViewModelLocator.CacheViewModel.Details.AddFolder(newFolder);
 					}
 			   }
 
@@ -107,7 +107,7 @@ namespace BackupSoftware
 
 					foreach (var folder in foldersToRemove)
 					{
-						 IoC.Get<CacheViewModel>().RemoveFolder(folder);
+						 ViewModelLocator.CacheViewModel.Details.RemoveFolder(folder);
 					}
 			   }
 		  }
@@ -151,7 +151,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  private void GoToDetailsView()
 		  {
-			   IoC.Get<ApplicationViewModel>().CurrentViewModel = ViewModelLocator.DetailsViewModel;
+			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
 		  }
 
 		  #endregion
@@ -165,7 +165,19 @@ namespace BackupSoftware
 
 			   SelectFoldersCommand = new RelayCommand(SelectFolders);
 			   GoToDetailsViewCommand = new RelayCommand(GoToDetailsView);
-			   RemoveItemCommand = new RelayParameterizedCommand<string>(IoC.Get<CacheViewModel>().RemoveFolder);
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveItem);
 		  }
-	 }
+
+		  /// <summary>
+		  /// The function of RemoveItemCommand
+		  /// </summary>
+		  void RemoveItem(string folderName)
+		  {
+			   if (_DialogService.ShowYesNoMessageBox("Are you sure you want to remove this folder?", "Question"))
+			   {
+					ViewModelLocator.CacheViewModel.Details.RemoveFolder(folderName);
+			   }
+		  }
+	 }			  
+		  
 }

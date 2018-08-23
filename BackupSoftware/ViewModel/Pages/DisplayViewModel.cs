@@ -45,6 +45,22 @@ namespace BackupSoftware
 		  /// </summary>
 		  public Progress<int> CountProgress { get; set; }
 
+		  /// <summary>
+		  /// True if the backup is running
+		  /// </summary>
+		  public bool IsBackupRunning { get; set; } = false;
+
+		  /// <summary>
+		  /// True if the overall backup is done
+		  /// </summary>
+		  private bool _IsBackupDone;
+
+		  public bool IsBackupDone
+		  {
+			   get { return _IsBackupDone; }
+			   set { if (_IsBackupDone == value) return; _IsBackupDone = value; OnPropertyChanged(nameof(IsBackupDone)); }
+		  }
+
 
 		  #region Commands
 		  /// <summary>
@@ -59,7 +75,7 @@ namespace BackupSoftware
 		  /// </summary>
 		  async void StartBackupAsync(IProgress<int> progress)
 		  {
-			   IoC.Get<CacheViewModel>().IsBackupRunning = true;
+			   IsBackupRunning = true;
 			   await Task.Run(() =>
 			   {
 					int count = 0;
@@ -74,8 +90,13 @@ namespace BackupSoftware
 
 							  if (count == Items.Count)
 							  {
-								   IoC.Get<CacheViewModel>().IsBackupRunning = false;
+								   IsBackupRunning = false;
+								   IsBackupDone = true;
+
 								   Debug.WriteLine("Done!");
+
+								   // Redircet to details page
+								   GoToDetails();
 							  }
 						 }
 					});
@@ -84,17 +105,23 @@ namespace BackupSoftware
 
 		  }
 
+
+		  private void GoToDetails()
+		  {
+			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
+		  }
+
 		  /// <summary>
 		  /// Setting all the information(DestFolder, FolderPath) to <see cref="Items"/>
 		  /// </summary>
 		  private void SetItemsInformation()
 		  {
 			   // Getting all the infomation to Items
-			   foreach (var item in IoC.Get<CacheViewModel>().SourceFolders)
+			   foreach (var item in ViewModelLocator.CacheViewModel.Details.SourceFolders)
 			   {
 					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(item)
 					{
-						 Destination = $"{IoC.Get<CacheViewModel>().DestFolder}{item.FolderInfo.Name}"
+						 Destination = $"{ViewModelLocator.CacheViewModel.Details.DestFolder}{item.FolderInfo.Name}"
 					};
 
 					Items.Add(displayItemControlViewModel);
@@ -104,8 +131,11 @@ namespace BackupSoftware
 
 		  public void RunBackup()
 		  {
-			   if (!IoC.Get<CacheViewModel>().IsBackupRunning)
+			   if (!IsBackupRunning)
 			   {
+					// In the begining the backup is not yet started
+					IsBackupDone = false;
+
 					// Setting all the infomation to Items
 					SetItemsInformation();
 
@@ -119,7 +149,7 @@ namespace BackupSoftware
 			   Items = new List<DisplayItemControlViewModel>();
 
 			   // Create command
-			   BackToDetailsCommand = new RelayCommand(() => { IoC.Get<ApplicationViewModel>().CurrentViewModel = ViewModelLocator.DetailsViewModel; });
+			   BackToDetailsCommand = new RelayCommand(GoToDetails);
 
 			   CountProgress = new Progress<int>();
 

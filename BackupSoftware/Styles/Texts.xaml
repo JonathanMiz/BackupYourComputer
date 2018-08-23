@@ -11,7 +11,7 @@
      <Style TargetType="TextBlock" x:Key="LoadingText">
 
           <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
-          
+
           <Style.Resources>
                <Storyboard x:Key="Spin">
                     <DoubleAnimation

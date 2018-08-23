@@ -23,7 +23,6 @@ namespace BackupSoftware
 			   {
 					return Visibility.Hidden;
 			   }
-			   Debugger.Break();
 		  }
 
 		  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -37,7 +36,10 @@ namespace BackupSoftware
 		  }
 	 }
 
-	 class BooleanToVisibleConverter2 : MarkupExtension, IValueConverter
+	 /// <summary>
+	 /// If the value is false the object will be visible
+	 /// </summary>
+	 class InverseBooleanToVisibleConverter : MarkupExtension, IValueConverter
 	 {
 		  public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		  {
@@ -49,7 +51,6 @@ namespace BackupSoftware
 			   {
 					return Visibility.Hidden;
 			   }
-			   Debugger.Break();
 		  }
 
 		  public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

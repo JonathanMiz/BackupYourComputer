@@ -35,11 +35,16 @@ namespace BackupSoftware
 		  /// <returns></returns>
 		  public static  string ExtractFileFolderNameFromFullPath(string fullPath)
 		  {
-			   var normalizedPath = fullPath.Replace('\\', '/');
+			   if (fullPath != null)
+			   {
+					var normalizedPath = fullPath.Replace('\\', '/');
 
-			   int lastSlash = normalizedPath.LastIndexOf('/');
+					int lastSlash = normalizedPath.LastIndexOf('/');
 
-			   return normalizedPath.Substring(lastSlash + 1);
+					return normalizedPath.Substring(lastSlash + 1);
+			   }
+
+			   return "";
 		  }
 	 }
 }

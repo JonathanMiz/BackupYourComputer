@@ -50,7 +50,7 @@ namespace BackupSoftware
 		  void OpenPage()
 		  {
 			   // Change the current page to the page of the menu item
-			   IoC.Kernel.Get<ApplicationViewModel>().CurrentViewModel = CurrentViewModel;
+			   ViewModelLocator.ApplicationViewModel.GoToView(CurrentViewModel);
 		  }
 	 }
 }

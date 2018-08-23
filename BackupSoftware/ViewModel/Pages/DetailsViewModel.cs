@@ -20,12 +20,6 @@ namespace BackupSoftware
 		  #region Private Members
 
 		  /// <summary>
-		  /// The text to display which folders the user chose
-		  /// </summary>
-		  private string _SourceFoldersText { get; set; }
-
-
-		  /// <summary>
 		  /// Dialog service to display messages to the screen
 		  /// </summary>
 		  private IDialogService _DialogService;
@@ -41,7 +35,10 @@ namespace BackupSoftware
 		  #endregion
 
 		  #region Public Members
-
+		  /// <summary>
+		  /// The text to display which folders the user chose
+		  /// </summary>
+		  private string _SourceFoldersText { get; set; }
 		  public string SourceFoldersText
 		  {
 			   get
@@ -60,32 +57,17 @@ namespace BackupSoftware
 
 
 		  /// <summary>
-		  /// Reference to <see cref="CacheViewModel.SourceFolders"/>
+		  /// Reference to <see cref="CacheViewModel.Details"/>
 		  /// </summary>
-		  public ObservableCollection<FolderListItem> SourceFolders
+		  public Details Details
 		  {
 			   get
 			   {
-					return IoC.Get<CacheViewModel>().SourceFolders;
+					return ViewModelLocator.CacheViewModel.Details;
 			   }
 			   set
 			   {
-					IoC.Get<CacheViewModel>().SourceFolders = value;
-			   }
-		  }
-
-		  /// <summary>
-		  /// The destination folder
-		  /// </summary>
-		  public string DestFolder
-		  {
-			   get
-			   {
-					return IoC.Get<CacheViewModel>().DestFolder;
-			   }
-			   set
-			   {
-					IoC.Get<CacheViewModel>().DestFolder = value;
+					ViewModelLocator.CacheViewModel.Details = value;
 			   }
 		  }
 
@@ -94,7 +76,6 @@ namespace BackupSoftware
 			   get { return _DisplayViewModel; }
 			   set { if (_DisplayViewModel == value) return; _DisplayViewModel = value; OnPropertyChanged(nameof(DisplayViewModel)); }
 		  }
-
 
 		  #endregion
 
@@ -106,7 +87,7 @@ namespace BackupSoftware
 		  private string ExtractFolderNames()
 		  {
 			   string list = "";
-			   foreach (FolderListItem item in IoC.Get<CacheViewModel>().SourceFolders)
+			   foreach (SourceFolder item in ViewModelLocator.CacheViewModel.Details.SourceFolders)
 			   {
 					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderInfo.FullPath);
 					list += ", ";
@@ -148,7 +129,7 @@ namespace BackupSoftware
 			   string folder = _DialogService.SelectFolder("Choose folder to backup in hard drive");
 
 			   if (folder != null)
-					DestFolder = folder;
+					Details.DestFolder = folder;
 
 		  }
 
@@ -158,7 +139,7 @@ namespace BackupSoftware
 		  void GoToSelectSource()
 		  {
 			   // Injecting the SelectSourceViewModel
-			   IoC.Get<ApplicationViewModel>().CurrentViewModel = IoC.Kernel.Get<SelectSourceViewModel>();
+			   ViewModelLocator.ApplicationViewModel.GoToView(IoC.Kernel.Get<SelectSourceViewModel>());
 		  }
 
 		  /// <summary>
@@ -166,26 +147,26 @@ namespace BackupSoftware
 		  /// </summary>
 		  private void GoToDisplay()
 		  {
-			   if (IoC.Get<CacheViewModel>().IsBackupRunning)
+			   if (DisplayViewModel.IsBackupRunning)
 			   {
-					IoC.Get<ApplicationViewModel>().CurrentViewModel = DisplayViewModel;
+					ViewModelLocator.ApplicationViewModel.GoToView(DisplayViewModel);
 			   }
 		  }
 		  
 		  /// <summary>
 		  /// Validates if the user gave right input
 		  /// </summary>
-		  private void ValidateUserInput()
+		  private void ValidateUserInput(Details details)
 		  {
 			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(DestFolder) || SourceFolders.Count == 0)
+			   if (string.IsNullOrEmpty(details.DestFolder) || details.SourceFolders.Count == 0)
 			   {
 					_DialogService.ShowMessageBox("Fill in the list of folder and hard drive!");
 					return;
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (FolderListItem item in SourceFolders)
+			   foreach (SourceFolder item in details.SourceFolders)
 			   {
 					if (!Directory.Exists(item.FolderInfo.FullPath))
 					{
@@ -195,19 +176,19 @@ namespace BackupSoftware
 
 			   }
 
-			   if (!Directory.Exists(DestFolder))
+			   if (!Directory.Exists(details.DestFolder))
 			   {
-					_DialogService.ShowMessageBox(DestFolder + " can not be found!");
+					_DialogService.ShowMessageBox(details.DestFolder + " can not be found!");
 					return;
 			   }
 		  }
 
 		  private void StartBackup()
 		  {
-			   if (!IoC.Get<CacheViewModel>().IsBackupRunning)
+			   if (!DisplayViewModel.IsBackupRunning)
 			   {
 					// Validate user input
-					ValidateUserInput();
+					ValidateUserInput(Details);
 
 					// Run the back up
 					DisplayViewModel.RunBackup();
@@ -238,7 +219,6 @@ namespace BackupSoftware
 
 			   SourceFoldersText = ExtractFolderNames();
 
-			  
 		  }
 	 }
 }
