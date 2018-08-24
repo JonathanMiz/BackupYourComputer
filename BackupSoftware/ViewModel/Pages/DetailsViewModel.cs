@@ -215,8 +215,8 @@ namespace BackupSoftware
 			   DisplayViewModel = displayViewModel;
 
 
-			   SelectDestFolderCommand = new RelayCommand(SelectDestFolder);
-			   GoToSelectSourceCommand = new RelayCommand(GoToSelectSource);
+			   SelectDestFolderCommand = new RelayCommand(SelectDestFolder, (parameter)=> { return !DisplayViewModel.IsBackupRunning; });
+			   GoToSelectSourceCommand = new RelayCommand(GoToSelectSource, (parameter) => { return !DisplayViewModel.IsBackupRunning; });
 			   StartBackupCommand = new RelayCommand(StartBackup);
 			   GoToDisplayCommand = new RelayCommand(GoToDisplay);
 

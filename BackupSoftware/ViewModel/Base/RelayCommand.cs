@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,25 +10,34 @@ namespace BackupSoftware
 {
 	 public class RelayCommand : ICommand
 	 {
-		  private Action m_action;
+		  private Action _Action;
+		  private Func<object, bool> _CanExecute;
 
-		  public RelayCommand(Action action)
+		  public RelayCommand(Action action, Func<object, bool> canExecute = null)
 		  {
-			   this.m_action = action;
+			   this._Action = action;
+			   _CanExecute = canExecute;
 		  }
 
-		  public event EventHandler CanExecuteChanged;
+		  public event EventHandler CanExecuteChanged
+		  {
+			   add { CommandManager.RequerySuggested += value; }
+			   remove { CommandManager.RequerySuggested -= value; }
+		  }
 
 		  public bool CanExecute(object parameter)
 		  {
+			   if (_CanExecute != null)
+					return _CanExecute(parameter);
+
 			   return true;
 		  }
 
 		  public void Execute(object parameter)
 		  {
-			   if(m_action != null)
+			   if(_Action != null)
 			   {
-					m_action();
+					_Action();
 			   }
 		  }
 	 }
