@@ -33,6 +33,7 @@ namespace BackupSoftware.Services
 			   {
 					Title = title,
 					IsFolderPicker = true,
+					Multiselect = true,
 					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
 			   };
 

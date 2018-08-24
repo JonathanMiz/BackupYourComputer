@@ -84,7 +84,6 @@ namespace BackupSoftware
 						 await item.StartBackup();
 						 if (item.BackupDone)
 						 {
-							  DoneFoldersCount++;
 							  count++;
 							  progress.Report(count);
 
@@ -94,6 +93,8 @@ namespace BackupSoftware
 								   IsBackupDone = true;
 
 								   Debug.WriteLine("Done!");
+
+								  
 
 								   // Redircet to details page
 								   GoToDetails();
@@ -159,7 +160,16 @@ namespace BackupSoftware
 
 		  private void CountProgress_ProgressChanged(object sender, int e)
 		  {
-			   DoneFoldersCount = (e * 100) / Items.Count;
+			   if (Items.Count != 0)
+			   {
+					DoneFoldersCount = (e * 100) / Items.Count;
+
+					// If the backup is done clear the existing items
+					if(e == Items.Count)
+					{
+						 Items.Clear();
+					}
+			   }
 		  }
 	 }
 }

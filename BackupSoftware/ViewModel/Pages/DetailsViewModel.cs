@@ -187,14 +187,17 @@ namespace BackupSoftware
 		  {
 			   if (!DisplayViewModel.IsBackupRunning)
 			   {
-					// Validate user input
-					ValidateUserInput(Details);
+					if (_DialogService.ShowYesNoMessageBox("Are you sure you want to start the backup?", "Question"))
+					{
+						 // Validate user input
+						 ValidateUserInput(Details);
 
-					// Run the back up
-					DisplayViewModel.RunBackup();
+						 // Run the back up
+						 DisplayViewModel.RunBackup();
 
-					// Redirect the user to the display view page
-					GoToDisplay();
+						 // Redirect the user to the display view page
+						 GoToDisplay();
+					}
 			   }
 			   else
 			   {
