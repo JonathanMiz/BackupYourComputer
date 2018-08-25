@@ -70,6 +70,11 @@ namespace BackupSoftware
 
 		  #endregion
 
+		  private void GoToDetails()
+		  {
+			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
+		  }
+
 		  /// <summary>
 		  /// Start backing up all the <see cref="FolderPathsToBackup"/> to <see cref="BackupFolder"/>
 		  /// </summary>
@@ -92,10 +97,6 @@ namespace BackupSoftware
 								   IsBackupRunning = false;
 								   IsBackupDone = true;
 
-								   Debug.WriteLine("Done!");
-
-								  
-
 								   // Redircet to details page
 								   GoToDetails();
 							  }
@@ -104,12 +105,6 @@ namespace BackupSoftware
 			   });
 
 
-		  }
-
-
-		  private void GoToDetails()
-		  {
-			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
 		  }
 
 		  /// <summary>
@@ -170,6 +165,16 @@ namespace BackupSoftware
 						 Items.Clear();
 					}
 			   }
+		  }
+
+		  /// <summary>
+		  /// Reset the state to the initial values
+		  /// </summary>
+		  public void ResetState()
+		  {
+			   DoneFoldersCount = 0;
+			   IsBackupDone = false;
+			   IsBackupRunning = false;
 		  }
 	 }
 }

@@ -1,5 +1,4 @@
 
-
 	Backup Software Checks:
 	
 	1. If the folder/file is not in the backup drive, copy it to the drive
@@ -21,21 +20,13 @@
 
 	1. Comment the code
 	2. Refactor the code
-
-	5. Option to stop backup ?
-	8. Use Fody Weavers
-	9. Save the last info to a json file?
-	
-	Bugs/Fixes:
-	
-	1. Handle the case when a file is been used by another process
-	2. Backup drive needs to be checked for forward slashes for linux compatability
-	3. When adding new folders the SourceFoldersText in DetailsViewModel is not changing
+	3. Option to stop backup ?
+	4. Use Fody Weavers
+	5. Save the last info to a json file?
 	
 	Aesthetics:
 	
 	1. Add global fonts to all of the program
-	2. when loading page make a fading effect like in ESET https://youtu.be/UZSFY8YdSrA?t=359
 	3. Make a page style for all the pages
 	4. Make custom progress bar
 	5. Implement the effect of selecting button in the menu
@@ -44,16 +35,21 @@
 	1. Ninject -> Service locator, NinjectModule
 	2. StoryBoard
 	3. Templates
-	5. UserControls
-	6. Fody weavers
+	4. UserControls
+	5. Fody weavers
+	
+	Bugs/Fixes:
+	
+	1. Handle the case when a file is been used by another process
+	2. Backup drive needs to be checked for forward slashes for linux compatability
+	
 	
 	Backup page
 	
 		1. Make costum buttons - Low Priority
 		2. In the header add the start time and end time - Medium Priority
-		4. Add error checks, when the backup is running disable choosing source and dest ( use can execute of the Command class)
-		5. Make the area of the start up button look good
-		6. When the user is selecting new folders make the page go back to normal state
+		3. Make the area of the start up button look good
+		4. When adding new folders the SourceFoldersText in DetailsViewModel is not changing
 		
 	DisplayBackup Page
 	

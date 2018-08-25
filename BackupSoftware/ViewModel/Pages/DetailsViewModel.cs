@@ -29,9 +29,6 @@ namespace BackupSoftware
 		  /// </summary>
 		  private DisplayViewModel _DisplayViewModel;
 
-
-
-
 		  #endregion
 
 		  #region Public Members
@@ -124,8 +121,14 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The action when the user choose backup folder
 		  /// </summary>
-		  void SelectDestFolder()
+		  private void SelectDestFolder()
 		  {
+			   // Reset the state to the initial values
+			   if (DisplayViewModel.IsBackupDone && !DisplayViewModel.IsBackupRunning)
+			   {
+					DisplayViewModel.ResetState();
+			   }
+
 			   string folder = _DialogService.SelectFolder("Choose folder to backup in hard drive");
 
 			   if (folder != null)
@@ -136,8 +139,15 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Redirecting the user to the select source view page
 		  /// </summary>
-		  void GoToSelectSource()
+		  private void GoToSelectSource()
 		  {
+
+			   // Reset the state to the initial values
+			   if (DisplayViewModel.IsBackupDone && !DisplayViewModel.IsBackupRunning)
+			   {
+					DisplayViewModel.ResetState();
+			   }
+
 			   // Injecting the SelectSourceViewModel
 			   ViewModelLocator.ApplicationViewModel.GoToView(IoC.Kernel.Get<SelectSourceViewModel>());
 		  }
@@ -156,31 +166,33 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Validates if the user gave right input
 		  /// </summary>
-		  private void ValidateUserInput(Details details)
+		  private bool ValidateUserInput(ObservableCollection<SourceFolder> SourceFolders, string DestFolder)
 		  {
 			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(details.DestFolder) || details.SourceFolders.Count == 0)
+			   if (string.IsNullOrEmpty(DestFolder) || SourceFolders.Count == 0)
 			   {
 					_DialogService.ShowMessageBox("Fill in the list of folder and hard drive!");
-					return;
+					return false;
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (SourceFolder item in details.SourceFolders)
+			   foreach (SourceFolder item in SourceFolders)
 			   {
 					if (!Directory.Exists(item.FolderInfo.FullPath))
 					{
 						 _DialogService.ShowMessageBox(item.FolderInfo.FullPath + " can not be found!");
-						 return;
+						 return false;
 					}
 
 			   }
 
-			   if (!Directory.Exists(details.DestFolder))
+			   if (!Directory.Exists(DestFolder))
 			   {
-					_DialogService.ShowMessageBox(details.DestFolder + " can not be found!");
-					return;
+					_DialogService.ShowMessageBox(DestFolder + " can not be found!");
+					return false;
 			   }
+
+			   return true;
 		  }
 
 		  private void StartBackup()
@@ -190,13 +202,14 @@ namespace BackupSoftware
 					if (_DialogService.ShowYesNoMessageBox("Are you sure you want to start the backup?", "Question"))
 					{
 						 // Validate user input
-						 ValidateUserInput(Details);
+						 if (ValidateUserInput(Details.SourceFolders, Details.DestFolder))
+						 {
+							  // Run the back up
+							  DisplayViewModel.RunBackup();
 
-						 // Run the back up
-						 DisplayViewModel.RunBackup();
-
-						 // Redirect the user to the display view page
-						 GoToDisplay();
+							  // Redirect the user to the display view page
+							  GoToDisplay();
+						 }
 					}
 			   }
 			   else
