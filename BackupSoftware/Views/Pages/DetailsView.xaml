@@ -70,7 +70,7 @@
                                                    FontSize="20"
                                                    Margin="0 5 0 3" FontWeight="Bold"
                                                    />
-                                        <TextBlock Text="{Binding SourceFoldersText, FallbackValue=Select folder}"
+                                        <TextBlock Text="{Binding SelectSourceViewModel.SourceFoldersText, FallbackValue=Select folder}"
                                                    HorizontalAlignment="Center"
                                                    FontFamily="Segoe UI Light"
                                                    Margin="0 10 0 0"
@@ -94,7 +94,20 @@
                <!--<RowDefinition Height="Auto"/>-->
           </Grid.RowDefinitions>
 
-          <Border Grid.Row="0"  Background="{StaticResource DarkLightGrayBrush}" Height="30"  Margin="0 0 0 40"/>
+          <Border Grid.Row="0"  Background="{StaticResource DarkLightGrayBrush}" Height="40"  Margin="0 0 0 40">
+               <Grid>
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                         <TextBlock HorizontalAlignment="Center" Text="Last Backup: " FontSize="15" FontWeight="Bold" />
+                         <TextBlock Text="{Binding LastBackupTimeText}" FontSize="15" />
+                    </StackPanel>
+               </Grid>
+          </Border>
 
           <Grid Grid.Row="1">
                <!-- Spining Icon -->
@@ -143,7 +156,7 @@
 
           </Grid>
 
-          <Border Grid.Row="3"  Background="#dcdde1" Height="70">
+          <Border Grid.Row="3"  Background="#dcdde1" Height="60">
                <Grid>
                     <Grid.ColumnDefinitions>
                          <ColumnDefinition Width="4*" />

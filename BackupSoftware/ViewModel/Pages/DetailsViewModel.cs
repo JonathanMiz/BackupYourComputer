@@ -28,29 +28,25 @@ namespace BackupSoftware
 		  /// The view model of the display view page
 		  /// </summary>
 		  private DisplayViewModel _DisplayViewModel;
+		  public DisplayViewModel DisplayViewModel
+		  {
+			   get { return _DisplayViewModel; }
+			   set { if (_DisplayViewModel == value) return; _DisplayViewModel = value; OnPropertyChanged(nameof(DisplayViewModel)); }
+		  }
+		  /// <summary>
+		  /// The view model of the display view page
+		  /// </summary>
+		  private SelectSourceViewModel _SelectSourceViewModel;
+		  public SelectSourceViewModel SelectSourceViewModel
+		  {
+			   get { return _SelectSourceViewModel; }
+			   set { if (_SelectSourceViewModel == value) return; _SelectSourceViewModel = value; OnPropertyChanged(nameof(SelectSourceViewModel)); }
+		  }
+
 
 		  #endregion
 
 		  #region Public Members
-		  /// <summary>
-		  /// The text to display which folders the user chose
-		  /// </summary>
-		  private string _SourceFoldersText { get; set; }
-		  public string SourceFoldersText
-		  {
-			   get
-			   {
-					return _SourceFoldersText;
-			   }
-			   set
-			   {
-					if (_SourceFoldersText == value)
-						 return;
-
-					_SourceFoldersText = value;
-					OnPropertyChanged(nameof(SourceFoldersText));
-			   }
-		  }
 
 
 		  /// <summary>
@@ -68,31 +64,16 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  public DisplayViewModel DisplayViewModel
+
+		  public string LastBackupTimeText
 		  {
-			   get { return _DisplayViewModel; }
-			   set { if (_DisplayViewModel == value) return; _DisplayViewModel = value; OnPropertyChanged(nameof(DisplayViewModel)); }
+			   get { if (Details.LastBackupTime == new DateTime()) return "No backup history."; else return Details.LastBackupTime.ToString("HH:mm:ss dd/MM/yyyy"); }
 		  }
 
 		  #endregion
 
 		  #region Helpers
-		  /// <summary>
-		  /// Extracting the names from the folders that the user chose
-		  /// </summary>
-		  /// <returns></returns>
-		  private string ExtractFolderNames()
-		  {
-			   string list = "";
-			   foreach (SourceFolder item in ViewModelLocator.CacheViewModel.Details.SourceFolders)
-			   {
-					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderInfo.FullPath);
-					list += ", ";
-			   }
-			   if(list != "")
-					return list.Substring(0, list.Length - 2);
-			   return list;
-		  }
+
 		  #endregion
 
 		  #region Commands
@@ -149,7 +130,7 @@ namespace BackupSoftware
 			   }
 
 			   // Injecting the SelectSourceViewModel
-			   ViewModelLocator.ApplicationViewModel.GoToView(IoC.Kernel.Get<SelectSourceViewModel>());
+			   ViewModelLocator.ApplicationViewModel.GoToView(_SelectSourceViewModel);
 		  }
 
 		  /// <summary>
@@ -166,17 +147,17 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Validates if the user gave right input
 		  /// </summary>
-		  private bool ValidateUserInput(ObservableCollection<SourceFolder> SourceFolders, string DestFolder)
+		  private bool ValidateUserInput(Details details)
 		  {
 			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(DestFolder) || SourceFolders.Count == 0)
+			   if (string.IsNullOrEmpty(details.DestFolder) || details.SourceFolders.Count == 0)
 			   {
 					_DialogService.ShowMessageBox("Fill in the list of folder and hard drive!");
 					return false;
 			   }
 
 			   // Check to see if the folders exists
-			   foreach (SourceFolder item in SourceFolders)
+			   foreach (SourceFolder item in details.SourceFolders)
 			   {
 					if (!Directory.Exists(item.FolderInfo.FullPath))
 					{
@@ -186,9 +167,9 @@ namespace BackupSoftware
 
 			   }
 
-			   if (!Directory.Exists(DestFolder))
+			   if (!Directory.Exists(details.DestFolder))
 			   {
-					_DialogService.ShowMessageBox(DestFolder + " can not be found!");
+					_DialogService.ShowMessageBox(details.DestFolder + " can not be found!");
 					return false;
 			   }
 
@@ -202,7 +183,7 @@ namespace BackupSoftware
 					if (_DialogService.ShowYesNoMessageBox("Are you sure you want to start the backup?", "Question"))
 					{
 						 // Validate user input
-						 if (ValidateUserInput(Details.SourceFolders, Details.DestFolder))
+						 if (ValidateUserInput(Details))
 						 {
 							  // Run the back up
 							  DisplayViewModel.RunBackup();
@@ -222,19 +203,17 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
-		  public DetailsViewModel(IDialogService dialogService, DisplayViewModel displayViewModel)
+		  public DetailsViewModel(IDialogService dialogService, SelectSourceViewModel selectSourceViewModel,  DisplayViewModel displayViewModel)
 		  {
 			   _DialogService = dialogService;
 			   DisplayViewModel = displayViewModel;
+			   SelectSourceViewModel = selectSourceViewModel;
 
 
 			   SelectDestFolderCommand = new RelayCommand(SelectDestFolder, (parameter)=> { return !DisplayViewModel.IsBackupRunning; });
 			   GoToSelectSourceCommand = new RelayCommand(GoToSelectSource, (parameter) => { return !DisplayViewModel.IsBackupRunning; });
 			   StartBackupCommand = new RelayCommand(StartBackup);
 			   GoToDisplayCommand = new RelayCommand(GoToDisplay);
-
-			   SourceFoldersText = ExtractFolderNames();
-
 		  }
 	 }
 }

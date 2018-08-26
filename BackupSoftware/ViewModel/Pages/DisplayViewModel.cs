@@ -62,6 +62,7 @@ namespace BackupSoftware
 		  }
 
 
+
 		  #region Commands
 		  /// <summary>
 		  /// The command to go back to the backup page
@@ -96,6 +97,8 @@ namespace BackupSoftware
 							  {
 								   IsBackupRunning = false;
 								   IsBackupDone = true;
+
+								   ViewModelLocator.CacheViewModel.Details.LastBackupTime = DateTime.Now;
 
 								   // Redircet to details page
 								   GoToDetails();

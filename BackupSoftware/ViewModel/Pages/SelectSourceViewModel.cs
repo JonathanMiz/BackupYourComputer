@@ -33,6 +33,26 @@ namespace BackupSoftware
 		  /// </summary>
 		  private IDialogService _DialogService;
 
+		  /// <summary>
+		  /// The text to display which folders the user chose
+		  /// </summary>
+		  private string _SourceFoldersText { get; set; } = "Select folder";
+		  public string SourceFoldersText
+		  {
+			   get
+			   {
+					return _SourceFoldersText;
+			   }
+			   set
+			   {
+					if (_SourceFoldersText == value)
+						 return;
+
+					_SourceFoldersText = value;
+					OnPropertyChanged(nameof(SourceFoldersText));
+			   }
+		  }
+
 		  #region Helpers
 		  /// <summary>
 		  /// Validate if the user selected folders that meets the reqiuerments
@@ -112,6 +132,23 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  /// <summary>
+		  /// Extracting the names from the folders that the user chose
+		  /// </summary>
+		  /// <returns></returns>
+		  private string ExtractFolderNames()
+		  {
+			   string list = "";
+			   foreach (SourceFolder item in SourceFolders)
+			   {
+					list += Helpers.ExtractFileFolderNameFromFullPath(item.FolderInfo.FullPath);
+					list += ", ";
+			   }
+			   if (list != "")
+					return list.Substring(0, list.Length - 2);
+			   return list;
+		  }
+
 		  #endregion
 
 		  #region Commands
@@ -151,6 +188,8 @@ namespace BackupSoftware
 		  /// </summary>
 		  private void GoToDetailsView()
 		  {
+			   SourceFoldersText = ExtractFolderNames();
+
 			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
 		  }
 
@@ -166,6 +205,8 @@ namespace BackupSoftware
 			   SelectFoldersCommand = new RelayCommand(SelectFolders);
 			   GoToDetailsViewCommand = new RelayCommand(GoToDetailsView);
 			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveItem);
+
+			   SourceFoldersText = ExtractFolderNames();
 		  }
 
 		  /// <summary>

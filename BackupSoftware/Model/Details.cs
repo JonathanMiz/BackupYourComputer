@@ -63,6 +63,22 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  private DateTime _LastBackupTime = new DateTime();
+
+		  public DateTime LastBackupTime
+		  {
+			   get { return _LastBackupTime; }
+			   set
+			   {
+					if (_LastBackupTime == value)
+						 return;
+
+					_LastBackupTime = value;
+					OnPropertyChanged(nameof(LastBackupTime));
+			   }
+		  }
+
+
 		  /// <summary>
 		  /// Add new folder to <see cref="SourceFolders"/>
 		  /// </summary>
