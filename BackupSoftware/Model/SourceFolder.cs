@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using System;
 
 
@@ -16,7 +17,7 @@ namespace BackupSoftware
 		  public FolderInfo FolderInfo { get; set; }
 
 		  /// <summary>
-		  /// A check to see if the user whats to delete the prev content in the backup drive
+		  /// A check to see if the user wants to delete the prev content in the backup drive
 		  /// </summary>
 		  public bool DeletePrevContent { get; set; } = false;
 

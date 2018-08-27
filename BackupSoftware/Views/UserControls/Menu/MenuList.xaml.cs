@@ -23,7 +23,7 @@ namespace BackupSoftware
         public MenuList()
         {
             InitializeComponent();
-			this.DataContext = new MenuListViewModel();
+			//this.DataContext = new MenuListViewModel();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace BackupSoftware
 		  /// The list of the folders the user want to backup
 		  /// </summary>
 		  private ObservableCollection<SourceFolder> _SourceFolders = new ObservableCollection<SourceFolder>();
+
 		  public ObservableCollection<SourceFolder> SourceFolders
 		  {
 			   get

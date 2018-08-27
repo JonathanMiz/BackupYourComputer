@@ -42,10 +42,14 @@ namespace BackupSoftware
 		  /// <returns></returns>
 		  private int CalcItemsCount(string path)
 		  {
-			   int fileCount = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Length;
-			   int folderCount = Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly).Length;
+			   int result = -1;
+			   if (path != null)
+			   {
+					int fileCount = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Length;
+					int folderCount = Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly).Length;
 
-			   int result = (fileCount + folderCount);
+					result = (fileCount + folderCount);
+			   }
 
 			   return result;
 		  }

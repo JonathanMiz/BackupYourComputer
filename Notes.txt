@@ -20,41 +20,40 @@
 
 	1. Comment the code
 	2. Refactor the code
-	3. Option to stop backup ?
+	3. Option to stop/pause backup ?
 	4. Use Fody Weavers
-	5. Save the last info to a json file?
+	
+	Things to understand better:
+		1. Ninject -> Service locator, NinjectModule
+		2. StoryBoard
+		3. Templates
+		4. UserControls
+		5. Fody weavers
+		7. Understand why Json initialized to null
 	
 	Aesthetics:
 	
 	1. Add global fonts to all of the program
 	3. Make a page style for all the pages
 	4. Make custom progress bar
-	5. Implement the effect of selecting button in the menu
-	
-	Things to understand better:
-	1. Ninject -> Service locator, NinjectModule
-	2. StoryBoard
-	3. Templates
-	4. UserControls
-	5. Fody weavers
+
 	
 	Bugs/Fixes:
 	
-	1. Handle the case when a file is been used by another process
+	1. Handle the case when a file is been used by another process - High priority
 	2. Backup drive needs to be checked for forward slashes for linux compatability
 	
 	
 	Backup page
 	
 		1. Make costum buttons - Low Priority
-		2. In the header add the start time and end time - Medium Priority
-		3. Make the area of the start up button look good
-		4. When adding new folders the SourceFoldersText in DetailsViewModel is not changing
+		2. Make the area of the start up button look good
+		3. Show the size of the total backup?
+		4. Instead of using CanExecute like I did, send a commnad parameter instead
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		
-		
 	Working right now: 
-		1. Saving the data to json file, figure out how to save the data
+		1. Implement the effect of selecting button in the menu

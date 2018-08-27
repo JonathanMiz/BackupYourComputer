@@ -29,7 +29,7 @@
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
                     <ListBox HorizontalAlignment="Left" x:Name="FolderList"
                                             ItemsSource="{Binding SourceFolders, Mode=TwoWay}"
-                                            Width="615" Height="250" Background="White">
+                                            Width="615" Height="230" Background="White">
                          <ListBox.ItemContainerStyle>
                               <Style TargetType="{x:Type ListBoxItem}">
                                    <Setter Property="Template">
@@ -118,11 +118,10 @@
 
                <!-- Browse button -->
                <Button
-                                 Command="{Binding SelectFoldersCommand}"
-                                 Width="100"
-                                 Height="30"
-                    VerticalAlignment="Center"
-                                 >
+                    Command="{Binding SelectFoldersCommand}"
+                    Style="{StaticResource CustomButton}"
+                    Width="100"
+                    Height="30" VerticalAlignment="Center">
                     <TextBlock Text="..." FontSize="20" HorizontalAlignment="Center"
                                     VerticalAlignment="Center"/>
                </Button>
@@ -130,14 +129,16 @@
 
           <!-- Select button -->
           <Button Grid.Row="2"
-                            Command="{Binding GoToDetailsViewCommand}"
-                            Width="150"
-                            Height="35"
-                              Padding="5"
-                            Content="Select"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Bottom"
-                  Margin="0 0 10 10"/>
+                  Style="{StaticResource CustomButton}"
+                  Command="{Binding GoToDetailsViewCommand}"
+                  Width="150"
+                  Height="35"
+                  Padding="5"
+                  Content="Select"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Center"
+                  Margin="0 0 10 10"
+                  />
 
           <Border Grid.Row="3"  Background="#dcdde1" Height="30">
           </Border>

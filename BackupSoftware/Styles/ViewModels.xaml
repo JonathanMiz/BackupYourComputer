@@ -15,5 +15,4 @@
           <local:DisplayView />
      </DataTemplate>
 
-
 </ResourceDictionary>

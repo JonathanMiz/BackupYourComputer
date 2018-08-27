@@ -6,8 +6,11 @@
              xmlns:local="clr-namespace:BackupSoftware"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-     <Grid Background="{StaticResource DarkBlueBrush}"
-           d:DataContext="{x:Static local:MenuListViewModel.Instance}">
+
+     <UserControl.DataContext>
+          <local:MenuListViewModel />
+     </UserControl.DataContext>
+     <Grid Background="{StaticResource DarkBlueBrush}">
           <ItemsControl ItemsSource="{Binding Items}" Margin="0 80 0 0">
                <ItemsControl.ItemTemplate>
                     <DataTemplate>

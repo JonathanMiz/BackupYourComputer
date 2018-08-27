@@ -14,16 +14,15 @@
                <Setter Property="Template">
                     <Setter.Value>
                          <ControlTemplate TargetType="{x:Type ButtonBase}">
-                              <Border x:Name="container" Background="{StaticResource DarkBlueBrush}" CornerRadius="3"
-                                      Tag="{Binding IsSelected}">
-                                   <Grid  Margin="0 0 0 0"   Height="40">
+                              <Border x:Name="background" Background="{StaticResource DarkBlueBrush}" CornerRadius="3">
+                                   <Grid  Margin="0 0 0 0" x:Name="container" Background="Transparent" Height="40">
                                         <Grid.ColumnDefinitions>
                                              <ColumnDefinition Width="Auto" />
                                              <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon -->
-                                        <Grid Margin="10 0" Background="Transparent">
+                                        <Grid Margin="10 0">
                                              <Grid.ColumnDefinitions>
                                                   <ColumnDefinition Width="Auto" />
                                                   <ColumnDefinition Width="Auto" />
@@ -42,7 +41,7 @@
                                               Width="30"
 
                                               />
-                                              
+
 
                                              <!-- Item title -->
                                              <TextBlock Grid.Column="1"
@@ -72,21 +71,15 @@
                                    <EventTrigger RoutedEvent="MouseLeave">
                                         <BeginStoryboard>
                                              <Storyboard>
-                                                  <ColorAnimation To="{StaticResource DarkBlue}" Duration="0:0:0.3"
+                                                  <ColorAnimation To="Transparent" Duration="0:0:0.3"
                                                                   Storyboard.TargetName="container"
                                                                   Storyboard.TargetProperty="Background.Color"
                                                                    />
                                              </Storyboard>
                                         </BeginStoryboard>
                                    </EventTrigger>
-                                   <Trigger Property="IsPressed" Value="True">
-                                        <Setter Property="Tag" Value="True" />
-                                   </Trigger>
-                                   <Trigger Property="IsPressed" Value="False">
-                                        <Setter Property="Tag" Value="False" />
-                                   </Trigger>
                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="Background" TargetName="container" Value="{StaticResource LightBlueBrush}" />
+                                        <Setter Property="Background" TargetName="background" Value="{StaticResource LightBlueBrush}" />
                                    </DataTrigger>
                               </ControlTemplate.Triggers>
                          </ControlTemplate>
@@ -97,5 +90,5 @@
 
 
      <Button Content="" Style="{StaticResource MenuItemButton}"
-             Command="{Binding OpenPageCommand}"/>
+             Command="{Binding GoToViewCommand}"/>
 </UserControl>

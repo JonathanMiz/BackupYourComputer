@@ -32,25 +32,31 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// The page of this menu item
 		  /// </summary>
-		  public ViewModelBase CurrentViewModel { get; set; }
+		  public ViewModelBase ViewModel { get; set; }
 
-		  public ICommand OpenPageCommand { get; set; }
+		  /// <summary>
+		  /// True if the item is selected
+		  /// </summary>
+		  public bool IsSelected { get; set; }
+
+		  public ICommand GoToViewCommand { get; set; }
 
 		  /// <summary>
 		  /// Default constructor
 		  /// </summary>
 		  public MenuItemViewModel()
 		  {
-			   OpenPageCommand = new RelayCommand(OpenPage);
+			   GoToViewCommand = new RelayCommand(GoToView);
 		  }
 
 		  /// <summary>
 		  /// The commnad for opening a page
 		  /// </summary>
-		  void OpenPage()
+		  void GoToView()
 		  {
 			   // Change the current page to the page of the menu item
-			   ViewModelLocator.ApplicationViewModel.GoToView(CurrentViewModel);
+			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModel);
+			   IsSelected = true;
 		  }
 	 }
 }
