@@ -26,10 +26,17 @@
           <StackPanel Grid.Row="1"  Orientation="Horizontal">
                <StackPanel  Margin="20">
 
+                    <Grid>
                     <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
+                    <Button Content="Remove all"  Command="{Binding RemoveAllItemsCommand}"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource CustomButton}"/>
+                    </Grid>
                     <ListBox HorizontalAlignment="Left" x:Name="FolderList"
                                             ItemsSource="{Binding SourceFolders, Mode=TwoWay}"
-                                            Width="615" Height="230" Background="White">
+                                            Width="615" Height="230" Background="White"
+                                                 HorizontalContentAlignment="Stretch"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                          <ListBox.ItemContainerStyle>
                               <Style TargetType="{x:Type ListBoxItem}">
                                    <Setter Property="Template">
@@ -125,6 +132,7 @@
                     <TextBlock Text="..." FontSize="20" HorizontalAlignment="Center"
                                     VerticalAlignment="Center"/>
                </Button>
+
           </StackPanel>
 
           <!-- Select button -->

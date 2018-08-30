@@ -35,7 +35,7 @@ namespace BackupSoftware
 
 		  public void Execute(object parameter)
 		  {
-			   if(_Action != null)
+			   if (_Action != null)
 			   {
 					_Action();
 			   }

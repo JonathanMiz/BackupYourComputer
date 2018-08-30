@@ -22,18 +22,20 @@
 	2. Refactor the code
 	3. Option to stop/pause backup ?
 	4. Use Fody Weavers
+	5. Separate reuseable code to different library
+	6. Remove all selected folders button
+	7. User system
 	
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
 		2. StoryBoard
-		3. Templates
-		4. UserControls
 		5. Fody weavers
 		7. Understand why Json initialized to null
-	
+		
 	Aesthetics:
 	
 	1. Add global fonts to all of the program
+	2. Make custom scrollbar
 	3. Make a page style for all the pages
 	4. Make custom progress bar
 
@@ -41,15 +43,14 @@
 	Bugs/Fixes:
 	
 	1. Handle the case when a file is been used by another process - High priority
+		1.1 handle that also when deleting folders
+		1.2 add message to ask the user to skip or try again
 	2. Backup drive needs to be checked for forward slashes for linux compatability
-	
 	
 	Backup page
 	
-		1. Make costum buttons - Low Priority
-		2. Make the area of the start up button look good
-		3. Show the size of the total backup?
-		4. Instead of using CanExecute like I did, send a commnad parameter instead
+		1. Show the size of the total backup?
+		2. Save the file that raised and execption to let the user know what was'nt backed up?
 		
 	DisplayBackup Page
 	

@@ -146,6 +146,8 @@ namespace BackupSoftware
 			   }
 			   if (list != "")
 					return list.Substring(0, list.Length - 2);
+			   else list = "Select folder";
+
 			   return list;
 		  }
 
@@ -162,9 +164,14 @@ namespace BackupSoftware
 		  /// </summary>
 		  public ICommand GoToDetailsViewCommand { get; set; }
 		  /// <summary>
-		  /// The command to remove a list view item
+		  /// The command to remove a item
 		  /// </summary>
 		  public ICommand RemoveItemCommand { get; set; }
+		  /// <summary>
+		  /// The command to remove all the items
+		  /// </summary>
+		  public ICommand RemoveAllItemsCommand{ get; set; }
+
 
 		  #endregion
 
@@ -205,8 +212,17 @@ namespace BackupSoftware
 			   SelectFoldersCommand = new RelayCommand(SelectFolders);
 			   GoToDetailsViewCommand = new RelayCommand(GoToDetailsView);
 			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveItem);
+			   RemoveAllItemsCommand = new RelayCommand(RemoveAllCommands);
 
 			   SourceFoldersText = ExtractFolderNames();
+		  }
+
+		  private void RemoveAllCommands()
+		  {
+			   if (_DialogService.ShowYesNoMessageBox("Are you sure you want to remove all the items?", "Question"))
+			   {
+					ViewModelLocator.CacheViewModel.Details.SourceFolders.Clear();
+			   }
 		  }
 
 		  /// <summary>

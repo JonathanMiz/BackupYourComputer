@@ -54,9 +54,11 @@ namespace BackupSoftware
 		  /// </summary>
 		  void GoToView()
 		  {
+			   IsSelected = true;
+
 			   // Change the current page to the page of the menu item
 			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModel);
-			   IsSelected = true;
+			   
 		  }
 	 }
 }

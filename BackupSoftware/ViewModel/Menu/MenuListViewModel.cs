@@ -19,6 +19,27 @@ namespace BackupSoftware
 		  public List<MenuItemViewModel> Items { get; set; }
 
 		  /// <summary>
+		  /// The selected item
+		  /// </summary>
+
+		  private MenuItemViewModel _SelectedItem;
+
+		  public MenuItemViewModel SelectedItem
+		  {
+			   get { return _SelectedItem; }
+			   set { if (_SelectedItem == value) return; _SelectedItem = value; OnPropertyChanged(nameof(SelectedItem)); }
+		  }
+
+		  private int _SelectedIndex;
+
+		  public int SelectedIndex
+		  {
+			   get { return _SelectedIndex; }
+			   set { if (_SelectedIndex == value) return; _SelectedIndex = value; OnPropertyChanged(nameof(SelectedIndex)); }
+		  }
+
+
+		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
 		  public MenuListViewModel()
@@ -31,7 +52,7 @@ namespace BackupSoftware
 						 IconCode = "\uf574",
 						 Title = "Backup",
 						 ViewModel = ViewModelLocator.DetailsViewModel,
-						 IsSelected = true
+						 //IsSelected = true
 					},
 					new MenuItemViewModel
 					{

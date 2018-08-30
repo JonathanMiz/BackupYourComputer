@@ -37,15 +37,6 @@ namespace BackupSoftware
 			   _DataService = dataService;
 
 			   Details = _DataService.GetDetails();
-
-			   // TEMP: Default values for tests
-			   //Details.DestFolder = "H:\\";
-
-			   //Details.AddFolder("C:\\Users\\Jonathan\\Documents\\BackupTest");
-			   //Details.AddFolder("C:\\Users\\Jonathan\\Documents\\Army");
-			   //Details.AddFolder("C:\\Users\\Jonathan\\Documents\\Blender");
-			   //Details.AddFolder("C:\\Users\\Jonathan\\Documents\\Books");
-			   //Details.AddFolder("C:\\Users\\Jonathan\\Documents\\boost_1_65_1");
 		  }
 	 }
 }

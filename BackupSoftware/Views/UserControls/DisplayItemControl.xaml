@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BackupSoftware"
              mc:Ignorable="d" d:DesignWidth="800" Height="150" 
-             d:DataContext="{x:Static local:DisplayItemControlViewModel.Instance}">
+             >
      <Border>
 
           <Grid>

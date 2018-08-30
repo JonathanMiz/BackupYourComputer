@@ -11,14 +11,20 @@
           <local:MenuListViewModel />
      </UserControl.DataContext>
      <Grid Background="{StaticResource DarkBlueBrush}">
-          <ItemsControl ItemsSource="{Binding Items}" Margin="0 80 0 0">
-               <ItemsControl.ItemTemplate>
+          <ListView ItemsSource="{Binding Items}" Margin="0 80 0 0"
+                    SelectionMode="Single"
+                    SelectedIndex="{Binding SelectedIndex}"
+                    HorizontalContentAlignment="Stretch"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+               <ListBox.ItemTemplate>
                     <DataTemplate>
 
                          <local:MenuItemControl />
 
+
+
                     </DataTemplate>
-               </ItemsControl.ItemTemplate>
-          </ItemsControl>
+               </ListBox.ItemTemplate>
+          </ListView>
      </Grid>
 </UserControl>

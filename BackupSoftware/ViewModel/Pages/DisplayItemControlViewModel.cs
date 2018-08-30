@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackupSoftware.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +11,7 @@ namespace BackupSoftware
 {
 	 public class DisplayItemControlViewModel : ViewModelBase
 	 {
-		  public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new SourceFolder("c:/jonathan/test"));
+		  //public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new SourceFolder("c:/jonathan/test"));
 
 		  #region Private Members
 			   private string _Log { get; set; }
@@ -114,10 +115,13 @@ namespace BackupSoftware
 			   }
 		  }
 
+		  private IDialogService _DialogService;
+
 		  #endregion
 
-		  public DisplayItemControlViewModel(SourceFolder sourceFolder)
+		  public DisplayItemControlViewModel(IDialogService dialogService, SourceFolder sourceFolder)
 		  {
+			   _DialogService = dialogService;
 			   SourceFolder = sourceFolder;
 
 			   ItemsRemainingProgress = new Progress<int>();
@@ -230,6 +234,12 @@ namespace BackupSoftware
 			   await BackupOneDirAsync(ItemsRemainingProgress);
 		  }
 
+		  private void ReplaceFile(string sourceFile, string destFile)
+		  {
+			   File.Delete(destFile);
+			   File.Copy(sourceFile, destFile);
+		  }
+
 		  /// <summary>
 		  /// Backups all the files and folders that in source to dest
 		  /// </summary>
@@ -258,15 +268,24 @@ namespace BackupSoftware
 						 if (fileInfo.Length != fileInDestInfo.Length)
 						 {
 							  // Repalce
-							  File.Delete(fullFilePathInDst);
-							  File.Copy(file, fullFilePathInDst);
+							  ReplaceFile(file, fullFilePathInDst);
+
 							  log = $"The file {file} has been modified, replacing it with new content in {fullFilePathInDst}{Environment.NewLine}";
 							  logProgress.Report(log);
 						 }
 					}
 					else
 					{
-						 File.Copy(file, fullFilePathInDst);
+						 try
+						 {
+
+							  File.Copy(file, fullFilePathInDst);
+						 }
+						 catch(IOException excp)
+						 {
+							  _DialogService.ShowMessageBox(excp.Message);
+						 }
+
 						 log = $"Copying {file}{Environment.NewLine}";
 						 logProgress.Report(log);
 					};
@@ -275,9 +294,13 @@ namespace BackupSoftware
 			   foreach (var dir in Directory.GetDirectories(source))
 			   {
 					string fullDirPathInDst = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
+
 					log = $"Backing up {dir} to {fullDirPathInDst}{Environment.NewLine}";
+
 					logProgress.Report(log);
+
 					Backup(dir, fullDirPathInDst, logProgress);
+
 					log = $"Ended backing up {dir} to {fullDirPathInDst}{Environment.NewLine}";
 					logProgress.Report(log);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackupSoftware.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +13,7 @@ namespace BackupSoftware
     public class DisplayViewModel : ViewModelBase
     {
 		  // TEMP: Instance to check the design live
-		  public static DisplayViewModel Instance => new DisplayViewModel();
+		  //public static DisplayViewModel Instance => new DisplayViewModel();
 		  //
 
 		  /// <summary>
@@ -61,7 +62,7 @@ namespace BackupSoftware
 			   set { if (_IsBackupDone == value) return; _IsBackupDone = value; OnPropertyChanged(nameof(IsBackupDone)); }
 		  }
 
-
+		  private IDialogService _DialogService;
 
 		  #region Commands
 		  /// <summary>
@@ -118,7 +119,7 @@ namespace BackupSoftware
 			   // Getting all the infomation to Items
 			   foreach (var item in ViewModelLocator.CacheViewModel.Details.SourceFolders)
 			   {
-					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(item)
+					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(_DialogService, item)
 					{
 						 Destination = $"{ViewModelLocator.CacheViewModel.Details.DestFolder}{item.FolderInfo.Name}"
 					};
@@ -143,8 +144,10 @@ namespace BackupSoftware
 			   }
 		  }
 
-		  public DisplayViewModel()
+		  public DisplayViewModel(IDialogService dialogService)
 		  {
+			   _DialogService = dialogService;
+
 			   Items = new List<DisplayItemControlViewModel>();
 
 			   // Create command
