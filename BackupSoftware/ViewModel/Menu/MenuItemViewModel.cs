@@ -37,25 +37,33 @@ namespace BackupSoftware
 		  /// <summary>
 		  /// True if the item is selected
 		  /// </summary>
-		  public bool IsSelected { get; set; }
+		  private bool _IsSelected;
+		  public bool IsSelected
+		  {
+			   get { return _IsSelected; }
+			   set
+			   {
+					if (_IsSelected == value)
+						 return;
 
-		  public ICommand GoToViewCommand { get; set; }
+					_IsSelected = value;
+					OnPropertyChanged(nameof(IsSelected));
+			   }
+		  }
 
 		  /// <summary>
 		  /// Default constructor
 		  /// </summary>
 		  public MenuItemViewModel()
 		  {
-			   GoToViewCommand = new RelayCommand(GoToView);
+
 		  }
 
 		  /// <summary>
 		  /// The commnad for opening a page
 		  /// </summary>
-		  void GoToView()
+		  public void GoToView()
 		  {
-			   IsSelected = true;
-
 			   // Change the current page to the page of the menu item
 			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModel);
 			   

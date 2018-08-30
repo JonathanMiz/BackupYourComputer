@@ -10,21 +10,33 @@
      <UserControl.DataContext>
           <local:MenuListViewModel />
      </UserControl.DataContext>
+     
      <Grid Background="{StaticResource DarkBlueBrush}">
           <ListView ItemsSource="{Binding Items}" Margin="0 80 0 0"
                     SelectionMode="Single"
-                    SelectedIndex="{Binding SelectedIndex}"
-                    HorizontalContentAlignment="Stretch"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-               <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"       
+                    BorderThickness="0"
+                    Background="{StaticResource DarkBlueBrush}">
 
-                         <local:MenuItemControl />
+               <!-- Editing the ListViewItem -->
+               <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                         <Setter Property="Template">
 
+                              <Setter.Value>
+                                   <ControlTemplate TargetType="ListViewItem">
 
+                                        <local:MenuItemControl />
 
-                    </DataTemplate>
-               </ListBox.ItemTemplate>
+                                   </ControlTemplate>
+
+                              </Setter.Value>
+                         </Setter>
+
+                    </Style>
+               </ListView.Resources>
+
           </ListView>
      </Grid>
+
 </UserControl>

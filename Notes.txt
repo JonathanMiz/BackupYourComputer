@@ -23,8 +23,7 @@
 	3. Option to stop/pause backup ?
 	4. Use Fody Weavers
 	5. Separate reuseable code to different library
-	6. Remove all selected folders button
-	7. User system
+	7. Users system
 	
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
@@ -42,19 +41,17 @@
 	
 	Bugs/Fixes:
 	
-	1. Handle the case when a file is been used by another process - High priority
-		1.1 handle that also when deleting folders
-		1.2 add message to ask the user to skip or try again
 	2. Backup drive needs to be checked for forward slashes for linux compatability
 	
 	Backup page
 	
 		1. Show the size of the total backup?
-		2. Save the file that raised and execption to let the user know what was'nt backed up?
+		2. Save the file name that raised and execption to let the user know what was'nt backed up?
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		
+		
 	Working right now: 
-		1. Implement the effect of selecting button in the menu
+		1. Clean code
