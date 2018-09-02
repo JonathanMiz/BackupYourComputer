@@ -31,7 +31,7 @@
                          </StackPanel>
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="To:" FontFamily="Segoe UI Light"/>
-                              <TextBlock Text="{Binding Destination}" Margin="5 0" />
+                              <TextBlock Text="{Binding DestinationPath}" Margin="5 0" />
                          </StackPanel>
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="Items remaining:" FontFamily="Segoe UI Light" />
@@ -41,7 +41,7 @@
                               <TextBlock Text="Status:" FontFamily="Segoe UI Light" />
                               <Viewbox>
                                    <StackPanel Orientation="Vertical" Width="Auto">
-                                        <TextBlock Text="{Binding Log}" TextWrapping="Wrap" Margin="5 0" Width="Auto"/>
+                                        <TextBlock Text="{Binding State}" TextWrapping="Wrap" Margin="5 0" Width="Auto"/>
                                    </StackPanel>
                               </Viewbox>
                          </StackPanel>
@@ -50,7 +50,7 @@
                          <TextBlock Text="{Binding Log}" />
                     </ScrollViewer>-->
                     <Image Grid.Column="3" Source="/Images/done.png" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top"
-                           Visibility="{Binding BackupDone,
+                           Visibility="{Binding IsBackupDone,
                                         Converter={local:BooleanToVisibleConverter}}"
                            />
                     <TextBlock Grid.Column="3"
@@ -59,7 +59,7 @@
                                FontFamily="{StaticResource FontAwesome}"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Top"
-                               Visibility="{Binding BackupDone, Converter={local:InverseBooleanToVisibleConverter}}"
+                               Visibility="{Binding IsBackupDone, Converter={local:InverseBooleanToVisibleConverter}}"
                                FontSize="20"
                                >
                          <TextBlock.RenderTransform>

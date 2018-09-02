@@ -19,7 +19,6 @@ namespace BackupSoftware
 		  {
 			   InitializeComponent();
 			   this.DataContext = new WindowViewModel(this);
-
 		  }
 	 }
 }

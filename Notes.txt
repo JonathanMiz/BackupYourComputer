@@ -22,8 +22,8 @@
 	2. Refactor the code
 	3. Option to stop/pause backup ?
 	4. Use Fody Weavers
-	5. Separate reuseable code to different library
 	7. Users system
+	8. Unit tests
 	
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
@@ -41,12 +41,13 @@
 	
 	Bugs/Fixes:
 	
-	2. Backup drive needs to be checked for forward slashes for linux compatability
+	1. Backup drive needs to be checked for forward slashes for linux compatability
+	2. The DetailsViewModel is dependent on DisplayViewModel and everychange in DisplayViewModel will make me change DetailsViewModel
 	
 	Backup page
 	
 		1. Show the size of the total backup?
-		2. Save the file name that raised and execption to let the user know what was'nt backed up?
+		2. Save the file names that raised and execption to let the user know what was'nt backed up?
 		
 	DisplayBackup Page
 	

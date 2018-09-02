@@ -1,4 +1,6 @@
-﻿using Ninject;
+﻿using BackupSoftware.Core;
+using BackupSoftware.Core.Services;
+using BackupSoftware.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,13 +26,15 @@ namespace BackupSoftware
 			   // Let the base do what it needs
 			   base.OnStartup(e);
 
+			   // Bind Windows specific dialog service
+			   IoC.Kernel.Bind<IDialogService>().To<WindowsDialogService>();
+
 			   // Setup IoC
 			   IoC.Setup();
 
+
 			   Current.MainWindow = new MainWindow();
 			   Current.MainWindow.Show();
-
-
 		  }
 
 		  protected override void OnExit(ExitEventArgs e)

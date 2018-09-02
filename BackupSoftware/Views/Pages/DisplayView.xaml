@@ -16,15 +16,15 @@
 
           <Border Grid.Row="0"  Background="#dcdde1" Height="30">
                <Button Command="{Binding BackToDetailsCommand}" 
-                       HorizontalAlignment="Left">
+                       HorizontalAlignment="Left"
+                       Style="{StaticResource CustomButton}">
                     <TextBlock Text="&#xf053;" FontFamily="{StaticResource FontAwesome}"
                                FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                </Button>
           </Border>
 
           <ScrollViewer Grid.Row="1">
-               <ItemsControl  ItemsSource="{Binding Items}"
-                    d:DataContext="{x:Static local:DisplayViewModel.Instance}" Padding="10">
+               <ItemsControl  ItemsSource="{Binding DisplayItems}" Padding="10">
                     <ItemsControl.ItemTemplate>
                          <DataTemplate>
 
@@ -39,7 +39,7 @@
           <Border Grid.Row="2"  Background="#dcdde1" Height="50">
 
                <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
-               <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto" Value="{Binding DoneFoldersCount}" />
+               <ProgressBar Height="20" Margin="30 0 30 0" Width="Auto" Value="{Binding CompletedItemsCount}" />
           </Border>
      </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using BackupSoftware.Core;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

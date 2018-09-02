@@ -164,7 +164,7 @@
                     </Grid.ColumnDefinitions>
                     <!--<TextBlock Grid.Column="0"  Text="Here will be logger..." FontSize="20" />-->
                     <ProgressBar Height="20" Margin="10"
-                                 Value="{Binding DisplayViewModel.DoneFoldersCount}"/>
+                                 Value="{Binding DisplayViewModel.CompletedItemsCount}"/>
                     
                     <Button Content="Show progress... "
                             HorizontalAlignment="Center"
