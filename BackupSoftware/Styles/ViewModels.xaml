@@ -15,5 +15,9 @@
      <DataTemplate DataType="{x:Type core:DisplayViewModel}">
           <local:DisplayView />
      </DataTemplate>
+     <DataTemplate DataType="{x:Type core:ScreenshotsViewModel}">
+          <local:ScreenshotsView />
+     </DataTemplate>
+                   
 
 </ResourceDictionary>

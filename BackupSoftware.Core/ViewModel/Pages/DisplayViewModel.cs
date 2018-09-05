@@ -121,7 +121,7 @@ namespace BackupSoftware.Core
 			   {
 					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(_DialogService, item)
 					{
-						 DestinationPath = $"{ViewModelLocator.CacheViewModel.Details.DestFolder}{item.FolderInfo.Name}"
+						 DestinationPath = $"{ViewModelLocator.CacheViewModel.Details.DestFolder}\\{item.FolderInfo.Name}"
 					};
 
 					DisplayItems.Add(displayItemControlViewModel);

@@ -32,7 +32,6 @@ namespace BackupSoftware
 			   // Setup IoC
 			   IoC.Setup();
 
-
 			   Current.MainWindow = new MainWindow();
 			   Current.MainWindow.Show();
 		  }

@@ -80,7 +80,7 @@ namespace BackupSoftware.Core
 					{
 						 IconCode = "\uf108",
 						 Title = "Screenshots",
-						 ViewModel = null
+						 ViewModel = ViewModelLocator.ScreenshotsViewModel
 					},
 					new MenuItemViewModel
 					{

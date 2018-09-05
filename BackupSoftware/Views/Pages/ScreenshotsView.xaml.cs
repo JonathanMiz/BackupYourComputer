@@ -16,13 +16,23 @@ using System.Windows.Shapes;
 namespace BackupSoftware
 {
 	 /// <summary>
-	 /// Interaction logic for ScreenshotsDetails.xaml
+	 /// Interaction logic for ScreenshotsView.xaml
 	 /// </summary>
-	 public partial class ScreenshotsDetails : Page
+	 public partial class ScreenshotsView : UserControl
 	 {
-		  public ScreenshotsDetails()
+		  public ScreenshotsView()
 		  {
 			   InitializeComponent();
+		  }
+
+		  private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		  {
+			   e.CanExecute = true;
+		  }
+
+		  private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+		  {
+
 		  }
 	 }
 }

@@ -21,9 +21,10 @@
 	1. Comment the code
 	2. Refactor the code
 	3. Option to stop/pause backup ?
-	4. Use Fody Weavers
+	4. Use Fody Weavers, find all the implementations of INoifyChanged and replace them
 	7. Users system
 	8. Unit tests
+	9. Tray icon?
 	
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
@@ -37,22 +38,32 @@
 	2. Make custom scrollbar
 	3. Make a page style for all the pages
 	4. Make custom progress bar
+	5. Make custom checkbox
 
 	
 	Bugs/Fixes:
 	
 	1. Backup drive needs to be checked for forward slashes for linux compatability
-	2. The DetailsViewModel is dependent on DisplayViewModel and everychange in DisplayViewModel will make me change DetailsViewModel
+	2. The DetailsViewModel is dependent on DisplayViewModel and every change in DisplayViewModel will make me change DetailsViewModel
 	
 	Backup page
 	
 		1. Show the size of the total backup?
 		2. Save the file names that raised and execption to let the user know what was'nt backed up?
+		3. Message to the user, that folders will not be used by other softwares
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
+		2. Show how many items were in the begining of the backup
+		3. Option to pause and resume a folder's backup
+		4. In the add of the backup show a log of the things that were backed up successfuly and those who don't.
 		
+	Screenshots Page:
+		1. Create some basic UI for the user to choose folders to take screenshots and maybe where to save the images
+		2. Create service from taking image function		4. Take screenshot of the primary window.
+		5. Advanced: have an option to let the user decide the area of taking screenshots like in ActivePresetner
+		6. Change the folder's window position to be in the first screen
 		
 	Working right now: 
-		1. Clean code
+		1. How to close folder process

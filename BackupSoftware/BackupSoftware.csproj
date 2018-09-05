@@ -77,11 +77,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Pages\ScreenshotsDetails.xaml.cs">
-      <DependentUpon>ScreenshotsDetails.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\WindowsDialogService.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
+    <Compile Include="Views\Pages\ScreenshotsView.xaml.cs">
+      <DependentUpon>ScreenshotsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\DisplayItemControl.xaml.cs">
       <DependentUpon>DisplayItemControl.xaml</DependentUpon>
     </Compile>
@@ -117,10 +117,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\ScreenshotsDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\Buttons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -138,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ViewModels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\ScreenshotsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

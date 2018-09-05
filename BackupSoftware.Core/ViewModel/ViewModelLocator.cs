@@ -12,6 +12,7 @@ namespace BackupSoftware.Core
 
 		  // Pages
 		  public static DetailsViewModel DetailsViewModel { get; private set; } = IoC.Kernel.Get<DetailsViewModel>(); // Injecting the DetailsViewModel
+		  public static ScreenshotsViewModel ScreenshotsViewModel{ get; private set; } = IoC.Kernel.Get<ScreenshotsViewModel>(); // Injecting the ScreenshotsViewModel
 
 
 	 }

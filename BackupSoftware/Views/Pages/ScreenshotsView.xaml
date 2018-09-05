@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="BackupSoftware.ScreenshotsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BackupSoftware"
+             xmlns:core="clr-namespace:BackupSoftware.Core;assembly=BackupSoftware.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+     <Grid Background="#f5f6fa">
+          <Grid.RowDefinitions>
+               <RowDefinition Height="Auto"/>
+               <RowDefinition Height="*"/>
+               <RowDefinition Height="Auto"/>
+               <!--<RowDefinition Height="Auto"/>-->
+          </Grid.RowDefinitions>
+
+          <Border Grid.Row="0"  Background="#dcdde1" Height="30">
+               <TextBlock Text="Screenshots"
+                          FontSize="20"
+                          Margin="10 0 0 0"
+                          FontFamily="Segoe UI Light"
+                          VerticalAlignment="Center"/>
+          </Border>
+
+          <Grid Grid.Row="1" Margin="10">
+               <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+               </Grid.RowDefinitions>
+               <CheckBox Grid.Row="0"  Content="Capture Desktop"
+                         IsChecked="{Binding ScreenshotsDetails.IsCaptureDesktop, Mode=TwoWay}" />
+               <ListView Grid.Row="1">
+                    <ListView.ItemTemplate>
+                         <DataTemplate>
+                              <StackPanel Grid.Column="0"  Orientation="Vertical">
+                                   <StackPanel Orientation="Horizontal" Margin="6 0 0 0">
+                                        <Image Source="/Images/icon_folder.png" Width="30"/>
+                                        <TextBlock
+                                             Text="{Binding FolderInfo.FullPath, FallbackValue=C:/Jonathan/Test}"
+                                             HorizontalAlignment="Left"
+                                             Foreground="Black"
+                                             TextTrimming="CharacterEllipsis"
+                                             Padding="10">
+                                        </TextBlock>
+                                   </StackPanel>
+
+                              </StackPanel>
+                         </DataTemplate>
+                    </ListView.ItemTemplate>
+               </ListView>
+
+               <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock Text="Screenshots Destination:" Margin="0 0 30 0"/>
+                    <TextBlock Text="{Binding ScreenshotsDetails.DestinationFolder}" />
+                    <Button Content="Browse" Width="50" Style="{StaticResource CustomButton}"
+                            Command="{Binding BrowseCommand}"/>
+               </StackPanel>
+               
+          </Grid>
+
+
+          <Border Grid.Row="2"  Background="#dcdde1" Height="50">
+               <Grid>
+                    <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="5*" />
+                         <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ProgressBar Height="20" Margin="10"
+                                 />
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource CustomButton}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                              Width="100"
+                            Height="35"
+                            Content="Take Screenshots"
+                            Command="{Binding StartCaptureCommand}" />
+
+               </Grid>
+          </Border>
+     </Grid>
+</UserControl>
