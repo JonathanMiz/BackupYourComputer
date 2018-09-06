@@ -46,5 +46,14 @@ namespace BackupSoftware.Core
 
 			   return "";
 		  }
+
+		  public static void CreateDirectoryIfNotExist(string directoryPath)
+		  {
+			   if (!Directory.Exists(directoryPath))
+			   {
+					Directory.CreateDirectory(directoryPath);
+			   }
+
+		  }
 	 }
 }

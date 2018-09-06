@@ -11,8 +11,8 @@ namespace BackupSoftware.Core.Services
 	 /// </summary>
 	 public interface IDialogService
 	 {
-		  string SelectFolder(string title);
-		  IEnumerable<string> SelectFolders(string title);
+		  string SelectFolder(string title, string initialDir);
+		  IEnumerable<string> SelectFolders(string title, string initialDir);
 
 		  void ShowMessageBox(string message);
 

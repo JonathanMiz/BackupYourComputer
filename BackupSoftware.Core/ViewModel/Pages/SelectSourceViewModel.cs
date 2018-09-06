@@ -1,4 +1,5 @@
 ﻿using BackupSoftware.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -175,7 +176,7 @@ namespace BackupSoftware.Core
 		  /// </summary>
 		  private void SelectFolders()
 		  {
-			   var newFoldersToBackup = _DialogService.SelectFolders("Select folder / folders");
+			   var newFoldersToBackup = _DialogService.SelectFolders("Select folder / folders", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
 			   if (newFoldersToBackup != null)
 			   {

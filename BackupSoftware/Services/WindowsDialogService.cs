@@ -8,13 +8,13 @@ namespace BackupSoftware.Services
 {
 	 class WindowsDialogService : IDialogService
 	 {
-		  public string SelectFolder(string title)
+		  public string SelectFolder(string title, string initialDir = "")
 		  {
 			   var dlg = new CommonOpenFileDialog
 			   {
 					Title = title,
 					IsFolderPicker = true,
-					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+					InitialDirectory = initialDir
 			   };
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
@@ -25,14 +25,14 @@ namespace BackupSoftware.Services
 			   return null;
 		  }
 
-		  public IEnumerable<string> SelectFolders(string title)
+		  public IEnumerable<string> SelectFolders(string title, string initialDir = "")
 		  {
 			   var dlg = new CommonOpenFileDialog
 			   {
 					Title = title,
 					IsFolderPicker = true,
 					Multiselect = true,
-					InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+					InitialDirectory = initialDir
 			   };
 
 			   if (dlg.ShowDialog() == CommonFileDialogResult.Ok)

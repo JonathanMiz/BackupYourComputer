@@ -148,7 +148,7 @@ namespace BackupSoftware.Core
 			   string dest = DestinationPath;
 			   string folderName = SourceFolder.FolderInfo.Name;
 
-			   CreateDirectory(dest, stateProgress);
+			   CreateDirectoryAndReport(dest, stateProgress);
 
 			   int count = 0;
 
@@ -210,27 +210,37 @@ namespace BackupSoftware.Core
 			   File.Copy(sourceFile, destFile);
 		  }
 
+		  private bool FileInDestModified(string DestFilePath, string SourceFilePath)
+		  {
+			   FileInfo sourceFileInfo = new FileInfo(SourceFilePath);
+			   FileInfo destFileInfo = new FileInfo(DestFilePath);
+			   
+			   if (sourceFileInfo.Length != destFileInfo.Length)
+			   {
+					return true;
+			   }
+
+			   return false;
+		  }
+
 		  private void CopyFiles(string destFolder, string fileToCopy, IProgress<string> stateProgress)
 		  {
-			   string fullFilePathInDst = System.IO.Path.Combine(destFolder, Helpers.ExtractFileFolderNameFromFullPath(fileToCopy));
+			   string DestFilePath = System.IO.Path.Combine(destFolder, Helpers.ExtractFileFolderNameFromFullPath(fileToCopy));
 
-			   if (File.Exists(fullFilePathInDst))
+			   if (File.Exists(DestFilePath))
 			   {
-					FileInfo fileInDestInfo = new FileInfo(fullFilePathInDst);
-					FileInfo fileInfo = new FileInfo(fileToCopy);
-
-					if (fileInfo.Length != fileInDestInfo.Length)
+					if(FileInDestModified(DestFilePath, fileToCopy))
 					{
-						 ReplaceFile(fileToCopy, fullFilePathInDst);
+						 ReplaceFile(fileToCopy, DestFilePath);
 
-						 stateProgress.Report($"The file {fileToCopy} has been modified, replacing it with new content in {fullFilePathInDst}{Environment.NewLine}");
+						 stateProgress.Report($"The file {fileToCopy} has been modified, replacing it with new content in {DestFilePath}{Environment.NewLine}");
 					}
 			   }
 			   else
 			   {
 					try
 					{
-						 File.Copy(fileToCopy, fullFilePathInDst);
+						 File.Copy(fileToCopy, DestFilePath);
 						 stateProgress.Report($"Copying {fileToCopy}{Environment.NewLine}");
 					}
 					catch (IOException excp)
@@ -240,7 +250,7 @@ namespace BackupSoftware.Core
 			   };
 		  }
 
-		  private void CreateDirectory(string dest, IProgress<string> stateProgress)
+		  private void CreateDirectoryAndReport(string dest, IProgress<string> stateProgress)
 		  {
 			   if (!Directory.Exists(dest))
 			   {
@@ -257,7 +267,7 @@ namespace BackupSoftware.Core
 		  private void Backup(string source, string dest, IProgress<string> stateProgress)
 		  {
 
-			   CreateDirectory(dest, stateProgress);
+			   CreateDirectoryAndReport(dest, stateProgress);
 
 			   foreach (var file in Directory.GetFiles(source))
 			   {

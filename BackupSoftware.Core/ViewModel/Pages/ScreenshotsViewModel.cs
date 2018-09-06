@@ -27,127 +27,120 @@ namespace BackupSoftware.Core
 
 		  private IDialogService _DialogService;
 
-		  public ICommand StartCaptureCommand { get; set; }
-		  public ICommand BrowseCommand { get; set; }
+		  public ICommand StartCaptureScreenshotsCommand { get; set; }
+		  public ICommand BrowseDestFolderCommand { get; set; }
+		  public ICommand BrowseFoldersToScreenshotCommand { get; set; }
 
 		  public ScreenshotsViewModel(IDialogService dialogService)
 		  {
 			   _DialogService = dialogService;
 
-			   StartCaptureCommand = new RelayCommand(PerformAllCaptures);
-			   BrowseCommand = new RelayCommand(Browse);
+			   StartCaptureScreenshotsCommand = new RelayCommand(StartCaptureScreenshots);
+			   BrowseDestFolderCommand = new RelayCommand(BrowseDestFolder);
+			   BrowseFoldersToScreenshotCommand = new RelayCommand(BrowseFoldersToScreenshot);
+
 
 			   // Temporary: Only for testing the logic
 			   _ScreenshotsDetails = new ScreenshotsDetails()
 			   {
 					IsCaptureDesktop = true,
-					DestinationFolder = "H://"
+					DestinationFolder = "H://",
 			   };
 		  }
 
-		  private void Browse()
+		  private bool ValidateFolders(string newFolder)
 		  {
-			   var result = _DialogService.SelectFolder("Choose destination folder");
-			   if (result != null)
-					_ScreenshotsDetails.DestinationFolder = result;
-		  }
+			   var Folders = ScreenshotsDetails.Folders;
 
-		  private void OpenFolder(string folderName)
-		  {
-			   ProcessStartInfo startInfo = new ProcessStartInfo();
-			   startInfo.FileName = "explorer.exe";
-			   startInfo.Arguments = folderName;
-			   startInfo.WindowStyle = ProcessWindowStyle.Maximized;
-
-			   Process proc = Process.Start(startInfo);
-		  }
-
-		  private void CloseFolder(string folderName)
-		  {
-			   foreach (SHDocVw.InternetExplorer window in new SHDocVw.ShellWindows())
+			   // Iterate through all of the folders that are already in our data
+			   for (int i = 0; i < Folders.Count; ++i)
 			   {
-					if (Path.GetFileNameWithoutExtension(window.FullName).ToLowerInvariant() == "explorer")
+					var exisitingFolder = Folders[i].FullPath.ToString();
+					if (exisitingFolder == newFolder)
 					{
-						 if (Uri.IsWellFormedUriString(window.LocationURL, UriKind.Absolute))
-						 {
-							  string location = new Uri(window.LocationURL).LocalPath;
+						 _DialogService.ShowMessageBox(newFolder + " already exists in the list!");
+						 return false;
+					}
+			   }
 
-							  if (string.Equals(location, folderName, StringComparison.OrdinalIgnoreCase))
-								   window.Quit();
+			   return true;
+		  }
+
+		  private void BrowseFoldersToScreenshot()
+		  {
+			   var newFoldersToBackup = _DialogService.SelectFolders("Select folder / folders", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+
+			   if (newFoldersToBackup != null)
+			   {
+					foreach (var folder in newFoldersToBackup)
+					{
+						 if (ValidateFolders(folder))
+						 {
+							  ScreenshotsDetails.Folders.Add(new FolderInfo(folder));
 						 }
 					}
 			   }
 		  }
 
-		  private void CreateDirectory(string directoryPath)
+		  private void BrowseDestFolder()
 		  {
-			   if (!Directory.Exists(directoryPath))
+			   var result = _DialogService.SelectFolder("Choose destination folder", Environment.GetFolderPath(Environment.SpecialFolder.MyComputer));
+			   if (result != null)
+					_ScreenshotsDetails.DestinationFolder = result;
+		  }
+
+		  private bool ValidateScreenshotsDetails()
+		  {
+			   if(!ScreenshotsDetails.IsCaptureDesktop && ScreenshotsDetails.Folders.Count == 0)
 			   {
-					Directory.CreateDirectory(directoryPath);
+					_DialogService.ShowMessageBox("You didn't choose folders to capture!");
 			   }
 
-		  }
-
-		  private async Task CaptureDesktopAsync(string saveLocationPath)
-		  {
-			   if (ScreenshotsDetails.IsCaptureDesktop)
+			   if (string.IsNullOrEmpty(ScreenshotsDetails.DestinationFolder))
 			   {
-					Shell32.Shell shell = new Shell32.Shell();
-					//shell.MinimizeAll();
-					shell.ToggleDesktop();
-
-					await Task.Delay(200);
-
-					String filename = saveLocationPath + "\\Desktop_" + DateTime.Now.ToString("dd_MM_yyyy") + ".png";
-					TakeScreenshot(filename);
+					_DialogService.ShowMessageBox("Fill in the destination folder!");
+					return false;
 			   }
-		  }
 
-		  private async Task CaptureFoldersAsync(string saveLocationPath)
-		  {
-
-			   foreach (var folder in ViewModelLocator.CacheViewModel.Details.SourceFolders)//ScreenshotsDetails.Folders)
+			   foreach (FolderInfo item in ScreenshotsDetails.Folders)
 			   {
-					String locationToSaveFilename = saveLocationPath + "\\" + folder.FolderInfo.Name + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".png";
-					OpenFolder(folder.FolderInfo.FullPath);
-
-					// Make the folder to stay open
-					await Task.Delay(500);
-
-					await Task.Run(() => { TakeScreenshot(locationToSaveFilename); });
-					CloseFolder(folder.FolderInfo.FullPath);
-			   }
-		  }
-
-		  public async void PerformAllCaptures()
-		  {
-			   string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
-			   string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
-
-			   CreateDirectory(mainSaveFolder);
-
-			   CreateDirectory(saveScreenshootesLocationFolder);
-
-			   await CaptureDesktopAsync(saveScreenshootesLocationFolder);
-
-			   await CaptureFoldersAsync(saveScreenshootesLocationFolder);
-		  }
-
-		  private void TakeScreenshot(string saveLocationPath)
-		  {
-			   double screenLeft = 0;
-			   double screenTop = 0;
-			   double screenWidth = SystemParameters.PrimaryScreenWidth;
-			   double screenHeight = SystemParameters.PrimaryScreenHeight;
-
-			   using (Bitmap bmp = new Bitmap((int)screenWidth,(int)screenHeight))
-			   {
-					using (Graphics g = Graphics.FromImage(bmp))
+					if (!Directory.Exists(item.FullPath))
 					{
-						 g.CopyFromScreen((int)screenLeft, (int)screenTop, 0, 0, bmp.Size);
-						 bmp.Save(saveLocationPath);
+						 _DialogService.ShowMessageBox(item.FullPath + " can not be found!");
+						 return false;
 					}
+
+			   }
+
+			   if (!Directory.Exists(ScreenshotsDetails.DestinationFolder))
+			   {
+					_DialogService.ShowMessageBox(ScreenshotsDetails.DestinationFolder + " can not be found!");
+					return false;
+			   }
+
+			   return true;
+		  }
+
+		  public async void StartCaptureScreenshots()
+		  {
+			   if (ValidateScreenshotsDetails())
+			   {
+					string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
+					string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
+
+
+
+					Helpers.CreateDirectoryIfNotExist(mainSaveFolder);
+
+					Helpers.CreateDirectoryIfNotExist(saveScreenshootesLocationFolder);
+
+					await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
+
+
+					await ScreenshotsDetails.CaptureFoldersAsync(saveScreenshootesLocationFolder);
 			   }
 		  }
+
+
 	 }
 }
