@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace BackupSoftware.Core
@@ -60,8 +61,9 @@ namespace BackupSoftware.Core
 			   // Iterate through all of the folders that are already in our data
 			   for (int i = 0; i < SourceFolders.Count; ++i)
 			   {
-					var exisitingFolderToBackup = SourceFolders[i].FolderInfo.FullPath.ToString();
-					if (ViewModelLocator.CacheViewModel.Details.FindFolderItemByString(SourceFolders, newFolder) != null)
+					var exisitingFolderToBackup = SourceFolders[i].FolderInfo.FullPath;
+
+					if (SourceFolders.Where(sf => sf.FolderInfo.FullPath == newFolder).FirstOrDefault() != null)
 					{
 						 _DialogService.ShowMessageBox(newFolder + " already exists in the list!");
 						 return false;

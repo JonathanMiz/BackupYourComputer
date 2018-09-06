@@ -28,6 +28,7 @@ namespace BackupSoftware.Core
 		  public ICommand StartCaptureScreenshotsCommand { get; set; }
 		  public ICommand BrowseDestFolderCommand { get; set; }
 		  public ICommand BrowseFoldersToScreenshotCommand { get; set; }
+		  public ICommand RemoveItemCommand { get; set; }
 
 		  public ScreenshotsViewModel(IDialogService dialogService)
 		  {
@@ -37,26 +38,30 @@ namespace BackupSoftware.Core
 			   BrowseDestFolderCommand = new RelayCommand(BrowseDestFolder);
 			   BrowseFoldersToScreenshotCommand = new RelayCommand(BrowseFoldersToScreenshot);
 
-			   
-			   
+			   RemoveItemCommand = new RelayParameterizedCommand<string>(RemoveItem);
+		  }
+
+		  private void RemoveItem(string folderName)
+		  {
+			   if (_DialogService.ShowYesNoMessageBox("Are you sure you want to delete the folder from the list?", "Are you sure?"))
+			   {
+					var item = ScreenshotsDetails.Folders.Where(f => f.FullPath == folderName).FirstOrDefault();
+
+					if (item != null)
+					{
+						 ScreenshotsDetails.Folders.Remove(item);
+					}
+					// TODO: Handle the case when item is null
+			   }
+
+
 		  }
 
 		  private bool ValidateFolders(string newFolder)
 		  {
 			   var Folders = ScreenshotsDetails.Folders;
 
-			   // Iterate through all of the folders that are already in our data
-			   for (int i = 0; i < Folders.Count; ++i)
-			   {
-					var exisitingFolder = Folders[i].FullPath.ToString();
-					if (exisitingFolder == newFolder)
-					{
-						 _DialogService.ShowMessageBox(newFolder + " already exists in the list!");
-						 return false;
-					}
-			   }
-
-			   return true;
+			   return (Folders.Where(f => f.FullPath == newFolder) != null);
 		  }
 
 		  private void BrowseFoldersToScreenshot()

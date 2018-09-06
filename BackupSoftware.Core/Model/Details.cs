@@ -98,7 +98,8 @@ namespace BackupSoftware.Core
 		  {
 
 			   // Find the item by the name of the folder
-			   SourceFolder item = FindFolderItemByString(SourceFolders, folder);
+			   SourceFolder item = SourceFolders.Where(sf => sf.FolderInfo.FullPath == folder).FirstOrDefault();
+
 
 			   // Check if the item was found
 			   if (item != null)
@@ -106,25 +107,6 @@ namespace BackupSoftware.Core
 					// Remove the item from the list
 					SourceFolders.Remove(item);
 			   }
-		  }
-
-		  /// <summary>
-		  /// Finds FolderListItem by folder name
-		  /// </summary>
-		  /// <param name="Folders"></param>
-		  /// <param name="folder"></param>
-		  /// <returns></returns>
-		  public SourceFolder FindFolderItemByString(ObservableCollection<SourceFolder> Folders, string folder)
-		  {
-			   for (int i = 0; i < Folders.Count; ++i)
-			   {
-					SourceFolder item = Folders[i];
-					if (item.FolderInfo.FullPath == folder)
-					{
-						 return item;
-					}
-			   }
-			   return null;
 		  }
 	 }
 }

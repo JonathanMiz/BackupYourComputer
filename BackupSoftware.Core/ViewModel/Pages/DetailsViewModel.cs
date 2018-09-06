@@ -171,6 +171,8 @@ namespace BackupSoftware.Core
 		  {
 			   if (!DisplayViewModel.IsBackupRunning)
 			   {
+					_DialogService.ShowMessageBox("Make sure all the folders aren't in use of other softwares, so all the information will be transfered properly.");
+
 					if (_DialogService.ShowYesNoMessageBox("Are you sure you want to start the backup?", "Question"))
 					{
 						 // Validate user input

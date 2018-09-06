@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,6 +39,12 @@ namespace BackupSoftware.Core
 			   set { if (_DestinationFolder == value) return; _DestinationFolder = value; OnPropertyChanged(nameof(DestinationFolder)); }
 		  }
 
+		  [DllImport("user32.dll", SetLastError = true)]
+		  internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+
+		  [DllImport("user32.dll")]
+		  private extern static bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+
 		  public void OpenFolder(string folderName)
 		  {
 			   ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -46,6 +53,8 @@ namespace BackupSoftware.Core
 			   startInfo.WindowStyle = ProcessWindowStyle.Maximized;
 
 			   Process proc = Process.Start(startInfo);
+
+			   MoveWindow(proc.MainWindowHandle, 0, 0, 0, 0, true);
 		  }
 
 		  public void CloseFolder(string folderName)
@@ -111,6 +120,9 @@ namespace BackupSoftware.Core
 					}
 			   }
 		  }
+
+		  
+
 		  public event PropertyChangedEventHandler PropertyChanged;
 
 		  private void OnPropertyChanged(string propertyName)

@@ -26,6 +26,7 @@
 	8. Unit tests
 	9. Tray icon?
 	10. Lots of code duplication in ScreenshotsViewModel and DetailsViewModel(Validatefolder, selectfolder, selectfolders)
+	11. When exit from the window check if the backup is running
 	
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
@@ -66,4 +67,4 @@
 		3. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
 		
 	Working right now: 
-		1. Create some basic UI for the user to choose folders to take screenshots and maybe where to save the images
+		1. Fixing the find item in select source view model

@@ -36,21 +36,36 @@
                               >
                                              <ListView.ItemTemplate>
                                                   <DataTemplate>
-                                                       <StackPanel Grid.Column="0"  Orientation="Vertical">
-                                                            <StackPanel Orientation="Horizontal" Margin="6 0 0 0">
-                                                                 <Image Source="/Images/icon_folder.png" Width="30"/>
+                                                            <Grid>
+                                                                 <Grid.ColumnDefinitions>
+                                                                      <ColumnDefinition Width="Auto" />
+                                                                      <ColumnDefinition Width="*" />
+                                                                      <ColumnDefinition Width="Auto" />
+                                                                 </Grid.ColumnDefinitions>
+                                                                 <Image Grid.Column="0" Source="/Images/icon_folder.png" Width="30"/>
                                                                  <TextBlock
-                                                  Text="{Binding FullPath, FallbackValue=C:/Jonathan/Test}"
-                                                  HorizontalAlignment="Left"
-                                                  Foreground="Black"
-                                                  TextTrimming="CharacterEllipsis"
-                                                  Padding="10">
+                                                                      Grid.Column="1"
+                                                                      Text="{Binding FullPath, FallbackValue=C:/User/Test}"
+                                                                      HorizontalAlignment="Left"
+                                                                      Foreground="Black"
+                                                                      TextTrimming="CharacterEllipsis"
+                                                                      Padding="10">
                                                                  </TextBlock>
-                                                            </StackPanel>
-
-                                                       </StackPanel>
+                                                                 <Button
+                                                                      Grid.Column="2"
+                                                                      Content="X"
+                                                                      HorizontalAlignment="Right"
+                                                                      Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                                      CommandParameter="{Binding FullPath}"
+                                                                      Padding="10" Margin="0 0 0 0"
+                                                                      Style="{StaticResource HoverlessButton}"
+                                                                      Foreground="Red"
+                                                                      FontSize="20"
+                                                                      />
+                                                            </Grid>
                                                   </DataTemplate>
                                              </ListView.ItemTemplate>
+                                             
                                         </ListView>
                                    </StackPanel>
                               </Border>
