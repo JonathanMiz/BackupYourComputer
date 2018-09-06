@@ -16,12 +16,10 @@ namespace BackupSoftware.Core
 {
 	 public class ScreenshotsViewModel : ViewModelBase
 	 {
-		  private ScreenshotsDetails _ScreenshotsDetails;
-
 		  public ScreenshotsDetails ScreenshotsDetails
 		  {
-			   get { return _ScreenshotsDetails; }
-			   set { _ScreenshotsDetails = value; }
+			   get { return ViewModelLocator.CacheViewModel.ScreenshotsDetails; }
+			   set { ViewModelLocator.CacheViewModel.ScreenshotsDetails = value; }
 		  }
 
 
@@ -39,13 +37,8 @@ namespace BackupSoftware.Core
 			   BrowseDestFolderCommand = new RelayCommand(BrowseDestFolder);
 			   BrowseFoldersToScreenshotCommand = new RelayCommand(BrowseFoldersToScreenshot);
 
-
-			   // Temporary: Only for testing the logic
-			   _ScreenshotsDetails = new ScreenshotsDetails()
-			   {
-					IsCaptureDesktop = true,
-					DestinationFolder = "H://",
-			   };
+			   
+			   
 		  }
 
 		  private bool ValidateFolders(string newFolder)
@@ -86,7 +79,7 @@ namespace BackupSoftware.Core
 		  {
 			   var result = _DialogService.SelectFolder("Choose destination folder", Environment.GetFolderPath(Environment.SpecialFolder.MyComputer));
 			   if (result != null)
-					_ScreenshotsDetails.DestinationFolder = result;
+					ScreenshotsDetails.DestinationFolder = result;
 		  }
 
 		  private bool ValidateScreenshotsDetails()

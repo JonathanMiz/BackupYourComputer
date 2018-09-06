@@ -61,11 +61,9 @@
 		4. In the add of the backup show a log of the things that were backed up successfuly and those who don't.
 		
 	Screenshots Page:
-		1. Create some basic UI for the user to choose folders to take screenshots and maybe where to save the images
-		2. Create service from taking image function
-		3. Advanced: have an option to let the user decide the area of taking screenshots like in ActivePresetner
-		4. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
-		5. Save data to json file
+		1. Create service from taking image function
+		2. Advanced: have an option to let the user decide the area of taking screenshots like in ActivePresetner
+		3. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
 		
 	Working right now: 
 		1. Create some basic UI for the user to choose folders to take screenshots and maybe where to save the images

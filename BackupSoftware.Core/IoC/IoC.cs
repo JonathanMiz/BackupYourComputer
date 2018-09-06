@@ -23,6 +23,7 @@ namespace BackupSoftware.Core
 			   // Binding IDialogService to WindowDialogService, so ninject could instantiate WindowDialogService whenever
 			   // IDialogService is a dependency of some class constructor
 			   Kernel.Bind<IDetailsDataService>().To<JsonDetailsDataService>();
+			   Kernel.Bind<IScreenshotsDetailsDataService>().To<JsonScreenshotsDetailsDataService>();
 
 			   // Bind to a single instance of Application view model
 			   Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
