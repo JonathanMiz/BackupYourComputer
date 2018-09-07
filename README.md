@@ -1,7 +1,7 @@
 # BackupYourComputer
 A software that backs up your requested folders and files to hard drive you choose, and also allows you to take screenshots of your computer to restore your computer in the best way possible in case of losing all you information with C# WPF
 
-![alt text](https://github.com/JohnMiz/BackupYourComputer/blob/designreadme/backupPage.png "Backup Page")
+![alt text](https://github.com/JohnMiz/BackupYourComputer/blob/master/backupPage.png "Backup Page")
 ---
 
 ## Features
