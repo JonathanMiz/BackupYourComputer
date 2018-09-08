@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackupSoftware.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -39,11 +40,12 @@ namespace BackupSoftware.Core
 			   set { if (_DestinationFolder == value) return; _DestinationFolder = value; OnPropertyChanged(nameof(DestinationFolder)); }
 		  }
 
-		  [DllImport("user32.dll", SetLastError = true)]
-		  internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+		  private ITakeScreenshotService _TakeScreenshotService;
 
-		  [DllImport("user32.dll")]
-		  private extern static bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+		  public ScreenshotsDetails()
+		  {
+			   _TakeScreenshotService = IoC.Get<ITakeScreenshotService>();
+		  }
 
 		  public void OpenFolder(string folderName)
 		  {
@@ -51,10 +53,9 @@ namespace BackupSoftware.Core
 			   startInfo.FileName = "explorer.exe";
 			   startInfo.Arguments = folderName;
 			   startInfo.WindowStyle = ProcessWindowStyle.Maximized;
-
+			   
 			   Process proc = Process.Start(startInfo);
 
-			   MoveWindow(proc.MainWindowHandle, 0, 0, 0, 0, true);
 		  }
 
 		  public void CloseFolder(string folderName)
@@ -84,7 +85,7 @@ namespace BackupSoftware.Core
 					await Task.Delay(200);
 
 					String filename = screenshotsFolderPath + "\\Desktop_" + DateTime.Now.ToString("dd_MM_yyyy") + ".png";
-					TakeAndSaveScreenshot(filename);
+					_TakeScreenshotService.TakeAndSaveScreenshot(filename);
 			   }
 		  }
 
@@ -97,31 +98,14 @@ namespace BackupSoftware.Core
 					OpenFolder(folder.FullPath);
 
 					// Giving the folder time to be loaded properly
-					await Task.Delay(650);
+					await Task.Delay(750);
 
-					await Task.Run(() => { TakeAndSaveScreenshot(locationToSaveScreenshot); });
+					await Task.Run(() => { _TakeScreenshotService.TakeAndSaveScreenshot(locationToSaveScreenshot); });
 					CloseFolder(folder.FullPath);
 			   }
 		  }
 
-		  public void TakeAndSaveScreenshot(string screenshotPath)
-		  {
-			   double screenLeft = 0;
-			   double screenTop = 0;
-			   double screenWidth = SystemParameters.PrimaryScreenWidth;
-			   double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-			   using (Bitmap bmp = new Bitmap((int)screenWidth, (int)screenHeight))
-			   {
-					using (Graphics g = Graphics.FromImage(bmp))
-					{
-						 g.CopyFromScreen((int)screenLeft, (int)screenTop, 0, 0, bmp.Size);
-						 bmp.Save(screenshotPath);
-					}
-			   }
-		  }
-
-		  
 
 		  public event PropertyChangedEventHandler PropertyChanged;
 

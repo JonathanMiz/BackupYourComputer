@@ -61,6 +61,7 @@
     <Compile Include="Services\IScreenshotsDetailsDataService.cs" />
     <Compile Include="Services\IDetailsDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\ITakeScreenshotService.cs" />
     <Compile Include="Services\JsonScreenshotsDetailsDataService.cs" />
     <Compile Include="Services\JsonDetailsDataService.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />

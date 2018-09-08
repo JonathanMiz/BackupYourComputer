@@ -57,7 +57,7 @@ namespace BackupSoftware.Core
 
 		  }
 
-		  private bool ValidateFolders(string newFolder)
+		  private bool IsFolderInList(string newFolder)
 		  {
 			   var Folders = ScreenshotsDetails.Folders;
 
@@ -72,7 +72,7 @@ namespace BackupSoftware.Core
 			   {
 					foreach (var folder in newFoldersToBackup)
 					{
-						 if (ValidateFolders(folder))
+						 if (IsFolderInList(folder))
 						 {
 							  ScreenshotsDetails.Folders.Add(new FolderInfo(folder));
 						 }
@@ -123,19 +123,23 @@ namespace BackupSoftware.Core
 		  {
 			   if (ValidateScreenshotsDetails())
 			   {
-					string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
-					string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
+					_DialogService.ShowMessageBox("Make sure your folders are opening in the primary screen!");
+					if (_DialogService.ShowYesNoMessageBox("Are you ready to start?", "Are you ready?"))
+					{
+						 string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
+						 string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
 
 
 
-					Helpers.CreateDirectoryIfNotExist(mainSaveFolder);
+						 Helpers.CreateDirectoryIfNotExist(mainSaveFolder);
 
-					Helpers.CreateDirectoryIfNotExist(saveScreenshootesLocationFolder);
+						 Helpers.CreateDirectoryIfNotExist(saveScreenshootesLocationFolder);
 
-					await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
+						 await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
 
 
-					await ScreenshotsDetails.CaptureFoldersAsync(saveScreenshootesLocationFolder);
+						 await ScreenshotsDetails.CaptureFoldersAsync(saveScreenshootesLocationFolder);
+					}
 			   }
 		  }
 

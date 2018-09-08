@@ -117,7 +117,7 @@
                <!--<RowDefinition Height="Auto"/>-->
           </Grid.RowDefinitions>
 
-          <Border Grid.Row="0"  Background="#dcdde1" Height="30">
+          <Border Grid.Row="0"  Background="#dcdde1" Height="40">
                <TextBlock Text="Screenshots"
                           FontSize="20"
                           Margin="10 0 0 0"
@@ -153,13 +153,13 @@
 
           <Border Grid.Row="2"  Background="#dcdde1" Height="50">
                <Button
-                            Style="{StaticResource CustomButton}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                              Width="200"
-                            Height="45"
-                            Content="Take Screenshots"
-                            Command="{Binding StartCaptureScreenshotsCommand}" />
+                    Style="{StaticResource CustomButton}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="200"
+                    Height="40"
+                    Content="Take Screenshots"
+                    Command="{Binding StartCaptureScreenshotsCommand}" />
           </Border>
      </Grid>
 </UserControl>

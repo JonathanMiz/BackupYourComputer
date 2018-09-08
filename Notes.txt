@@ -52,19 +52,18 @@
 	
 		1. Show the size of the total backup?
 		2. Save the file names that raised and execption to let the user know what was'nt backed up?
-		3. Message to the user, that folders will not be used by other softwares
 		
 	DisplayBackup Page
 	
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		2. Show how many items were in the begining of the backup
 		3. Option to pause and resume a folder's backup
-		4. In the add of the backup show a log of the things that were backed up successfuly and those who don't.
+		4. In the end of the backup show a log of the things that were backed up successfuly and those who don't.
+		5. What if the file size in the same as before the backup????
+		6. Save the backup details to the json file after the user is choosing new folders or new destination
 		
 	Screenshots Page:
-		1. Create service from taking image function
-		2. Advanced: have an option to let the user decide the area of taking screenshots like in ActivePresetner
-		3. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
+		1. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
 		
 	Working right now: 
-		1. Fixing the find item in select source view model
+		1. 

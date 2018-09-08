@@ -78,6 +78,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Services\WindowsDialogService.cs" />
+    <Compile Include="Services\WindowsTakeScreenshot.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Views\Pages\ScreenshotsView.xaml.cs">
       <DependentUpon>ScreenshotsView.xaml</DependentUpon>

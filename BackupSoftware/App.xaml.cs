@@ -28,6 +28,7 @@ namespace BackupSoftware
 
 			   // Bind Windows specific dialog service
 			   IoC.Kernel.Bind<IDialogService>().To<WindowsDialogService>();
+			   IoC.Kernel.Bind<ITakeScreenshotService>().To<WindowsTakeScreenshot>();
 
 			   // Setup IoC
 			   IoC.Setup();
