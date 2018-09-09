@@ -183,6 +183,7 @@ namespace BackupSoftware.Core
 			   if (newFoldersToBackup != null)
 			   {
 					ValidateAndAddFolders(newFoldersToBackup);
+					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 
@@ -218,6 +219,7 @@ namespace BackupSoftware.Core
 			   if (_DialogService.ShowYesNoMessageBox("Are you sure you want to remove all the items?", "Question"))
 			   {
 					ViewModelLocator.CacheViewModel.Details.SourceFolders.Clear();
+					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 

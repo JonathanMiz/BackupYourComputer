@@ -104,7 +104,10 @@ namespace BackupSoftware.Core
 			   string folder = _DialogService.SelectFolder("Choose folder to backup in hard drive", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
 			   if (folder != null)
+			   {
 					Details.DestFolder = folder;
+					ViewModelLocator.CacheViewModel.Save();
+			   }
 
 		  }
 
