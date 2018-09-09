@@ -232,5 +232,9 @@
       <Name>BackupSoftware.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\checked_checkbox.png" />
+    <Resource Include="Images\unchecked_checkbox.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

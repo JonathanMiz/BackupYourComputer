@@ -121,6 +121,32 @@
                </Trigger>
           </Style.Triggers>
      </Style>
-    
+
+     <!-- customCheckboxStyle -->
+     <Style TargetType="{x:Type CheckBox}" x:Key="customCheckboxStyle">
+          <Setter Property="Template">
+               <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                         <StackPanel Orientation="Horizontal">
+                              <Image x:Name="checkboxImage" Source="/BackupSoftware;component/Images/unchecked_checkbox.png" Width="16"/>
+                              <ContentPresenter VerticalAlignment="Center" Margin="5 0 0 0"/>
+                         </StackPanel>
+                         <ControlTemplate.Triggers>
+                              <Trigger Property="IsChecked" Value="True">
+                                   <Setter TargetName="checkboxImage" Property="Source" Value="/BackupSoftware;component/Images/checked_checkbox.png"/>
+                              </Trigger>
+                              <MultiTrigger>
+                                   <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="False"/>
+                                   </MultiTrigger.Conditions>
+                                   <!--<Setter TargetName="checkboxImage" Property="Source" Value="hover_image.png"/>-->
+                              </MultiTrigger>
+                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+               </Setter.Value>
+          </Setter>
+     </Style>
+
 
 </ResourceDictionary>

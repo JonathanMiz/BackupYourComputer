@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:BackupSoftware"
              mc:Ignorable="d" d:DesignWidth="800" Height="150" 
              >
+     
      <Border>
 
           <Grid>

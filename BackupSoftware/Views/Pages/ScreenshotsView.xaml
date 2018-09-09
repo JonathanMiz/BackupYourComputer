@@ -9,6 +9,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
      <UserControl.Resources>
+
+
           <Style x:Key="ChooseFolderButton" TargetType="{x:Type Button}">
                <Setter Property="Background" Value="White" />
                <Setter Property="Template">
@@ -28,7 +30,8 @@
                                                    Margin="0 5 0 3" FontWeight="Bold"
                                                    />
                                         <CheckBox  Content="Capture Desktop"
-                                             IsChecked="{Binding ScreenshotsDetails.IsCaptureDesktop, Mode=TwoWay}" />
+                                             IsChecked="{Binding ScreenshotsDetails.IsCaptureDesktop, Mode=TwoWay}"
+                                                   Style="{StaticResource customCheckboxStyle}"/>
 
                                         <ListView Grid.Column="0"
                                              ItemsSource="{Binding ScreenshotsDetails.Folders}"
@@ -107,7 +110,8 @@
                     </Setter.Value>
                </Setter>
           </Style>
-     </UserControl.Resources>
+
+          </UserControl.Resources>
      
      <Grid Background="#f5f6fa">
           <Grid.RowDefinitions>

@@ -31,8 +31,9 @@
 	Things to understand better:
 		1. Ninject -> Service locator, NinjectModule
 		2. StoryBoard
-		5. Fody weavers
-		7. Understand why Json initialized to null
+		3. Fody weavers
+		4. Understand why Json initialized to null
+		5. Async await
 		
 	Aesthetics:
 	
@@ -60,7 +61,6 @@
 		3. Option to pause and resume a folder's backup
 		4. In the end of the backup show a log of the things that were backed up successfuly and those who don't.
 		5. What if the file size in the same as before the backup????
-		6. Save the backup details to the json file after the user is choosing new folders or new destination
 		
 	Screenshots Page:
 		1. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)

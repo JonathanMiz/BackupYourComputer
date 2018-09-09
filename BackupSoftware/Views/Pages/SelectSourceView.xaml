@@ -27,8 +27,8 @@
                <StackPanel  Margin="20">
 
                     <Grid>
-                    <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
-                    <Button Content="Remove all"  Command="{Binding RemoveAllItemsCommand}"
+                         <Label Content="List of folders:" Style="{StaticResource LabelStyle}"/>
+                         <Button Content="Remove all"  Command="{Binding RemoveAllItemsCommand}"
                             HorizontalAlignment="Right"
                             Style="{StaticResource CustomButton}"/>
                     </Grid>
@@ -62,10 +62,12 @@
                                                                                       Padding="10">
                                                                                 </TextBlock>
                                                                            </StackPanel>
-                                                                           <CheckBox Content="Delete previous files" 
-                                                                           IsChecked="{Binding DeletePrevContent}"
-                                                                           x:Name ="DeletePrevContent"
-                                                                           Margin="10 0"/>
+                                                                           <CheckBox 
+                                                                                Style="{StaticResource customCheckboxStyle}"
+                                                                                Content="Delete previous files" 
+                                                                                IsChecked="{Binding DeletePrevContent}"
+                                                                                Margin="10 0"
+                                                                           />
                                                                       </StackPanel>
 
 
