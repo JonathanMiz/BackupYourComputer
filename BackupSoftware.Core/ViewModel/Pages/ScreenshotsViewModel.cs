@@ -72,11 +72,17 @@ namespace BackupSoftware.Core
 			   {
 					foreach (var folder in newFoldersToBackup)
 					{
-						 if (IsFolderInList(folder))
+						 if (!IsFolderInList(folder))
 						 {
 							  ScreenshotsDetails.Folders.Add(new FolderInfo(folder));
+
+						 }
+						 else
+						 {
+							  _DialogService.ShowMessageBox($"Folder {folder} already exists in the list!");
 						 }
 					}
+					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 
@@ -84,7 +90,10 @@ namespace BackupSoftware.Core
 		  {
 			   var result = _DialogService.SelectFolder("Choose destination folder", Environment.GetFolderPath(Environment.SpecialFolder.MyComputer));
 			   if (result != null)
+			   {
 					ScreenshotsDetails.DestinationFolder = result;
+					ViewModelLocator.CacheViewModel.Save();
+			   }
 		  }
 
 		  private bool ValidateScreenshotsDetails()
@@ -129,14 +138,11 @@ namespace BackupSoftware.Core
 						 string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
 						 string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
 
-
-
 						 Helpers.CreateDirectoryIfNotExist(mainSaveFolder);
 
 						 Helpers.CreateDirectoryIfNotExist(saveScreenshootesLocationFolder);
 
 						 await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
-
 
 						 await ScreenshotsDetails.CaptureFoldersAsync(saveScreenshootesLocationFolder);
 					}

@@ -37,7 +37,13 @@ namespace BackupSoftware.Core
 		  public string DestinationFolder
 		  {
 			   get { return _DestinationFolder; }
-			   set { if (_DestinationFolder == value) return; _DestinationFolder = value; OnPropertyChanged(nameof(DestinationFolder)); }
+			   set
+			   {
+					if (_DestinationFolder == value)
+						 return;
+					_DestinationFolder = value;
+					OnPropertyChanged(nameof(DestinationFolder));
+			   }
 		  }
 
 		  private ITakeScreenshotService _TakeScreenshotService;
@@ -114,6 +120,7 @@ namespace BackupSoftware.Core
 			   if(PropertyChanged != null)
 			   {
 					PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 	 }

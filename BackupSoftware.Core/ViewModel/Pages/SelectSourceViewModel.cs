@@ -23,6 +23,7 @@ namespace BackupSoftware.Core
 					ViewModelLocator.CacheViewModel.Details.SourceFolders = value;
 			   }
 		  }
+		  
 
 		  /// <summary>
 		  /// Dialog service to display messages to the screen
@@ -194,6 +195,9 @@ namespace BackupSoftware.Core
 		  {
 			   SourceFoldersText = ExtractFolderNames();
 
+			   // Save all the new content
+			   ViewModelLocator.CacheViewModel.Save();
+
 			   ViewModelLocator.ApplicationViewModel.GoToView(ViewModelLocator.DetailsViewModel);
 		  }
 
@@ -231,6 +235,7 @@ namespace BackupSoftware.Core
 			   if (_DialogService.ShowYesNoMessageBox("Are you sure you want to remove this folder?", "Question"))
 			   {
 					ViewModelLocator.CacheViewModel.Details.RemoveFolder(folderName);
+					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 	 }			  

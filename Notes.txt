@@ -41,7 +41,6 @@
 	2. Make custom scrollbar
 	3. Make a page style for all the pages
 	4. Make custom progress bar
-	5. Make custom checkbox
 
 	
 	Bugs/Fixes:
