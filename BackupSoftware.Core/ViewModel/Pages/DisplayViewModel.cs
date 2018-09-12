@@ -117,12 +117,10 @@ namespace BackupSoftware.Core
 		  private void SetItemsInformation()
 		  {
 			   // Getting all the infomation to Items
-			   foreach (var item in ViewModelLocator.CacheViewModel.Details.SourceFolders)
+			   foreach (var folder in ViewModelLocator.CacheViewModel.Details.SourceFolders)
 			   {
-					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(_DialogService, item)
-					{
-						 DestinationPath = $"{ViewModelLocator.CacheViewModel.Details.DestFolder}\\{item.FolderInfo.Name}"
-					};
+					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(_DialogService, folder,
+																				$"{ViewModelLocator.CacheViewModel.Details.DestFolder}\\{folder.FolderInfo.Name}");
 
 					DisplayItems.Add(displayItemControlViewModel);
 			   }
@@ -133,6 +131,9 @@ namespace BackupSoftware.Core
 		  {
 			   if (!IsBackupRunning)
 			   {
+					ReportFile.ClearLog();
+					ReportFile.WriteToLog($"Starting report...");
+
 					// In the begining the backup is not yet started
 					IsBackupDone = false;
 

@@ -40,11 +40,14 @@
                          </StackPanel>
                          <StackPanel Orientation="Horizontal">
                               <TextBlock Text="Status:" FontFamily="Segoe UI Light" />
-                              <Viewbox>
-                                   <StackPanel Orientation="Vertical" Width="Auto">
-                                        <TextBlock Text="{Binding State}" TextWrapping="Wrap" Margin="5 0" Width="Auto"/>
-                                   </StackPanel>
-                              </Viewbox>
+
+                                   <TextBlock Text="{Binding State}"            
+                                                   Margin="5 0"
+                                              TextWrapping="Wrap"
+                                              Width="650"
+                                              />
+                                   
+
                          </StackPanel>
                     </StackPanel>
                     <!--<ScrollViewer Grid.Column="2">

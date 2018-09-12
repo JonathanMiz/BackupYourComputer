@@ -43,7 +43,7 @@ namespace BackupSoftware.Core
 		  /// <summary>
 		  /// Reference to <see cref="CacheViewModel.Details"/>
 		  /// </summary>
-		  public Details Details
+		  public BackupDetails Details
 		  {
 			   get
 			   {
@@ -60,10 +60,6 @@ namespace BackupSoftware.Core
 		  {
 			   get { if (Details.LastBackupTime == new DateTime()) return "No backup history."; else return Details.LastBackupTime.ToString("HH:mm:ss dd/MM/yyyy"); }
 		  }
-
-		  #endregion
-
-		  #region Helpers
 
 		  #endregion
 
@@ -138,37 +134,6 @@ namespace BackupSoftware.Core
 			   }
 		  }
 		  
-		  /// <summary>
-		  /// Validates if the user gave right input
-		  /// </summary>
-		  private bool ValidateUserInput(Details details)
-		  {
-			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(details.DestFolder) || details.SourceFolders.Count == 0)
-			   {
-					_DialogService.ShowMessageBox("Fill in the list of folder and hard drive!");
-					return false;
-			   }
-
-			   // Check to see if the folders exists
-			   foreach (SourceFolder item in details.SourceFolders)
-			   {
-					if (!Directory.Exists(item.FolderInfo.FullPath))
-					{
-						 _DialogService.ShowMessageBox(item.FolderInfo.FullPath + " can not be found!");
-						 return false;
-					}
-
-			   }
-
-			   if (!Directory.Exists(details.DestFolder))
-			   {
-					_DialogService.ShowMessageBox(details.DestFolder + " can not be found!");
-					return false;
-			   }
-
-			   return true;
-		  }
 
 		  private void StartBackup()
 		  {
@@ -179,7 +144,7 @@ namespace BackupSoftware.Core
 					if (_DialogService.ShowYesNoMessageBox("Are you sure you want to start the backup?", "Question"))
 					{
 						 // Validate user input
-						 if (ValidateUserInput(Details))
+						 if (Details.Validate(_DialogService))
 						 {
 							  // Run the back up
 							  DisplayViewModel.RunBackup();

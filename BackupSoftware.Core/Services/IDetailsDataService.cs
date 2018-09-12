@@ -8,8 +8,8 @@ namespace BackupSoftware.Core.Services
 {
 	 public interface IDetailsDataService
 	 {
-		  Details GetDetails();
+		  BackupDetails GetDetails();
 
-		  void Save(Details details);
+		  void Save(BackupDetails details);
 	 }
 }

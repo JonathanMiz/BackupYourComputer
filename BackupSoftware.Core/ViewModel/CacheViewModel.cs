@@ -8,9 +8,9 @@ namespace BackupSoftware.Core
 	 public class CacheViewModel : ViewModelBase
 	 {
 
-		  private Details _Details;
+		  private BackupDetails _Details;
 
-		  public Details Details
+		  public BackupDetails Details
 		  {
 			   get { return _Details; }
 			   set { if (_Details == value) return; _Details = value; OnPropertyChanged(nameof(Details)); }

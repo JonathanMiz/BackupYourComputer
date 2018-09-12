@@ -61,7 +61,7 @@ namespace BackupSoftware.Core
 		  {
 			   var Folders = ScreenshotsDetails.Folders;
 
-			   return (Folders.Where(f => f.FullPath == newFolder) != null);
+			   return (Folders.Where(f => f.FullPath == newFolder).Count() > 0);
 		  }
 
 		  private void BrowseFoldersToScreenshot()
@@ -138,9 +138,9 @@ namespace BackupSoftware.Core
 						 string mainSaveFolder = ScreenshotsDetails.DestinationFolder + "\\Computer's screenshots\\";
 						 string saveScreenshootesLocationFolder = mainSaveFolder + "\\" + DateTime.Now.ToString("dd.MM.yyyy");
 
-						 Helpers.CreateDirectoryIfNotExist(mainSaveFolder);
+						 Helpers.CreateDirectoryIfNotExists(mainSaveFolder);
 
-						 Helpers.CreateDirectoryIfNotExist(saveScreenshootesLocationFolder);
+						 Helpers.CreateDirectoryIfNotExists(saveScreenshootesLocationFolder);
 
 						 await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
 

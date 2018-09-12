@@ -39,6 +39,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
@@ -53,11 +54,15 @@
   <ItemGroup>
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="IoC\IoC.cs" />
-    <Compile Include="Model\Details.cs" />
+    <Compile Include="Model\Backup.cs" />
+    <Compile Include="Model\FileBackup.cs" />
+    <Compile Include="Model\SourceDest.cs" />
+    <Compile Include="Model\BackupDetails.cs" />
     <Compile Include="Model\FolderInfo.cs" />
     <Compile Include="Model\ScreenshotsDetails.cs" />
     <Compile Include="Model\SourceFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportFile.cs" />
     <Compile Include="Services\IScreenshotsDetailsDataService.cs" />
     <Compile Include="Services\IDetailsDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
@@ -79,6 +84,7 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

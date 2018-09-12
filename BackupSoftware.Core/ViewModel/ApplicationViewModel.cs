@@ -32,12 +32,6 @@ namespace BackupSoftware.Core
 
 		  private double _ContentPresentorOpacity { get; set; } = 1.0f;
 
-		  public double ContentPresentorOpacity
-		  {
-			   get { return _ContentPresentorOpacity; }
-			   set { if (_ContentPresentorOpacity == value) return; _ContentPresentorOpacity = value; OnPropertyChanged(nameof(ContentPresentorOpacity)); }
-		  }
-
 
 		  public void GoToView(ViewModelBase ViewModel)
 		  {
@@ -50,13 +44,13 @@ namespace BackupSoftware.Core
 			   {
 					for(double i = 1.0; i > 0.0; i -= 0.1)
 					{
-						 ContentPresentorOpacity = i;
+						 _ContentPresentorOpacity = i;
 						 Thread.Sleep(10);
 					}
 					CurrentViewModel = ViewModel;
 					for (double i = 0.0; i < 1.1; i += 0.1)
 					{
-						 ContentPresentorOpacity = i;
+						 _ContentPresentorOpacity = i;
 						 Thread.Sleep(10);
 					}
 			   });

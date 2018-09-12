@@ -1,5 +1,6 @@
 ﻿using BackupSoftware.Core.Services;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -7,8 +8,6 @@ namespace BackupSoftware.Core
 {
 	 public class DisplayItemControlViewModel : ViewModelBase
 	 {
-		  //public static DisplayItemControlViewModel Instance => new DisplayItemControlViewModel(new SourceFolder("c:/jonathan/test"));
-
 		  #region Public Members
 
 		  /// <summary>
@@ -37,6 +36,7 @@ namespace BackupSoftware.Core
 		  /// </summary>
 		  public Progress<string> StateProgress { get; set; }
 
+
 		  /// <summary>
 		  /// True if the backup for the folder is done
 		  /// </summary>
@@ -45,14 +45,14 @@ namespace BackupSoftware.Core
 		  public bool IsBackupDone
 		  {
 			   get { return _IsBackupDone; }
-			   set { if (_IsBackupDone == value) return; _IsBackupDone = value; OnPropertyChanged(nameof(IsBackupDone));  }
+			   set { if (_IsBackupDone == value) return; _IsBackupDone = value; OnPropertyChanged(nameof(IsBackupDone)); }
 		  }
 
 
 		  /// <summary>
 		  /// Text to display the user with the current status
 		  /// </summary>
-		  private string _State { get; set; }
+		  private string _State { get; set; } = "";
 		  public string State
 		  {
 			   get
@@ -112,10 +112,12 @@ namespace BackupSoftware.Core
 
 		  #endregion
 
-		  public DisplayItemControlViewModel(IDialogService dialogService, SourceFolder sourceFolder)
+		  public DisplayItemControlViewModel(IDialogService dialogService, SourceFolder sourceFolder, string destPath)
 		  {
 			   _DialogService = dialogService;
 			   SourceFolder = sourceFolder;
+			   DestinationPath = destPath;
+
 
 			   ItemsProgress = new Progress<int>();
 			   ItemsProgress.ProgressChanged += ItemsProgress_ProgressChanged;
@@ -142,20 +144,25 @@ namespace BackupSoftware.Core
 		  /// </summary>
 		  /// <param name="itemsProgress"></param>
 		  /// <returns></returns>
-		  private async Task BackupOneDirAsync(IProgress<int> itemsProgress, IProgress<string> stateProgress)
+		  private async Task BackupOneDirAsync()
 		  {
 			   string source = SourceFolder.FolderInfo.FullPath;
 			   string dest = DestinationPath;
 			   string folderName = SourceFolder.FolderInfo.Name;
 
-			   CreateDirectoryAndReport(dest, stateProgress);
+			   IProgress<string> stateProgress = StateProgress as IProgress<string>;
+			   IProgress<int> itemsProgress = ItemsProgress as IProgress<int>;
+
+			   if (Helpers.CreateDirectoryIfNotExists(dest))
+			   {
+					stateProgress.Report($"Created new folder {dest}");
+			   }
 
 			   int count = 0;
 
 			   // Handling the top directories
-			   foreach (var dir in Directory.GetDirectories(source))
+			   foreach (var src in Directory.GetDirectories(source))
 			   {
-					string src = dir;
 					string name = Helpers.ExtractFileFolderNameFromFullPath(src);
 
 					// Refactor slashes
@@ -163,7 +170,7 @@ namespace BackupSoftware.Core
 
 					stateProgress.Report($"Start backing up {src} to { dst} {Environment.NewLine}");
 
-					await Task.Run(() => { Backup(src, dst, StateProgress); });
+					await Task.Run(() => { Backup(src, dst); });
 
 					stateProgress.Report($"End backing up {src} to { dst} {Environment.NewLine}");
 
@@ -176,13 +183,15 @@ namespace BackupSoftware.Core
 			   // Handling the top files
 			   foreach (var file in Directory.GetFiles(source))
 			   {
-					CopyFiles(dest, file, StateProgress);
+					BackupFile(dest, file);
 
 					count++;
 					itemsProgress.Report(count);
 			   }
 
-			   stateProgress.Report($"Backing up from {source} to {dest} have been completed successfuly!{Environment.NewLine}");
+			   string successMessage = $"Backing up from {source} to {dest} have been completed successfuly!";
+			   stateProgress.Report(successMessage);
+			   ReportFile.WriteToLog(successMessage);
 
 			   IsBackupDone = true;
 		  }
@@ -201,7 +210,7 @@ namespace BackupSoftware.Core
 					await Task.Run(() => { DeleteFilesFromBackup(DestinationPath, SourceFolder.FolderInfo.FullPath, StateProgress); });
 			   }
 
-			   await BackupOneDirAsync(ItemsProgress, StateProgress);
+			   await BackupOneDirAsync();
 		  }
 
 		  private void ReplaceFile(string sourceFile, string destFile)
@@ -210,11 +219,11 @@ namespace BackupSoftware.Core
 			   File.Copy(sourceFile, destFile);
 		  }
 
-		  private bool FileInDestModified(string DestFilePath, string SourceFilePath)
+		  private bool IsFileSizeInDestModified(string DestFilePath, string SourceFilePath)
 		  {
 			   FileInfo sourceFileInfo = new FileInfo(SourceFilePath);
 			   FileInfo destFileInfo = new FileInfo(DestFilePath);
-			   
+
 			   if (sourceFileInfo.Length != destFileInfo.Length)
 			   {
 					return true;
@@ -223,17 +232,41 @@ namespace BackupSoftware.Core
 			   return false;
 		  }
 
-		  private void CopyFiles(string destFolder, string fileToCopy, IProgress<string> stateProgress)
+		  private bool IsFileLastWriteTimeInDestModified(string DestFilePath, string SourceFilePath)
 		  {
+			   FileInfo sourceFileInfo = new FileInfo(SourceFilePath);
+			   FileInfo destFileInfo = new FileInfo(DestFilePath);
+
+			   if (sourceFileInfo.LastWriteTime != destFileInfo.LastWriteTime)
+			   {
+					return true;
+			   }
+
+			   return false;
+		  }
+
+		  private bool CheckIfFileModified(string destFolder, string fileToCopy)
+		  {
+			   return (IsFileSizeInDestModified(destFolder, fileToCopy) || IsFileLastWriteTimeInDestModified(destFolder, fileToCopy));
+		  }
+
+		  private void BackupFile(string destFolder, string fileToCopy)
+		  {
+			   IProgress<string> stateProgress = StateProgress as IProgress<string>;
+
 			   string DestFilePath = System.IO.Path.Combine(destFolder, Helpers.ExtractFileFolderNameFromFullPath(fileToCopy));
 
 			   if (File.Exists(DestFilePath))
 			   {
-					if(FileInDestModified(DestFilePath, fileToCopy))
+					if (CheckIfFileModified(DestFilePath, fileToCopy))
 					{
 						 ReplaceFile(fileToCopy, DestFilePath);
 
 						 stateProgress.Report($"The file {fileToCopy} has been modified, replacing it with new content in {DestFilePath}{Environment.NewLine}");
+					}
+					else
+					{
+						 stateProgress.Report($"The file {fileToCopy} already exists in {DestFilePath}{Environment.NewLine}");
 					}
 			   }
 			   else
@@ -246,47 +279,54 @@ namespace BackupSoftware.Core
 					catch (IOException excp)
 					{
 						 _DialogService.ShowMessageBox(excp.Message);
+						 ReportFile.WriteToLog(excp.Message);
 					}
 			   };
 		  }
 
-		  private void CreateDirectoryAndReport(string dest, IProgress<string> stateProgress)
-		  {
-			   if (!Directory.Exists(dest))
-			   {
-					Directory.CreateDirectory(dest);
-					stateProgress.Report($"Created new folder {dest}");
-			   }
-		  }
 
 		  /// <summary>
 		  /// Backups all the files and folders that in source to dest
 		  /// </summary>
 		  /// <param name="source"></param>
 		  /// <param name="dest"></param>
-		  private void Backup(string source, string dest, IProgress<string> stateProgress)
+		  private void Backup(string source, string dest)
 		  {
-
-			   CreateDirectoryAndReport(dest, stateProgress);
-
-			   foreach (var file in Directory.GetFiles(source))
+			   try
 			   {
-					CopyFiles(dest, file, stateProgress);
-			   }
+					IProgress<string> stateProgress = StateProgress as IProgress<string>;
 
-			   foreach (var dir in Directory.GetDirectories(source))
+					if (Helpers.CreateDirectoryIfNotExists(dest))
+					{
+						 stateProgress.Report($"Created new folder {dest}");
+					}
+
+					foreach (var file in Directory.GetFiles(source))
+					{
+						 BackupFile(dest, file);
+					}
+
+					foreach (var dir in Directory.GetDirectories(source))
+					{
+						 string fullDirPathInDst = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
+
+						 stateProgress.Report($"Backing up {dir} to {fullDirPathInDst}{Environment.NewLine}");
+
+						 Backup(dir, fullDirPathInDst);
+
+						 stateProgress.Report($"Ended backing up {dir} to {fullDirPathInDst}{Environment.NewLine}");
+					}
+
+					if (Directory.GetDirectories(source).Length == 0)
+						 return;
+			   }
+			   catch (Exception e)
 			   {
-					string fullDirPathInDst = System.IO.Path.Combine(dest, Helpers.ExtractFileFolderNameFromFullPath(dir));
-
-					stateProgress.Report($"Backing up {dir} to {fullDirPathInDst}{Environment.NewLine}");
-
-					Backup(dir, fullDirPathInDst, stateProgress);
-
-					stateProgress.Report($"Ended backing up {dir} to {fullDirPathInDst}{Environment.NewLine}");
-			   }
-
-			   if (Directory.GetDirectories(source).Length == 0)
+					Directory.Delete(dest);
+					_DialogService.ShowMessageBox(e.Message);
+					ReportFile.WriteToLog(e.Message);
 					return;
+			   }
 		  }
 
 		  /// <summary>
@@ -306,7 +346,7 @@ namespace BackupSoftware.Core
 					if (!File.Exists(fullFilePathInDest))
 					{
 						 stateProgress.Report($"Deleted {file}...");
-						 
+
 						 File.Delete(file);
 					}
 			   }
