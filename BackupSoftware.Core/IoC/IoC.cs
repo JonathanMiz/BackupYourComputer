@@ -24,6 +24,7 @@ namespace BackupSoftware.Core
 			   // IDialogService is a dependency of some class constructor
 			   Kernel.Bind<IDetailsDataService>().To<JsonDetailsDataService>();
 			   Kernel.Bind<IScreenshotsDetailsDataService>().To<JsonScreenshotsDetailsDataService>();
+			   Kernel.Bind<IBackupService>().To<BackupService>();
 
 			   // Bind to a single instance of Application view model
 			   Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());

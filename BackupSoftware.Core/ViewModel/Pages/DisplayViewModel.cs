@@ -63,6 +63,7 @@ namespace BackupSoftware.Core
 		  }
 
 		  private IDialogService _DialogService;
+		  private IBackupService _BackupService;
 
 		  #region Commands
 		  /// <summary>
@@ -89,7 +90,7 @@ namespace BackupSoftware.Core
 					Parallel.ForEach<DisplayItemControlViewModel>(DisplayItems, async (item) =>
 					{
 						 await item.StartBackup();
-						 if (item.IsBackupDone)
+						 if (item.BackupStatus.IsBackupDone)
 						 {
 							  count++;
 							  progress.Report(count);
@@ -100,6 +101,8 @@ namespace BackupSoftware.Core
 								   IsBackupDone = true;
 
 								   ViewModelLocator.CacheViewModel.Details.LastBackupTime = DateTime.Now;
+								   ReportFile.WriteToLog("Backup has ended successfully!");
+								   ReportFile.SaveToLog();
 
 								   // Redircet to details page
 								   GoToDetails();
@@ -119,8 +122,8 @@ namespace BackupSoftware.Core
 			   // Getting all the infomation to Items
 			   foreach (var folder in ViewModelLocator.CacheViewModel.Details.SourceFolders)
 			   {
-					DisplayItemControlViewModel displayItemControlViewModel = new DisplayItemControlViewModel(_DialogService, folder,
-																				$"{ViewModelLocator.CacheViewModel.Details.DestFolder}\\{folder.FolderInfo.Name}");
+					DisplayItemControlViewModel displayItemControlViewModel = 
+						 new DisplayItemControlViewModel(_DialogService, _BackupService, folder, $"{ViewModelLocator.CacheViewModel.Details.DestFolder}\\{folder.FolderInfo.Name}");
 
 					DisplayItems.Add(displayItemControlViewModel);
 			   }
@@ -132,7 +135,7 @@ namespace BackupSoftware.Core
 			   if (!IsBackupRunning)
 			   {
 					ReportFile.ClearLog();
-					ReportFile.WriteToLog($"Starting report...");
+					ReportFile.WriteToLog($"Starting backup...");
 
 					// In the begining the backup is not yet started
 					IsBackupDone = false;
@@ -145,9 +148,10 @@ namespace BackupSoftware.Core
 			   }
 		  }
 
-		  public DisplayViewModel(IDialogService dialogService)
+		  public DisplayViewModel(IDialogService dialogService, IBackupService backupService)
 		  {
 			   _DialogService = dialogService;
+			   _BackupService = backupService;
 
 			   DisplayItems = new List<DisplayItemControlViewModel>();
 

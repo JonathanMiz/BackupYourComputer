@@ -68,4 +68,4 @@
 		1. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
 		
 	Working right now: 
-		1. 
+		1. Refactor CopyFile function
