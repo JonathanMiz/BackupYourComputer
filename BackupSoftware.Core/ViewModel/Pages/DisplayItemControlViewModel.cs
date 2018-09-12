@@ -48,6 +48,7 @@ namespace BackupSoftware.Core
 			   DestinationPath = destPath;
 
 			   BackupStatus = new BackupStatus(_DialogService);
+			   BackupStatus.ItemsRemainingCounter = SourceFolder.FolderInfo.ItemsCount;
 		  }
 
 

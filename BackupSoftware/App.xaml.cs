@@ -39,9 +39,11 @@ namespace BackupSoftware
 
 		  protected override void OnExit(ExitEventArgs e)
 		  {
+
 			   base.OnExit(e);
 
 			   IoC.Get<CacheViewModel>().Save();
+
 		  }
 	 }
 }

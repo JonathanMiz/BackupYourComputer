@@ -1,5 +1,6 @@
 ﻿using BackupSoftware.Core.Services;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 
@@ -82,6 +83,9 @@ namespace BackupSoftware.Core
 		  /// The command to redirect to the display view
 		  /// </summary>
 		  public ICommand GoToDisplayCommand { get; set; }
+
+		  public ICommand ShowBackupReportCommand { get; set; }
+
 		  #endregion
 
 		  #region Command Functions
@@ -175,6 +179,12 @@ namespace BackupSoftware.Core
 			   GoToSelectSourceCommand = new RelayCommand(GoToSelectSource, (parameter) => { return !DisplayViewModel.IsBackupRunning; });
 			   StartBackupCommand = new RelayCommand(StartBackup);
 			   GoToDisplayCommand = new RelayCommand(GoToDisplay);
+			   ShowBackupReportCommand = new RelayCommand(() =>
+			   {
+					ProcessStartInfo info = new ProcessStartInfo(ReportFile.LogPath);
+					Process.Start(info);
+			   });
+
 		  }
 	 }
 }

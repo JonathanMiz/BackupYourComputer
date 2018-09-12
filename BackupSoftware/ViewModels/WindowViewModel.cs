@@ -1,4 +1,6 @@
 ﻿using BackupSoftware.Core;
+using BackupSoftware.Core.Services;
+using BackupSoftware.Services;
 using System.Windows;
 using System.Windows.Input;
 
@@ -106,7 +108,17 @@ namespace BackupSoftware
 
 		  public void CloseWindow()
 		  {
-			   m_Window.Close();
+			   if (!ViewModelLocator.CacheViewModel.IsBackupRunning)
+			   {
+					m_Window.Close();
+			   }
+			   else
+			   {
+					IDialogService dialogService = new WindowsDialogService();
+
+					dialogService.ShowMessageBox("Please wait until the backup is finished!");
+			   }
+
 		  }
 
 		  #endregion

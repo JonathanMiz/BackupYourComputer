@@ -24,6 +24,11 @@ namespace BackupSoftware.Core
 			   set { if (_ScreenshotsDetails == value) return; _ScreenshotsDetails = value; OnPropertyChanged(nameof(ScreenshotsDetails)); }
 		  }
 
+		  /// <summary>
+		  /// True if the backup is running
+		  /// </summary>
+		  public bool IsBackupRunning { get; set; } = false;
+
 		  private IDetailsDataService _DataService;
 		  private IScreenshotsDetailsDataService _ScreenshotsDataService;
 

@@ -100,11 +100,18 @@
                          <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                         <TextBlock HorizontalAlignment="Center" Text="Last Backup: " FontSize="15" FontWeight="Bold" />
-                         <TextBlock Text="{Binding LastBackupTimeText}" FontSize="15" />
+                    <StackPanel>
+                         <StackPanel Orientation="Horizontal"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center">
+                              <TextBlock HorizontalAlignment="Center" Text="Last Backup: " FontSize="15" FontWeight="Bold" />
+
+                              <TextBlock Text="{Binding LastBackupTimeText}" FontSize="15" />
+                         </StackPanel>
+                         <Button Content="Show last backup report"
+                                   HorizontalAlignment="Center"
+                                   Style="{StaticResource MouseHoverHoverlessButton}"
+                                   Command="{Binding ShowBackupReportCommand}"/>
                     </StackPanel>
                </Grid>
           </Border>

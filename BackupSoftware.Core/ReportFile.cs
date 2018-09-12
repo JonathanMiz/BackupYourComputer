@@ -9,7 +9,7 @@ namespace BackupSoftware.Core
 {
 	 public class ReportFile
 	 {
-		  private static string LogPath = "log.txt";
+		  public static string LogPath = "log.txt";
 
 		  private static string log = "";
 

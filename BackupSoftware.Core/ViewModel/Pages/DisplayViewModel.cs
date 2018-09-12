@@ -49,7 +49,12 @@ namespace BackupSoftware.Core
 		  /// <summary>
 		  /// True if the backup is running
 		  /// </summary>
-		  public bool IsBackupRunning { get; set; } = false;
+		  public bool IsBackupRunning
+		  {
+			   get { return ViewModelLocator.CacheViewModel.IsBackupRunning; }
+			   set { ViewModelLocator.CacheViewModel.IsBackupRunning = value; }
+		  }
+
 
 		  /// <summary>
 		  /// True if the overall backup is done
