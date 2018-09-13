@@ -24,15 +24,17 @@ namespace BackupSoftware.Core
 
 
 		  private IDialogService _DialogService;
+		  private ITakeScreenshotService _TakeScreenshotService;
 
 		  public ICommand StartCaptureScreenshotsCommand { get; set; }
 		  public ICommand BrowseDestFolderCommand { get; set; }
 		  public ICommand BrowseFoldersToScreenshotCommand { get; set; }
 		  public ICommand RemoveItemCommand { get; set; }
 
-		  public ScreenshotsViewModel(IDialogService dialogService)
+		  public ScreenshotsViewModel(IDialogService dialogService, ITakeScreenshotService takeScreenshotService)
 		  {
 			   _DialogService = dialogService;
+			   _TakeScreenshotService = takeScreenshotService;
 
 			   StartCaptureScreenshotsCommand = new RelayCommand(StartCaptureScreenshots);
 			   BrowseDestFolderCommand = new RelayCommand(BrowseDestFolder);
@@ -142,9 +144,9 @@ namespace BackupSoftware.Core
 
 						 Helpers.CreateDirectoryIfNotExists(saveScreenshootesLocationFolder);
 
-						 await ScreenshotsDetails.CaptureDesktopAsync(saveScreenshootesLocationFolder);
+						 await _TakeScreenshotService.CaptureDesktopAsync(saveScreenshootesLocationFolder, ScreenshotsDetails.IsCaptureDesktop);
 
-						 await ScreenshotsDetails.CaptureFoldersAsync(saveScreenshootesLocationFolder);
+						 await _TakeScreenshotService.CaptureFoldersAsync(saveScreenshootesLocationFolder, ScreenshotsDetails.Folders);
 					}
 			   }
 		  }

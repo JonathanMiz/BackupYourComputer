@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace BackupSoftware.Services
 {
-	 class WindowsDialogService : IDialogService
+	 public class WindowsDialogService : IDialogService
 	 {
 		  public string SelectFolder(string title, string initialDir = "")
 		  {

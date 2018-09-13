@@ -168,7 +168,9 @@ namespace BackupSoftware.Core
 		  /// <summary>
 		  /// Default Constructor
 		  /// </summary>
-		  public DetailsViewModel(IDialogService dialogService, SelectSourceViewModel selectSourceViewModel,  DisplayViewModel displayViewModel)
+		  public DetailsViewModel(IDialogService dialogService,
+								   SelectSourceViewModel selectSourceViewModel,  
+								   DisplayViewModel displayViewModel)
 		  {
 			   _DialogService = dialogService;
 			   DisplayViewModel = displayViewModel;
@@ -181,6 +183,7 @@ namespace BackupSoftware.Core
 			   GoToDisplayCommand = new RelayCommand(GoToDisplay);
 			   ShowBackupReportCommand = new RelayCommand(() =>
 			   {
+					// WRONG: uses windows functionallity in Core
 					ProcessStartInfo info = new ProcessStartInfo(ReportFile.LogPath);
 					Process.Start(info);
 			   });

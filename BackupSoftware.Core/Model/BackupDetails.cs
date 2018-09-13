@@ -15,16 +15,8 @@ namespace BackupSoftware.Core
 	 /// All the details the user gives to the software
 	 /// The folders to backup and the destination
 	 /// </summary>
-	 public class BackupDetails : INotifyPropertyChanged
+	 public class BackupDetails : ObservableObject
 	 {
-		  public event PropertyChangedEventHandler PropertyChanged;
-
-		  private void OnPropertyChanged(string propertyName)
-		  {
-			   if (PropertyChanged != null)
-					PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		  }
-
 		  /// <summary>
 		  /// The list of the folders the user want to backup
 		  /// </summary>
@@ -111,19 +103,13 @@ namespace BackupSoftware.Core
 			   }
 		  }
 
-		  /// <summary>
-		  /// Validates if the user gave right input
-		  /// </summary>
-		  public bool Validate(IDialogService dialogService)
+		  bool IsEmptyDetails()
 		  {
-			   // Checks to see if there is content in the fields
-			   if (string.IsNullOrEmpty(DestFolder) || SourceFolders.Count == 0)
-			   {
-					dialogService.ShowMessageBox("Fill in the list of folder and hard drive!");
-					return false;
-			   }
+			   return (string.IsNullOrEmpty(DestFolder) || SourceFolders.Count == 0);
+		  }
 
-			   // Check to see if the folders exists
+		  bool IsFoldersExist(IDialogService dialogService)
+		  {
 			   foreach (SourceFolder item in SourceFolders)
 			   {
 					if (!Directory.Exists(item.FolderInfo.FullPath))
@@ -131,7 +117,26 @@ namespace BackupSoftware.Core
 						 dialogService.ShowMessageBox(item.FolderInfo.FullPath + " can not be found!");
 						 return false;
 					}
+			   }
+			   return true;
+		  }
+		  
+		  /// <summary>
+		  /// Validates if the user gave right input
+		  /// </summary>
+		  public bool Validate(IDialogService dialogService)
+		  {
+			   // Checks to see if there is content in the fields
+			   if (IsEmptyDetails())
+			   {
+					dialogService.ShowMessageBox("Fill in the list of folders and hard drive!");
+					return false;
+			   }
 
+			   // Check to see if the folders exists
+			   if(!IsFoldersExist(dialogService))
+			   {
+					return false;
 			   }
 
 			   if (!Directory.Exists(DestFolder))

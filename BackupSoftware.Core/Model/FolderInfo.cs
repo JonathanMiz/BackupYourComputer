@@ -32,7 +32,7 @@ namespace BackupSoftware.Core
 		  {
 			   FullPath = folderPath;
 			   Name = Helpers.ExtractFileFolderNameFromFullPath(FullPath);
-			   ItemsCount = CalcItemsCount(FullPath);
+			   ItemsCount = CalcItemsCount();
 		  }
 
 		  /// <summary>
@@ -40,13 +40,16 @@ namespace BackupSoftware.Core
 		  /// </summary>
 		  /// <param name="path"></param>
 		  /// <returns></returns>
-		  private int CalcItemsCount(string path)
+		  private int CalcItemsCount()
 		  {
 			   int result = -1;
-			   if (path != null)
+			   if (!Directory.Exists(FullPath))
+					return result;
+
+			   if (FullPath != null)
 			   {
-					int fileCount = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly).Length;
-					int folderCount = Directory.GetDirectories(path, "*.*", SearchOption.TopDirectoryOnly).Length;
+					int fileCount = Directory.GetFiles(FullPath, "*.*", SearchOption.TopDirectoryOnly).Length;
+					int folderCount = Directory.GetDirectories(FullPath, "*.*", SearchOption.TopDirectoryOnly).Length;
 
 					result = (fileCount + folderCount);
 			   }

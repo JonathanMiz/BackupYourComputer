@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace BackupSoftware.Core
 {
-	 public class ScreenshotsDetails : INotifyPropertyChanged
+	 public class ScreenshotsDetails : ObservableObject
 	 {
 		  private bool _IsCaptureDesktop;
 
@@ -43,84 +43,6 @@ namespace BackupSoftware.Core
 						 return;
 					_DestinationFolder = value;
 					OnPropertyChanged(nameof(DestinationFolder));
-			   }
-		  }
-
-		  private ITakeScreenshotService _TakeScreenshotService;
-
-		  public ScreenshotsDetails()
-		  {
-			   _TakeScreenshotService = IoC.Get<ITakeScreenshotService>();
-		  }
-
-		  public void OpenFolder(string folderName)
-		  {
-			   ProcessStartInfo startInfo = new ProcessStartInfo();
-			   startInfo.FileName = "explorer.exe";
-			   startInfo.Arguments = folderName;
-			   startInfo.WindowStyle = ProcessWindowStyle.Maximized;
-			   
-			   Process proc = Process.Start(startInfo);
-
-		  }
-
-		  public void CloseFolder(string folderName)
-		  {
-			   foreach (SHDocVw.InternetExplorer window in new SHDocVw.ShellWindows())
-			   {
-					if (Path.GetFileNameWithoutExtension(window.FullName).ToLowerInvariant() == "explorer")
-					{
-						 if (Uri.IsWellFormedUriString(window.LocationURL, UriKind.Absolute))
-						 {
-							  string location = new Uri(window.LocationURL).LocalPath;
-
-							  if (string.Equals(location, folderName, StringComparison.OrdinalIgnoreCase))
-								   window.Quit();
-						 }
-					}
-			   }
-		  }
-
-		  public async Task CaptureDesktopAsync(string screenshotsFolderPath)
-		  {
-			   if (IsCaptureDesktop)
-			   {
-					Shell32.Shell shell = new Shell32.Shell();
-					shell.ToggleDesktop();
-
-					await Task.Delay(200);
-
-					String filename = screenshotsFolderPath + "\\Desktop_" + DateTime.Now.ToString("dd_MM_yyyy") + ".png";
-					_TakeScreenshotService.TakeAndSaveScreenshot(filename);
-			   }
-		  }
-
-		  public async Task CaptureFoldersAsync(string screenshotsFolderPath)
-		  {
-
-			   foreach (var folder in Folders)
-			   {
-					String locationToSaveScreenshot = screenshotsFolderPath + "\\" + folder.Name + "_" + DateTime.Now.ToString("dd_MM_yyyy") + ".png";
-					OpenFolder(folder.FullPath);
-
-					// Giving the folder time to be loaded properly
-					await Task.Delay(750);
-
-					await Task.Run(() => { _TakeScreenshotService.TakeAndSaveScreenshot(locationToSaveScreenshot); });
-					CloseFolder(folder.FullPath);
-			   }
-		  }
-
-
-
-		  public event PropertyChangedEventHandler PropertyChanged;
-
-		  private void OnPropertyChanged(string propertyName)
-		  {
-			   if(PropertyChanged != null)
-			   {
-					PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-					ViewModelLocator.CacheViewModel.Save();
 			   }
 		  }
 	 }

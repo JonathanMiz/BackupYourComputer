@@ -67,4 +67,5 @@
 		
 	Working right now:
 		1. Use Fody Weavers, find all the implementations of INoifyChanged and replace them
+		2. Solve
 

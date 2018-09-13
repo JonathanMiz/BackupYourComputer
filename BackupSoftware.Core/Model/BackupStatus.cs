@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BackupSoftware.Core
 {
-	 public class BackupStatus : ViewModelBase // Change the name of viewmodelbase to something more appropriate
+	 public class BackupStatus : ObservableObject
 	 {
 		  /// <summary>
 		  /// Text to display the user with the current status
