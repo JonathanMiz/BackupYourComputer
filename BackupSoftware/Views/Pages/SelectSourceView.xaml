@@ -138,18 +138,28 @@
           </StackPanel>
 
           <!-- Select button -->
-          <Button Grid.Row="2"
-                  Style="{StaticResource CustomButton}"
-                  Command="{Binding GoToDetailsViewCommand}"
-                  Width="150"
-                  Height="35"
-                  Padding="5"
-                  Content="Select"
-                  HorizontalAlignment="Right"
-                  VerticalAlignment="Center"
-                  Margin="0 0 10 10"
-                  />
-
+          <Grid Grid.Row="2">
+               <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    
+               </Grid.ColumnDefinitions>
+               <!--<Button Style="{StaticResource CustomButton}"
+                       Width="200"
+                       Height="40"
+                       Content="Load Favorite folders"/>-->
+               <Button Grid.Column="1"
+                       Style="{StaticResource CustomButton}"
+                       Command="{Binding GoToDetailsViewCommand}"
+                       Width="150"
+                       Height="35"
+                       Padding="5"
+                       Content="Select"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Margin="0 0 10 10"
+                       />
+          </Grid>
           <Border Grid.Row="3"  Background="#dcdde1" Height="30">
           </Border>
      </Grid>

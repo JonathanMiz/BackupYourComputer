@@ -183,7 +183,7 @@ namespace BackupSoftware.Core
 			   GoToDisplayCommand = new RelayCommand(GoToDisplay);
 			   ShowBackupReportCommand = new RelayCommand(() =>
 			   {
-					// WRONG: uses windows functionallity in Core
+					// WRONG: uses windows functionality in Core
 					ProcessStartInfo info = new ProcessStartInfo(ReportFile.LogPath);
 					Process.Start(info);
 			   });

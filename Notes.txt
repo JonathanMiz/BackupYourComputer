@@ -61,11 +61,15 @@
 		1. Improve the algorithm? So it would be more responsive when showing the status - Low Priority
 		2. Show how many items were in the begining of the backup
 		3. Option to pause and resume a folder's backup
-		
+	
+	SelectFolders:
+		1. Option to have favorite folders
+	
 	Screenshots Page:
 		1. Change the folder's window position to be in the first screen( Take screenshot of the primary window.)
 		
 	Working right now:
 		1. Use Fody Weavers, find all the implementations of INoifyChanged and replace them
-		2. Solve
+		
+
 
